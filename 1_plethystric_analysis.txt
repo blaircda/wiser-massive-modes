@@ -1,0 +1,234 @@
+========================================================================
+PLETHYSTIC LOGARITHM ANALYSIS OF MASSIVE SO(10) MODES: TOTAL (R_B + R_F)
+========================================================================
+
+[1/3] Computing formal logarithm coefficients L_n for n = 1..9...
+      Logarithm computed in 1.88s.
+
+[2/3] Computing Plethystic Logarithm a_n = PL_n via Adams operations...
+      Plethystic Logarithm computed in 17.22s.
+
+[3/3] Exact Round-Trip Verification PE[PL[R(q)]] == R(q)...
+      Order q^1 (Level  2): PASSED
+      Order q^2 (Level  3): PASSED
+      Order q^3 (Level  4): PASSED
+      Order q^4 (Level  5): PASSED
+      Order q^5 (Level  6): PASSED
+      Order q^6 (Level  7): PASSED
+      Order q^7 (Level  8): PASSED
+      Order q^8 (Level  9): PASSED
+      Order q^9 (Level 10): PASSED
+      --> ALL ORDERS 1..9 RECONSTRUCT EXACTLY IN THE REPRESENTATION RING!
+      Verification took 6.01s.
+
+========================================================================
+DETAILED REPRESENTATION-THEORETIC DECOMPOSITION OF PL[R(q)]
+========================================================================
+
+--- Order q^1 (Oscillator Level 2) ---
+  Summary: +1 generator irreps (dim 10) | -0 relation irreps (dim 0) | Net dim: 10
+  GENERATORS (+):
+    +      [dim     10] Dynkin (1, 0, 0, 0, 0)
+  RELATIONS (-):
+    None
+
+--- Order q^2 (Oscillator Level 3) ---
+  Summary: +1 generator irreps (dim 16) | -1 relation irreps (dim 1) | Net dim: 15
+  GENERATORS (+):
+    +      [dim     16] Dynkin (0, 0, 0, 0, 1)
+  RELATIONS (-):
+    -      [dim      1] Dynkin (0, 0, 0, 0, 0)
+
+--- Order q^3 (Oscillator Level 4) ---
+  Summary: +1 generator irreps (dim 45) | -1 relation irreps (dim 16) | Net dim: 29
+  GENERATORS (+):
+    +      [dim     45] Dynkin (0, 1, 0, 0, 0)
+  RELATIONS (-):
+    -      [dim     16] Dynkin (0, 0, 0, 1, 0)
+
+--- Order q^4 (Oscillator Level 5) ---
+  Summary: +3 generator irreps (dim 161) | -2 relation irreps (dim 146) | Net dim: 15
+  GENERATORS (+):
+    +      [dim      1] Dynkin (0, 0, 0, 0, 0)
+    +      [dim     16] Dynkin (0, 0, 0, 0, 1)
+    +      [dim    144] Dynkin (1, 0, 0, 0, 1)
+  RELATIONS (-):
+    - 2 * [dim     10] Dynkin (1, 0, 0, 0, 0)
+    -      [dim    126] Dynkin (0, 0, 0, 0, 2)
+
+--- Order q^5 (Oscillator Level 6) ---
+  Summary: +6 generator irreps (dim 847) | -4 relation irreps (dim 880) | Net dim: -33
+  GENERATORS (+):
+    + 2 * [dim      1] Dynkin (0, 0, 0, 0, 0)
+    +      [dim     45] Dynkin (0, 1, 0, 0, 0)
+    +      [dim    126] Dynkin (0, 0, 0, 0, 2)
+    +      [dim    144] Dynkin (1, 0, 0, 0, 1)
+    +      [dim    210] Dynkin (0, 0, 0, 1, 1)
+    +      [dim    320] Dynkin (1, 1, 0, 0, 0)
+  RELATIONS (-):
+    -      [dim     16] Dynkin (0, 0, 0, 0, 1)
+    -      [dim     16] Dynkin (0, 0, 0, 1, 0)
+    - 2 * [dim    144] Dynkin (1, 0, 0, 1, 0)
+    -      [dim    560] Dynkin (0, 1, 0, 0, 1)
+
+--- Order q^6 (Oscillator Level 7) ---
+  Summary: +6 generator irreps (dim 3664) | -10 relation irreps (dim 3774) | Net dim: -110
+  GENERATORS (+):
+    + 3 * [dim     16] Dynkin (0, 0, 0, 1, 0)
+    + 4 * [dim    144] Dynkin (1, 0, 0, 0, 1)
+    +      [dim    560] Dynkin (0, 1, 0, 0, 1)
+    +      [dim    560] Dynkin (0, 1, 0, 1, 0)
+    +      [dim    720] Dynkin (2, 0, 0, 0, 1)
+    +      [dim   1200] Dynkin (0, 0, 1, 0, 1)
+  RELATIONS (-):
+    -      [dim      1] Dynkin (0, 0, 0, 0, 0)
+    - 2 * [dim     45] Dynkin (0, 1, 0, 0, 0)
+    - 2 * [dim     54] Dynkin (2, 0, 0, 0, 0)
+    -      [dim    120] Dynkin (0, 0, 1, 0, 0)
+    -      [dim    126] Dynkin (0, 0, 0, 0, 2)
+    -      [dim    144] Dynkin (1, 0, 0, 1, 0)
+    - 2 * [dim    210] Dynkin (0, 0, 0, 1, 1)
+    -      [dim    770] Dynkin (0, 2, 0, 0, 0)
+    -      [dim    945] Dynkin (1, 0, 1, 0, 0)
+    -      [dim   1050] Dynkin (1, 0, 0, 0, 2)
+
+--- Order q^7 (Oscillator Level 8) ---
+  Summary: +12 generator irreps (dim 18905) | -13 relation irreps (dim 18806) | Net dim: 99
+  GENERATORS (+):
+    +      [dim      1] Dynkin (0, 0, 0, 0, 0)
+    + 6 * [dim     10] Dynkin (1, 0, 0, 0, 0)
+    + 6 * [dim    120] Dynkin (0, 0, 1, 0, 0)
+    + 4 * [dim    126] Dynkin (0, 0, 0, 0, 2)
+    +      [dim    126] Dynkin (0, 0, 0, 2, 0)
+    +      [dim    210] Dynkin (0, 0, 0, 1, 1)
+    + 5 * [dim    320] Dynkin (1, 1, 0, 0, 0)
+    +      [dim    720] Dynkin (2, 0, 0, 0, 1)
+    +      [dim   1386] Dynkin (2, 1, 0, 0, 0)
+    + 4 * [dim   1728] Dynkin (1, 0, 0, 1, 1)
+    +      [dim   2970] Dynkin (0, 1, 1, 0, 0)
+    +      [dim   3696] Dynkin (0, 1, 0, 0, 2)
+  RELATIONS (-):
+    - 5 * [dim     16] Dynkin (0, 0, 0, 0, 1)
+    -      [dim     16] Dynkin (0, 0, 0, 1, 0)
+    -      [dim     54] Dynkin (2, 0, 0, 0, 0)
+    - 3 * [dim    144] Dynkin (1, 0, 0, 0, 1)
+    - 5 * [dim    144] Dynkin (1, 0, 0, 1, 0)
+    -      [dim    560] Dynkin (0, 1, 0, 0, 1)
+    - 3 * [dim    560] Dynkin (0, 1, 0, 1, 0)
+    -      [dim    672] Dynkin (0, 0, 0, 0, 3)
+    - 3 * [dim    720] Dynkin (2, 0, 0, 1, 0)
+    - 2 * [dim   1200] Dynkin (0, 0, 1, 0, 1)
+    -      [dim   1200] Dynkin (0, 0, 1, 1, 0)
+    -      [dim   1440] Dynkin (0, 0, 0, 1, 2)
+    - 2 * [dim   3696] Dynkin (1, 1, 0, 0, 1)
+
+--- Order q^8 (Oscillator Level 9) ---
+  Summary: +16 generator irreps (dim 95264) | -25 relation irreps (dim 94499) | Net dim: 765
+  GENERATORS (+):
+    + 10 * [dim     16] Dynkin (0, 0, 0, 0, 1)
+    + 4 * [dim     16] Dynkin (0, 0, 0, 1, 0)
+    + 4 * [dim    144] Dynkin (1, 0, 0, 0, 1)
+    + 12 * [dim    144] Dynkin (1, 0, 0, 1, 0)
+    + 15 * [dim    560] Dynkin (0, 1, 0, 0, 1)
+    +      [dim    672] Dynkin (0, 0, 0, 0, 3)
+    + 10 * [dim    720] Dynkin (2, 0, 0, 0, 1)
+    + 2 * [dim   1200] Dynkin (0, 0, 1, 0, 1)
+    + 5 * [dim   1200] Dynkin (0, 0, 1, 1, 0)
+    + 4 * [dim   1440] Dynkin (0, 0, 0, 1, 2)
+    +      [dim   1440] Dynkin (0, 0, 0, 2, 1)
+    +      [dim   2640] Dynkin (3, 0, 0, 0, 1)
+    + 5 * [dim   3696] Dynkin (1, 1, 0, 1, 0)
+    +      [dim   5280] Dynkin (1, 0, 0, 0, 3)
+    +      [dim   8064] Dynkin (0, 2, 0, 0, 1)
+    + 3 * [dim   8800] Dynkin (1, 0, 1, 0, 1)
+  RELATIONS (-):
+    - 5 * [dim      1] Dynkin (0, 0, 0, 0, 0)
+    -      [dim     10] Dynkin (1, 0, 0, 0, 0)
+    - 14 * [dim     45] Dynkin (0, 1, 0, 0, 0)
+    - 5 * [dim     54] Dynkin (2, 0, 0, 0, 0)
+    - 2 * [dim    120] Dynkin (0, 0, 1, 0, 0)
+    - 4 * [dim    126] Dynkin (0, 0, 0, 0, 2)
+    -      [dim    126] Dynkin (0, 0, 0, 2, 0)
+    - 12 * [dim    210] Dynkin (0, 0, 0, 1, 1)
+    - 2 * [dim    210] Dynkin (3, 0, 0, 0, 0)
+    - 4 * [dim    320] Dynkin (1, 1, 0, 0, 0)
+    - 2 * [dim    720] Dynkin (2, 0, 0, 1, 0)
+    -      [dim    770] Dynkin (0, 2, 0, 0, 0)
+    - 9 * [dim    945] Dynkin (1, 0, 1, 0, 0)
+    - 5 * [dim   1050] Dynkin (1, 0, 0, 0, 2)
+    - 3 * [dim   1050] Dynkin (1, 0, 0, 2, 0)
+    -      [dim   1386] Dynkin (2, 1, 0, 0, 0)
+    - 3 * [dim   1728] Dynkin (1, 0, 0, 1, 1)
+    - 3 * [dim   2970] Dynkin (0, 1, 1, 0, 0)
+    - 2 * [dim   3696] Dynkin (0, 1, 0, 0, 2)
+    -      [dim   4312] Dynkin (2, 0, 1, 0, 0)
+    -      [dim   4410] Dynkin (1, 2, 0, 0, 0)
+    -      [dim   4950] Dynkin (2, 0, 0, 0, 2)
+    - 3 * [dim   5940] Dynkin (0, 1, 0, 1, 1)
+    -      [dim   6930] Dynkin (0, 0, 1, 0, 2)
+    -      [dim   8085] Dynkin (2, 0, 0, 1, 1)
+
+--- Order q^9 (Oscillator Level 10) ---
+  Summary: +35 generator irreps (dim 493977) | -25 relation irreps (dim 493008) | Net dim: 969
+  GENERATORS (+):
+    + 4 * [dim      1] Dynkin (0, 0, 0, 0, 0)
+    + 15 * [dim     10] Dynkin (1, 0, 0, 0, 0)
+    + 21 * [dim     45] Dynkin (0, 1, 0, 0, 0)
+    + 11 * [dim     54] Dynkin (2, 0, 0, 0, 0)
+    + 16 * [dim    120] Dynkin (0, 0, 1, 0, 0)
+    + 10 * [dim    126] Dynkin (0, 0, 0, 0, 2)
+    + 7 * [dim    126] Dynkin (0, 0, 0, 2, 0)
+    + 22 * [dim    210] Dynkin (0, 0, 0, 1, 1)
+    + 2 * [dim    210] Dynkin (3, 0, 0, 0, 0)
+    + 10 * [dim    320] Dynkin (1, 1, 0, 0, 0)
+    + 12 * [dim    770] Dynkin (0, 2, 0, 0, 0)
+    + 24 * [dim    945] Dynkin (1, 0, 1, 0, 0)
+    + 15 * [dim   1050] Dynkin (1, 0, 0, 0, 2)
+    + 8 * [dim   1050] Dynkin (1, 0, 0, 2, 0)
+    + 7 * [dim   1386] Dynkin (2, 1, 0, 0, 0)
+    + 15 * [dim   1728] Dynkin (1, 0, 0, 1, 1)
+    +      [dim   2640] Dynkin (3, 0, 0, 0, 1)
+    +      [dim   2772] Dynkin (0, 0, 0, 0, 4)
+    + 3 * [dim   2970] Dynkin (0, 1, 1, 0, 0)
+    + 2 * [dim   3696] Dynkin (0, 1, 0, 0, 2)
+    + 2 * [dim   3696] Dynkin (0, 1, 0, 2, 0)
+    + 3 * [dim   4125] Dynkin (0, 0, 2, 0, 0)
+    + 3 * [dim   4312] Dynkin (2, 0, 1, 0, 0)
+    +      [dim   4410] Dynkin (1, 2, 0, 0, 0)
+    +      [dim   4608] Dynkin (3, 1, 0, 0, 0)
+    + 2 * [dim   4950] Dynkin (2, 0, 0, 0, 2)
+    +      [dim   4950] Dynkin (2, 0, 0, 2, 0)
+    + 13 * [dim   5940] Dynkin (0, 1, 0, 1, 1)
+    +      [dim   6930] Dynkin (0, 0, 0, 1, 3)
+    + 4 * [dim   6930] Dynkin (0, 0, 1, 0, 2)
+    + 5 * [dim   8085] Dynkin (2, 0, 0, 1, 1)
+    + 2 * [dim  10560] Dynkin (0, 0, 1, 1, 1)
+    + 3 * [dim  17920] Dynkin (1, 1, 1, 0, 0)
+    + 2 * [dim  23040] Dynkin (1, 1, 0, 0, 2)
+    +      [dim  36750] Dynkin (1, 1, 0, 1, 1)
+  RELATIONS (-):
+    - 5 * [dim     16] Dynkin (0, 0, 0, 0, 1)
+    - 24 * [dim     16] Dynkin (0, 0, 0, 1, 0)
+    - 40 * [dim    144] Dynkin (1, 0, 0, 0, 1)
+    - 5 * [dim    144] Dynkin (1, 0, 0, 1, 0)
+    - 5 * [dim    560] Dynkin (0, 1, 0, 0, 1)
+    - 32 * [dim    560] Dynkin (0, 1, 0, 1, 0)
+    - 5 * [dim    672] Dynkin (0, 0, 0, 0, 3)
+    - 2 * [dim    720] Dynkin (2, 0, 0, 0, 1)
+    - 19 * [dim    720] Dynkin (2, 0, 0, 1, 0)
+    - 21 * [dim   1200] Dynkin (0, 0, 1, 0, 1)
+    - 5 * [dim   1200] Dynkin (0, 0, 1, 1, 0)
+    - 5 * [dim   1440] Dynkin (0, 0, 0, 1, 2)
+    - 7 * [dim   1440] Dynkin (0, 0, 0, 2, 1)
+    - 4 * [dim   2640] Dynkin (3, 0, 0, 1, 0)
+    - 15 * [dim   3696] Dynkin (1, 1, 0, 0, 1)
+    - 5 * [dim   3696] Dynkin (1, 1, 0, 1, 0)
+    -      [dim   5280] Dynkin (1, 0, 0, 0, 3)
+    - 2 * [dim   8064] Dynkin (0, 2, 0, 0, 1)
+    - 2 * [dim   8064] Dynkin (0, 2, 0, 1, 0)
+    - 4 * [dim   8800] Dynkin (1, 0, 1, 0, 1)
+    - 7 * [dim   8800] Dynkin (1, 0, 1, 1, 0)
+    - 6 * [dim  11088] Dynkin (1, 0, 0, 1, 2)
+    - 3 * [dim  15120] Dynkin (2, 1, 0, 0, 1)
+    -      [dim  17280] Dynkin (0, 1, 0, 0, 3)
+    - 2 * [dim  25200] Dynkin (0, 1, 1, 0, 1)
