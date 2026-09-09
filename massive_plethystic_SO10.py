@@ -68,8 +68,9 @@ def compute_plethystic_log(L_dict, max_degree):
         a_n = sum_{k | n} (mu(k) / k) * Psi^k(L_{n/k})
     """
     a = {}
+    parent = L_dict[1].parent() if 1 in L_dict else D5
     for n in range(1, max_degree + 1):
-        val = D5(0)
+        val = parent(0)
         for k in divisors(n):
             coeff = Rational((moebius(k), k))
             val += coeff * (L_dict[n // k].adams_operator(k))
@@ -85,9 +86,11 @@ def compute_plethystic_exp(a_dict, max_degree):
         b_n = L_n + (1/n) * sum_{j=1}^{n-1} j L_j * b_{n-j}
     """
     L_rec = {}
-    b_rec = {0: D5(0, 0, 0, 0, 0)}
+    parent = a_dict[1].parent() if 1 in a_dict else D5
+    rank = parent.cartan_type().rank()
+    b_rec = {0: parent(*([0] * rank))}
     for n in range(1, max_degree + 1):
-        val = D5(0)
+        val = parent(0)
         for k in divisors(n):
             coeff = Rational((1, k))
             val += coeff * (a_dict[n // k].adams_operator(k))
