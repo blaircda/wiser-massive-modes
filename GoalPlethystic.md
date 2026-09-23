@@ -1,7 +1,5 @@
 # Background
 
-# Background
-
 The ultimate goal is to understand possible 11-dimensional structure present in the massive levels of the type IIA superstring.
 
 We are investigating an old proposal of Bars found in https://arxiv.org/abs/hep-th/9503228, specifically the proposal of Section III.B.
@@ -35,7 +33,7 @@ This has been done in two ways: firstly by writing raw Python code to do the gro
 In this working directory, the latter can be checked by running
 
 ```text
-bin/sage-run massive_SO8_to_SO10.py
+bin/sage-run massive_SO8_to_S010.py
 ```
 
 The found \(SO(10)\) multiplets are located in `massive_SO10.py`.
@@ -59,7 +57,7 @@ $$
 Hence the generating series for the proposed spectrum is
 
 $$
-R(q)=\sum_{n\geq1}r_n q^{n-1}
+R(q)=\sum_{n\geq1}R_n q^{n-1}
     =\frac{r(q)}{1-q}.
 $$
 
@@ -86,10 +84,23 @@ with the logarithm interpreted in the representation ring via Adams operations.
 
 The aim is to determine whether the observed positive \(SO(10)\) decomposition of every \(R_n\) reflects a deeper structure. In particular:
 
-1. identify the \(SO(10)\) representations appearing in the plethystic logarithm;
-2. distinguish genuine generators from negative terms corresponding to relations/syzygies;
+1. identify the signed \(SO(10)\) representations appearing in the plethystic logarithm;
+2. determine whether any independent graded-algebra construction justifies
+   interpreting those signs as generators and relations;
 3. look for a simple representation-theoretic explanation of the \(1/(1-q)\) cumulative construction;
 4. determine whether the resulting structure gives evidence for an analytic explanation of Bars III.B, rather than merely an empirical level-by-level character identity.
 
 This is a test of the \(SO(10)\) character identity itself.
 
+## Current conclusion
+
+The exact formal identity
+
+$$
+\operatorname{PL}[R(q)]=\operatorname{PL}[r(q)]+\mathbf 1q
+$$
+
+is established, but it does not explain $SO(10)$ positivity. Earlier
+pure-spinor, on-shell-relation and general syzygy interpretations of individual
+signed coefficients have been withdrawn. See `PLETHYSTIC_STATUS.md` for the
+authoritative account.

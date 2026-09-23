@@ -1,5 +1,11 @@
 # Direction 3 Technical Report: Bars' Scheme III.C Higher Multiplicity Scheme, 11D Supermembrane / Matrix Models, and Howe Duality
 
+> **Superseded (23 September 2026):** The convolution and plethystic identities
+> remain valid, and III.C positivity remains conditional on III.B. Claims that
+> signed PL terms establish syzygies, membrane dynamics or Howe-dual structure
+> are not established by the computation. See `PLETHYSTIC_STATUS.md` and
+> `STATUS.md`.
+
 **Author:** Gemini Subagent (Antigravity Theoretical Physics & Representation Theory Team)  
 **Date:** September 2026  
 **Status:** Completed, Mathematically Proved & Numerically Verified  

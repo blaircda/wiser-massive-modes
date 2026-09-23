@@ -69,10 +69,9 @@ def get_scheme_iiic_multiplets(max_level=10):
 
 def run_sage_analysis():
     """Run exact character-valued plethystic analysis in SageMath."""
-    from sage.all import WeylCharacterRing, Rational, divisors, moebius
-    from massive_plethystic_SO10 import (
+    from sage.all import WeylCharacterRing, Rational
+    from plethystic_series import (
         compute_log_coefficients, compute_plethystic_log, compute_plethystic_exp,
-        decompose_pl_term, parse_coroots
     )
 
     D5 = WeylCharacterRing("D5", base_ring=Rational(1).parent(), style="coroots")
@@ -200,8 +199,8 @@ def run_python_analysis():
     print("\nKey Algebraic Properties Verified:")
     print("1. All coefficients c_k = p(k) - p(k-1) are strictly non-negative integers:")
     print("   ", [f"c_{k}={C_COEFFS[k]}" for k in range(10)])
-    print("2. Because R^{III.B}_m are genuine positive SO(10) representations,")
-    print("   every R^{III.C}_n is GUARANTEED to be a genuine positive SO(10) representation.")
+    print("2. For every supplied positive R^{III.B}_m input, the nonnegative convolution")
+    print("   produces a positive R^{III.C}_n. All-orders positivity remains conditional on III.B.")
 
     print("\n--- Verifying Exact Plethystic Logarithm Cancellation Theorem ---")
     PL_RB_tot = compute_PL_dim(dim_RB_tot, 9)
@@ -220,7 +219,7 @@ def run_python_analysis():
             assert d_tot == 0.0 and d_sup == 0.0, "Mismatch at q^1"
         else:
             assert d_tot == 1.0 and d_sup == 1.0, f"Mismatch at q^{order}: expected +1.0"
-    print("\n[PASSED] All 9 orders satisfy PL[R^{III.C}] - PL[R^{III.B}] == 1_{SO(10)} * q^n (for n >= 2) with 100% exact precision!")
+    print("\n[PASSED] Numerical dimensional check through all 9 available orders.")
 
 
 if __name__ == "__main__":

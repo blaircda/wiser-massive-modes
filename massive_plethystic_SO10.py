@@ -1,19 +1,24 @@
 """
 massive_plethystic_SO10.py
 
-Investigation of the 11-dimensional structure hidden in the massive levels
-of the type IIA superstring via character-valued Plethystic Logarithm (PL).
+Baseline-dependent character-valued plethystic analysis of the preserved
+level-1--10 SO(10) spectrum.
 
 Computes PL[R(q)] directly in the representation ring of SO(10) (D5) without
 reducing to dimensions, and verifies exact round-trip reconstruction PE[PL[R(q)]] == R(q)
-through order q^9 (level 10).
+through order q^9 (level 10). Signed PL coefficients are reported only as
+formal positive and negative terms; no geometric interpretation follows from
+their signs alone.
 """
 
 import time
-from sage.all import (
-    WeylCharacterRing, Rational, divisors, moebius
-)
+from sage.all import WeylCharacterRing, Rational
 from massive_SO10 import SO10_SUPERMULTIPLETS_DYNKIN
+from plethystic_series import (
+    compute_log_coefficients,
+    compute_plethystic_exp,
+    compute_plethystic_log,
+)
 
 # Initialize D5 with QQ base ring to support rational coefficients in PL/PE recurrences
 D5 = WeylCharacterRing("D5", base_ring=Rational(1).parent(), style="coroots")
@@ -45,66 +50,8 @@ def get_so10_character_qq(level, super_graded=False):
     return char
 
 
-def compute_log_coefficients(b_dict, max_degree):
-    """
-    Compute L_n = [q^n] log(B(q)) for B(q) = 1 + sum_{n>=1} b_n q^n
-    using the logarithmic derivative triangular recurrence:
-        q B'(q) = B(q) * q L'(q)
-        => n b_n = n L_n + sum_{j=1}^{n-1} j L_j * b_{n-j}
-        => L_n = b_n - (1/n) * sum_{j=1}^{n-1} j L_j * b_{n-j}
-    """
-    L = {}
-    for n in range(1, max_degree + 1):
-        term = b_dict[n]
-        for j in range(1, n):
-            term -= Rational((j, n)) * (L[j] * b_dict[n - j])
-        L[n] = term
-    return L
-
-
-def compute_plethystic_log(L_dict, max_degree):
-    """
-    Compute a_n = [q^n] PL[B(q)] via Möbius inversion of the Adams operator:
-        a_n = sum_{k | n} (mu(k) / k) * Psi^k(L_{n/k})
-    """
-    a = {}
-    parent = L_dict[1].parent() if 1 in L_dict else D5
-    for n in range(1, max_degree + 1):
-        val = parent(0)
-        for k in divisors(n):
-            coeff = Rational((moebius(k), k))
-            val += coeff * (L_dict[n // k].adams_operator(k))
-        a[n] = val
-    return a
-
-
-def compute_plethystic_exp(a_dict, max_degree):
-    """
-    Reconstruct B(q) = 1 + sum_{n>=1} b_n q^n from a_n = [q^n] PL[B(q)]
-    using:
-        L_n = sum_{k | n} (1 / k) * Psi^k(a_{n/k})
-        b_n = L_n + (1/n) * sum_{j=1}^{n-1} j L_j * b_{n-j}
-    """
-    L_rec = {}
-    parent = a_dict[1].parent() if 1 in a_dict else D5
-    rank = parent.cartan_type().rank()
-    b_rec = {0: parent(*([0] * rank))}
-    for n in range(1, max_degree + 1):
-        val = parent(0)
-        for k in divisors(n):
-            coeff = Rational((1, k))
-            val += coeff * (a_dict[n // k].adams_operator(k))
-        L_rec[n] = val
-
-        term = L_rec[n]
-        for j in range(1, n):
-            term += Rational((j, n)) * (L_rec[j] * b_rec[n - j])
-        b_rec[n] = term
-    return b_rec
-
-
 def decompose_pl_term(char):
-    """Decompose a character in D5 into positive (generators) and negative (relations) irreps."""
+    """Separate positive and negative irreducible coefficients without interpretation."""
     pos_items = []
     neg_items = []
     for wt, coeff in char.monomial_coefficients().items():
@@ -171,16 +118,16 @@ def run_analysis(max_level=10, super_graded=False):
         neg_dim = sum(c * dim for c, dim, _ in neg_items)
 
         print(f"\n--- Order q^{n} (Oscillator Level {n+1}) ---")
-        print(f"  Summary: +{len(pos_items)} generator irreps (dim {pos_dim}) | -{len(neg_items)} relation irreps (dim {neg_dim}) | Net dim: {pos_dim - neg_dim}")
+        print(f"  Summary: +{len(pos_items)} positive irreps (dim {pos_dim}) | -{len(neg_items)} negative irreps (dim {neg_dim}) | Net dim: {pos_dim - neg_dim}")
 
-        print("  GENERATORS (+):")
+        print("  POSITIVE TERMS (+):")
         if not pos_items:
             print("    None")
         for c, dim, coroots in pos_items:
             prefix = f"{c} * " if c > 1 else "     "
             print(f"    + {prefix}[dim {dim:6d}] Dynkin {coroots}")
 
-        print("  RELATIONS (-):")
+        print("  NEGATIVE TERMS (-):")
         if not neg_items:
             print("    None")
         for c, dim, coroots in neg_items:
@@ -190,7 +137,7 @@ def run_analysis(max_level=10, super_graded=False):
     return a, b
 
 
-if __name__ == "__main__" or "__file__" in globals():
+if __name__ == "__main__":
     import sys
     args = sys.argv[1:] if "sys" in globals() else []
     if "--all" in args:

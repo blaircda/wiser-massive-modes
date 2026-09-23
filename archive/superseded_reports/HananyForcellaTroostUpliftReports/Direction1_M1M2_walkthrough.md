@@ -1,5 +1,9 @@
 # Walkthrough: Milestones M1 & M2 Completed
 
+> **Archived (23 September 2026):** Historical implementation notes. The
+> maintained baseline-free derivation is `hft_so9.py`; its separate comparison
+> is `verify_hft_so9_against_baseline.py`. `STATUS.md` is authoritative.
+
 We have successfully implemented and verified the Hanany–Forcella–Troost (HFT, arXiv:1007.2622) $SO(9)$ closed-form generating function and character-division pipeline in [`hft_so9.py`](file:///home/chris/Programming/Projects/wiser-massive-modes/hft_so9.py).
 
 Both **Milestone M1** (levels 1–5) and **Milestone M2** (levels 6–10) have passed with 100% exact character matches against the established baseline from [`massive_SO10.py`](file:///home/chris/Programming/Projects/wiser-massive-modes/massive_SO10.py).

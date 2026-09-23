@@ -1,5 +1,9 @@
 # Walkthrough: Milestones M1, M2, M3, & M4 Completed
 
+> **Superseded (23 September 2026):** The claimed M4 forward reconstruction was
+> circular and is withdrawn. M3 remains verified. See `STATUS.md` and
+> `Direction1_M3M4_ISSUE.md` for the audit trail.
+
 We have successfully implemented and verified the complete Hanany–Forcella–Troost (HFT, arXiv:1007.2622) pipeline in both $SO(9)$ and $SO(10)$, achieving **100% verification across all four milestones (M1, M2, M3, and M4)** for mass levels 1 through 10.
 
 All baseline verification files (`massive_SO10.py`, `massive_SO8_construct.py`, `massive_SO8_to_S010.py`, `massive_SO8_to_SO9.py`) remain strictly read-only and untouched.

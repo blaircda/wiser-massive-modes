@@ -9,12 +9,15 @@ Verifies:
 2. branch_{D5 -> B4}(PL_SO10[R(q)]) - 1_{SO9} * q == PL_SO9[r(q)]
 for both Total (R_B + R_F) and Super-Graded (R_B - R_F) series through order q^9 (levels 1-10).
 
-Generates PL_Report_2.md.
+Can optionally generate supplemental signed-coefficient tables under scratch/.
 """
+
+import argparse
+import os
 
 from sage.all import WeylCharacterRing, QQ
 from massive_SO10 import SO10_SUPERMULTIPLETS_DYNKIN
-from massive_plethystic_SO10 import (
+from plethystic_series import (
     compute_log_coefficients, compute_plethystic_log
 )
 
@@ -50,9 +53,9 @@ def format_table(pos_items, neg_items):
     lines.append("| Type | Mult | Dim | Dynkin $(a_1, a_2, a_3, a_4)$ |")
     lines.append("| :--- | :---: | :---: | :--- |")
     for c, dim, coroots in pos_items:
-        lines.append(f"| **Generator (+)** | {c} | {dim:,} | `{coroots}` |")
+        lines.append(f"| **Positive term (+)** | {c} | {dim:,} | `{coroots}` |")
     for c, dim, coroots in neg_items:
-        lines.append(f"| **Relation (-)** | {c} | {dim:,} | `{coroots}` |")
+        lines.append(f"| **Negative term (-)** | {c} | {dim:,} | `{coroots}` |")
     if not pos_items and not neg_items:
         lines.append("| None | - | - | - |")
     return "\n".join(lines)
@@ -118,11 +121,16 @@ def run_comparisons():
 
 
 def generate_report_2(results):
-    target_path = "/home/chris/Programming/Projects/wiser-massive-modes/PL_Report_2.md"
+    target_path = os.path.join(
+        os.path.dirname(__file__),
+        "scratch",
+        "plethystic_baseline_tables.md",
+    )
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
     out = []
-    out.append("# Waystone Report 2: Plethystic Analysis of Perturbative $r(q)$ vs. Cumulative $R(q)\n")
+    out.append("# Supplemental Baseline-Dependent Plethystic Tables\n")
     out.append("**Date:** September 2026  ")
-    out.append("**Status:** Complete & Exactly Verified  ")
+    out.append("**Status:** Descriptive tables from protected level-1--10 data  ")
     out.append("**Scope:**")
     out.append("1. Comparison of $\\operatorname{PL}[r(q)]$ and $\\operatorname{PL}[R(q)]$ in $SO(10)$ (virtual series).")
     out.append("2. Direct computation of $\\operatorname{PL}_{SO(9)}[r(q)]$ from the perturbative string Fock space and verification of the Branching Commutativity Theorem:")
@@ -131,20 +139,20 @@ def generate_report_2(results):
     out.append("---\n")
 
     out.append("## 1. Executive Summary & Main Findings\n")
-    out.append("This report addresses the question: *Does the complex generator and syzygy structure observed in $\\operatorname{PL}[R(q)]$ originate from the Bars cumulative summation $\\frac{1}{1-q}$, or is it already inherent in the perturbative string spectrum $r(q)$?*\n")
+    out.append("This report compares the signed coefficients of $\\operatorname{PL}[R(q)]$ and $\\operatorname{PL}[r(q)]$. The signs are formal representation-ring data and are not interpreted here as geometric generators, relations, or syzygies.\n")
     out.append("### Key Results:")
     out.append("1. **The Algebraic Subtraction Theorem (in $SO(10)$):**")
     out.append("   When $r(q) = (1-q)R(q)$ is treated as a virtual series in $\\mathcal{R}(SO(10))$, its Plethystic Logarithm is **strictly identical** to $\\operatorname{PL}[R(q)]$ at every order $q^n$ for $n \\ge 2$:")
     out.append("   $$\\operatorname{PL}[r(q)]_n = \\operatorname{PL}[R(q)]_n \\quad (\\forall n \\ge 2).$$")
-    out.append("   The two series differ **only at order $q^1$**, where the vector generator $+ \\mathbf{10}$ is replaced by $\\mathbf{10} - \\mathbf{1}$:")
+    out.append("   The two series differ **only at order $q^1$**, where the coefficient $+ \\mathbf{10}$ is replaced by $\\mathbf{10} - \\mathbf{1}$:")
     out.append("   $$\\operatorname{PL}[R(q)] - \\operatorname{PL}[r(q)] = \\mathbf{1} q.$$")
     out.append("2. **The Branching Commutativity Theorem (in $SO(9)$):**")
     out.append("   When $r(q)$ is computed directly as genuine positive representations of $SO(9)$ ($B_4$) from the string oscillator Fock space:")
     out.append("   $$\\operatorname{branch}_{D_5 \\to B_4}\\Big(\\operatorname{PL}_{SO(10)}[R(q)]\\Big) - \\mathbf{1}_{SO(9)} q \\equiv \\operatorname{PL}_{SO(9)}\\Big[r(q)\\Big].$$")
-    out.append("   Every generator ($+$) and relation ($-$) in $SO(9)$ is the exact restriction of an $SO(10)$ generator or relation!")
-    out.append("3. **Physical Meaning:**")
-    out.append("   - The entire tower of generators (spinors $\\mathbf{16}$, 2-forms $\\mathbf{45} \\to \\mathbf{9} \\oplus \\mathbf{36}$, vector-spinors $\\mathbf{144} \\to \\mathbf{16} \\oplus \\mathbf{128}$) and relations (including the **pure spinor relation** $-\\mathbf{126} \\to -\\mathbf{126}$) is **already fully present in the perturbative string spectrum $r(q)$**.")
-    out.append("   - The Bars cumulative factor $\\frac{1}{1-q}$ does not create or alter this algebraic variety: it simply provides the single singlet generator $\\mathbf{1}q$ that cancels the on-shell singlet relation $-\\mathbf{1}q^2$, allowing the cumulative sums to organize into genuine positive $SO(10)$ multiplets.\n")
+    out.append("   Every signed coefficient in $SO(9)$ is the restriction of the corresponding formal $SO(10)$ coefficient.")
+    out.append("3. **Interpretive limit:**")
+    out.append("   - The higher-order signed PL coefficients are already present in the perturbative series $r(q)$. No geometric meaning is inferred from an individual negative coefficient such as $-\\mathbf{126}$.")
+    out.append("   - The Bars factor contributes exactly one formal singlet term $+\\mathbf{1}q$ to the plethystic logarithm. This identity alone does not prove $SO(10)$ positivity.\n")
 
     out.append("## 2. Mathematical Proof of Identity\n")
     out.append("In any representation ring $\\mathcal{R}$, the Plethystic Exponential satisfies $\\operatorname{PE}[A + B] = \\operatorname{PE}[A] \\cdot \\operatorname{PE}[B]$, which implies that $\\operatorname{PL}[A \\cdot B] = \\operatorname{PL}[A] + \\operatorname{PL}[B]$.")
@@ -169,7 +177,7 @@ def generate_report_2(results):
 
     out.append("---\n")
     out.append("## 4. Explicit Representation Tables for $\\operatorname{PL}_{SO(9)}[r(q)]$ (Total $r_B + r_F$)\n")
-    out.append("Here we list the generators and relations of the **perturbative string spectrum $r(q)$** directly in $SO(9)$ ($B_4$).")
+    out.append("Here we list the positive and negative signed coefficients of the **perturbative string spectrum $r(q)$** directly in $SO(9)$ ($B_4$).")
     out.append("Notice that at $q^1$, the vector $\\mathbf{9} = (1,0,0,0)$ appears (since $\\mathbf{10} \\to \\mathbf{9} \\oplus \\mathbf{1}$, and the singlet $\\mathbf{1}$ is subtracted).\n")
 
     PL_r9_tot = results[False]["PL_r9"]
@@ -178,7 +186,7 @@ def generate_report_2(results):
         pos_dim = sum(c * dim for c, dim, _ in pos_items)
         neg_dim = sum(c * dim for c, dim, _ in neg_items)
         out.append(f"### Order $q^{n}$ (Oscillator Level {n+1})\n")
-        out.append(f"- **Summary:** +{len(pos_items)} generators (gross dim {pos_dim:,}) | -{len(neg_items)} relations (gross dim {neg_dim:,}) | Net dim: {pos_dim - neg_dim:,}\n")
+        out.append(f"- **Summary:** +{len(pos_items)} positive terms (gross dim {pos_dim:,}) | -{len(neg_items)} negative terms (gross dim {neg_dim:,}) | Net dim: {pos_dim - neg_dim:,}\n")
         out.append(format_table(pos_items, neg_items))
         out.append("\n")
 
@@ -192,7 +200,7 @@ def generate_report_2(results):
         pos_dim = sum(c * dim for c, dim, _ in pos_items)
         neg_dim = sum(c * dim for c, dim, _ in neg_items)
         out.append(f"### Super-Graded Order $q^{n}$ (Oscillator Level {n+1})\n")
-        out.append(f"- **Summary:** +{len(pos_items)} generators (gross dim {pos_dim:,}) | -{len(neg_items)} relations (gross dim {neg_dim:,}) | Net dim: {pos_dim - neg_dim:,}\n")
+        out.append(f"- **Summary:** +{len(pos_items)} positive terms (gross dim {pos_dim:,}) | -{len(neg_items)} negative terms (gross dim {neg_dim:,}) | Net dim: {pos_dim - neg_dim:,}\n")
         out.append(format_table(pos_items, neg_items))
         out.append("\n")
 
@@ -210,6 +218,16 @@ def generate_report_2(results):
     print(f"Report written to: {target_path} ({len(content)} chars)")
 
 
-if __name__ == "__main__" or "__file__" in globals():
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Compare baseline-dependent plethystic series"
+    )
+    parser.add_argument(
+        "--write-report",
+        action="store_true",
+        help="Write supplemental signed tables under scratch/",
+    )
+    args = parser.parse_args()
     res = run_comparisons()
-    generate_report_2(res)
+    if args.write_report:
+        generate_report_2(res)

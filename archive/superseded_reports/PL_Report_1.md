@@ -1,5 +1,10 @@
 # Waystone Report: Plethystic Analysis of Massive $SO(10)$ Superstring Spectrum
 
+> **Superseded (23 September 2026):** Retained only as a historical computation.
+> The coefficient tables and round-trip calculation remain reproducible, but
+> the generator/relation, on-shell and pure-spinor interpretations are
+> withdrawn. See `PLETHYSTIC_STATUS.md`.
+
 **Date:** September 2026  
 **Status:** Complete & Exactly Verified  
 **Target Group:** $SO(10)$ ($D_5$)  
@@ -549,4 +554,3 @@ In this section, the spin-statistics graded Plethystic Logarithm is decomposed i
 | **Generator (+)** | 2 | 25,200 | `(0, 1, 1, 0, 1)` |
 | **Generator (+)** | 1 | 36,750 | `(1, 1, 0, 1, 1)` |
 | **Relation (-)** | 1 | 2,640 | `(3, 0, 0, 0, 1)` |
-

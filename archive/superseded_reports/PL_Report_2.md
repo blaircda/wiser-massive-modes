@@ -1,5 +1,10 @@
 # Waystone Report 2: Plethystic Analysis of Perturbative $r(q)$ vs. Cumulative $R(q)
 
+> **Superseded (23 September 2026):** The formal identity
+> $\operatorname{PL}[R]=\operatorname{PL}[r]+\mathbf 1q$ remains valid. The
+> generator/relation, algebraic-variety and pure-spinor interpretations are
+> withdrawn. See `PLETHYSTIC_STATUS.md`.
+
 **Date:** September 2026  
 **Status:** Complete & Exactly Verified  
 **Scope:**

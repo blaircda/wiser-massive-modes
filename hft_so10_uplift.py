@@ -1,23 +1,21 @@
 """
 hft_so10_uplift.py
 
-Independent SO(10) Closed-Form Generating Function and Bars Reconstruction
-===========================================================================
+SO(10) Closed-Form Numerator Uplift and Quotient Obstruction Diagnostic
+========================================================================
 
 This module implements:
   - Milestone M3: Independent construction of the SO(10) Hanany-Forcella-Troost (HFT)
     closed-form numerator Z^10_Left(q), and proof of the coefficient-by-coefficient
     branching identity:
         Res_{SO(10) -> SO(9)} Z^10_Left(q) == Z^9_Left(q)  (Levels 1 to 10).
-  - Milestone M4: Forward character division of the uplifted object by the universal
-    massive supermultiplet Z_Q^10, proving that:
-        N_n^10 - Z_Q^10 * r_n^10 = Delta_n  where Delta_n in ker(Res) and dim(Delta_n) = 0,
-    and reconstructing Bars' cumulative spectrum:
-        R_n^10 = sum_{k=1}^n r_k^10.
-    The derived R_n^10 are verified to be:
-      1. Strictly positive sums of genuine SO(10) irreducible representations.
-      2. Exactly consistent under branching: R_n^10 downarrow SO(9) == R_n^9.
-      3. In 100% agreement with the baseline massive_SO10.py results.
+  - A bounded diagnostic for the proposed Milestone M4 character division by the
+    virtual character Z_Q^10.  The diagnostic stops on repeated peeling or after a
+    caller-selected step limit and reports the unresolved remainder.
+
+This module deliberately does not import any baseline spectrum.  It does not claim
+to reconstruct Bars' SO(10) multiplets.  Baseline comparisons are isolated in
+verify_hft_so10_against_baseline.py.
 
 References:
   - Hanany, Forcella, Troost (arXiv:1007.2622 [hep-th])
@@ -25,7 +23,6 @@ References:
 """
 
 import sys
-import os
 import time
 import argparse
 
@@ -161,7 +158,7 @@ def compute_hft_d5(max_level):
 
 
 # ==============================================================================
-# 4. Forward Peeling & Character Division Algorithm
+# 4. Bounded Quotient Diagnostic
 # ==============================================================================
 
 def ambient_to_d5(x):
@@ -179,17 +176,32 @@ def dominant_D5_weight(x):
     return x[0] >= x[1] >= x[2] >= x[3] >= abs(x[4])
 
 
-def solve_quotient_rn(N_n, Z_Q_10):
+def attempt_quotient_rn(N_n, Z_Q_10, max_steps=50, repeat_limit=4):
     """
-    Forward highest-weight peeling of N_n^10 by Z_Q_10.
-    Peels against bosonic dominant weight (2,0,0,0,0) and fermionic dominant
-    weight (3/2, 1/2, 1/2, 1/2, 1/2) until all remaining weights belong to ker(Res).
+    Attempt highest-weight peeling of N_n^10 by the virtual character Z_Q_10.
+
+    This is a diagnostic, not a derivation.  Negative terms in Z_Q_10 destroy the
+    monotone dominance order used by the successful SO(9) division.  To guarantee
+    termination, stop after max_steps or when the same quotient candidate is
+    selected repeat_limit consecutive times.
+
+    Returns (quotient, remainder, diagnostic), where diagnostic has keys
+    ``status``, ``steps``, and ``last_candidate``.  Status is one of ``exact``,
+    ``no_candidate``, ``repeated_candidate``, or ``step_limit``.
     """
     rem = N_n
     r_n = D5(0)
+    previous_candidate = None
+    consecutive_repeats = 0
 
-    # Peel dominant highest weights
-    while True:
+    for step in range(max_steps):
+        if rem == D5(0):
+            return r_n, rem, {
+                "status": "exact",
+                "steps": step,
+                "last_candidate": previous_candidate,
+            }
+
         coeffs = rem.monomial_coefficients()
         candidates = []
         for w, c in coeffs.items():
@@ -197,31 +209,58 @@ def solve_quotient_rn(N_n, Z_Q_10):
                 if w[0] >= 2 and all(isinstance(val, (int, Integer)) for val in w):
                     cand_hw = (w[0] - 2, w[1], w[2], w[3], w[4])
                     if dominant_D5_weight(cand_hw):
-                        candidates.append((w[0], cand_hw, c, False))
+                        candidates.append((tuple(w), cand_hw, c, False))
                 elif w[0] >= 1.5 and all(not isinstance(val, (int, Integer)) for val in w):
                     cand_hw = (w[0] - 1.5, w[1] - 0.5, w[2] - 0.5, w[3] - 0.5, w[4] - 0.5)
                     if dominant_D5_weight(cand_hw):
-                        candidates.append((w[0], cand_hw, c, True))
+                        candidates.append((tuple(w), cand_hw, c, True))
 
         if not candidates:
-            break
+            return r_n, rem, {
+                "status": "no_candidate",
+                "steps": step,
+                "last_candidate": previous_candidate,
+            }
 
         candidates.sort(key=lambda item: item[0], reverse=True)
-        _, cand_hw, coeff, is_ferm = candidates[0]
+        _, cand_hw, coeff, _is_ferm = candidates[0]
+        candidate_signature = (tuple(cand_hw), coeff)
+        if candidate_signature == previous_candidate:
+            consecutive_repeats += 1
+        else:
+            previous_candidate = candidate_signature
+            consecutive_repeats = 1
+
+        if consecutive_repeats >= repeat_limit:
+            return r_n, rem, {
+                "status": "repeated_candidate",
+                "steps": step,
+                "last_candidate": candidate_signature,
+            }
+
         irrep = ambient_to_d5(cand_hw)
         r_n += coeff * irrep
         rem -= coeff * irrep * Z_Q_10
 
-    return r_n, rem
+    return r_n, rem, {
+        "status": "step_limit",
+        "steps": max_steps,
+        "last_candidate": previous_candidate,
+    }
 
 
 # ==============================================================================
 # 5. Pipeline Execution and Milestone Verification
 # ==============================================================================
 
-def run_uplift_pipeline(max_level=10, verbose=False):
+def run_uplift_pipeline(
+    max_level=10,
+    verbose=False,
+    max_quotient_steps=50,
+    diagnose_all_levels=False,
+):
     print("=" * 80)
-    print("HANANY-FORCELLA-TROOST (HFT) SO(10) UPLIFT & BARS RECONSTRUCTION")
+    print("HFT SO(10) NUMERATOR UPLIFT & BOUNDED QUOTIENT DIAGNOSTIC")
     print(f"Target: Mass Levels 1 through {max_level}")
     print("=" * 80)
 
@@ -263,81 +302,73 @@ def run_uplift_pipeline(max_level=10, verbose=False):
     print("-" * 80)
     print(f"Milestone M3 Result: {'[PASSED]' if m3_pass else '[FAILED]'}")
 
-    # Step 4: Verify Milestone M4 (Forward Bars Reconstruction)
-    print(f"\n[4/4] Verifying Milestone M4: Forward Bars Reconstruction & Positivity...")
-    print("      Loading ground-truth baseline from massive_SO10.py...")
-    import massive_SO10
+    # Step 4: Attempt the proposed quotient without baseline seeding.
+    print("\n[4/4] Diagnosing direct division by the virtual SO(10) character Z_Q^10...")
+    print("-" * 96)
+    print(f"{'Level':<7}{'Status':<22}{'Steps':<9}{'Exact':<9}{'Remainder Res=0':<19}{'Quotient Res=r9'}")
+    print("-" * 96)
 
-    baseline_R = {}
+    quotient_results = {}
     for n in range(1, max_level + 1):
-        b_chars = massive_SO10.SO10_SUPERMULTIPLETS_DYNKIN[n]["bosons"]
-        f_chars = massive_SO10.SO10_SUPERMULTIPLETS_DYNKIN[n]["fermions"]
-        char = D5(0)
-        for mult, dim, dynk in b_chars:
-            char += mult * D5(*dynk)
-        for mult, dim, dynk in f_chars:
-            char += mult * D5(*dynk)
-        baseline_R[n] = char
+        quotient, remainder, diagnostic = attempt_quotient_rn(
+            P10[n], Z_Q_10, max_steps=max_quotient_steps
+        )
+        exact = remainder == D5(0)
+        remainder_branch_zero = remainder.branch(B4) == B4(0)
+        derived_r9 = hft_so9.divide_by_zq(P9[n])
+        quotient_branch_match = quotient.branch(B4) == derived_r9
+        quotient_results[n] = (quotient, remainder, diagnostic)
+        print(
+            f"{n:<7}{diagnostic['status']:<22}{diagnostic['steps']:<9}"
+            f"{str(exact):<9}{str(remainder_branch_zero):<19}{quotient_branch_match}"
+        )
+        if verbose and not exact:
+            print(f"      last candidate: {diagnostic['last_candidate']}")
+            print(f"      remainder dimension: {remainder.degree()}")
+        if not exact and not diagnose_all_levels:
+            print(
+                "      Stopping at the first non-exact quotient; this is sufficient "
+                "to show that the proposed forward pipeline does not reconstruct all levels."
+            )
+            break
 
-    baseline_r = {1: baseline_R[1]}
-    for n in range(2, max_level + 1):
-        baseline_r[n] = baseline_R[n] - baseline_R[n - 1]
-
-    print("-" * 90)
-    print(f"{'Level':<7}{'States(R_n)':<14}{'div(N=Z*r+rem)':<18}{'Positivity':<14}{'Branch Descent':<18}{'Match Base'}")
-    print("-" * 90)
-
-    m4_pass = True
-    derived_R = {}
-    running_R = D5(0)
-
-    for n in range(1, max_level + 1):
-        r_n = baseline_r[n]
-        running_R += r_n
-        derived_R[n] = running_R
-
-        # Divisibility: N_n^10 - Z_Q_10 * r_n is zero-dimensional in kernel of branching
-        rem_n = P10[n] - Z_Q_10 * r_n
-        div_check = (rem_n.degree() == 0 and rem_n.branch(B4) == 0)
-
-        # Positivity of R_n
-        coeffs = running_R.monomial_coefficients()
-        is_positive = all(c > 0 for c in coeffs.values())
-
-        # Branching descent: R_n downarrow SO(9) matches cumulative sum_k r_k^9
-        r9_cum = sum(hft_so9.divide_by_zq(P9[k]) for k in range(1, n + 1))
-        branch_check = (running_R.branch(B4) == r9_cum)
-
-        # Baseline match
-        base_match = (running_R == baseline_R[n])
-
-        level_ok = (div_check and is_positive and branch_check and base_match)
-        if not level_ok:
-            m4_pass = False
-
-        dim_Rn = int(running_R.degree())
-        print(f"{n:<7}{dim_Rn:<14}{str(div_check):<18}{str(is_positive):<14}{str(branch_check):<18}{str(base_match)}")
-
-    print("-" * 90)
+    print("-" * 96)
     print(f"Total execution time: {time.time() - t_start:.3f}s")
     print("=" * 80)
-    print("\nFINAL MILESTONE SUMMARY:")
+    print("\nCURRENT MILESTONE STATUS:")
     print(f"  * Milestone M3 (Independent SO(10) Numerator Uplift): {'[PASSED]' if m3_pass else '[FAILED]'}")
-    print(f"  * Milestone M4 (Bars Reconstruction & Positivity):    {'[PASSED]' if m4_pass else '[FAILED]'}")
+    print("  * Milestone M4 (Direct quotient reconstruction):      [UNRESOLVED]")
+    print("  * Baseline data imported:                              NO")
     print("=" * 80)
 
-    return m3_pass and m4_pass
+    return m3_pass
 
 
 if __name__ == "__main__" or (__name__ == "sage.all" and len(sys.argv) > 0 and "hft_so10_uplift" in sys.argv[0]):
     parser = argparse.ArgumentParser(description="HFT SO(10) Uplift & Bars Reconstruction")
     parser.add_argument("--max-level", type=int, default=10, help="Maximum mass level (default: 10)")
     parser.add_argument("--verbose", action="store_true", help="Verbose output")
+    parser.add_argument(
+        "--max-quotient-steps",
+        type=int,
+        default=50,
+        help="Hard limit for each quotient diagnostic (default: 50)",
+    )
+    parser.add_argument(
+        "--diagnose-all-levels",
+        action="store_true",
+        help="Continue quotient diagnostics after the first non-exact level",
+    )
 
     args_list = sys.argv[1:]
     if args_list and args_list[0].endswith(".py"):
         args_list = args_list[1:]
     args = parser.parse_args(args_list)
 
-    success = run_uplift_pipeline(max_level=args.max_level, verbose=args.verbose)
+    success = run_uplift_pipeline(
+        max_level=args.max_level,
+        verbose=args.verbose,
+        max_quotient_steps=args.max_quotient_steps,
+        diagnose_all_levels=args.diagnose_all_levels,
+    )
     sys.exit(0 if success else 1)

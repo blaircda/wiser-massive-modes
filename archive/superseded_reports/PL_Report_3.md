@@ -1,5 +1,10 @@
 # Waystone Report 3: Next Research Directions — Analytic Generating Functions, Bars' Higher Multiplicity Scheme, and 11D Supermembranes
 
+> **Superseded (23 September 2026):** This report correctly retracted the earlier
+> pure-spinor claim but retained other unsupported syzygy and telescoping
+> interpretations, and predates the repaired M4 and cross-section results. See
+> `STATUS.md`, `PLETHYSTIC_STATUS.md`, and `FINITE_CROSS_SECTION_REPORT.md`.
+
 **Date:** September 2026  
 **Status:** Completed Synthesis of Subagent Investigations  
 **Authors:** Gemini Research Agents & Antigravity Theoretical Physics Team  

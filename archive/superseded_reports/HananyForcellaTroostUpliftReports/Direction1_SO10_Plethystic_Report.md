@@ -1,5 +1,10 @@
 # Direction 1: Analytic Closed-Form $SO(10)$ Uplift via Plethystic Generating Functions
 
+> **Superseded (23 September 2026):** The M4 division, exact telescoping,
+> all-orders positivity and pure-spinor/syzygy conclusions in this report are
+> withdrawn. The valid M3 numerator restriction is retained in `STATUS.md`; see
+> also `PLETHYSTIC_STATUS.md`.
+
 **Author:** Antigravity Research Agent  
 **Date:** September 2026  
 **Status:** Complete Investigation & Technical Assessment  

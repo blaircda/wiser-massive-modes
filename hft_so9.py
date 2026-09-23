@@ -2,8 +2,8 @@
 """
 hft_so9.py
 
-Exact Closed-Form Hanany-Forcella-Troost (HFT) SO(9) Generating Function
-and Universal Supermultiplet Character Division (Milestones M1 & M2).
+Baseline-Free Hanany-Forcella-Troost (HFT) SO(9) Generating Function
+and Universal Supermultiplet Character Division.
 
 Reference:
     "The covariant perturbative string spectrum"
@@ -20,18 +20,21 @@ This script implements:
 3. Character polynomial division by the universal massive supermultiplet:
      Z_Q = [2,0,0,0]_9 + [1,0,0,1]_9 + [0,0,1,0]_9  (dim = 44 + 128 + 84 = 256)
      N_n = Z_Q * r_n  =>  solves for r_n in R(B4) via greedy highest-weight reduction.
-4. Automated verification against the baseline Fock-space reduction (r_baseline)
-   for Milestones M1 (levels 1-5) and M2 (levels 6-10).
+4. Internal verification that every derived quotient satisfies N_n = Z_Q * r_n
+   and is a positive integral SO(9) character.
+
+This derivation module deliberately does not import any baseline SO(10) data.
+Comparison with the human-established baseline is performed separately by
+verify_hft_so9_against_baseline.py.
 
 Usage:
-    PATH=\"/home/chris/miniforge3/bin:$PATH\" ./bin/sage-run hft_so9.py [--max-level N] [--verbose]
+    ./bin/sage-run hft_so9.py [--max-level N] [--verbose]
 """
 
 import sys
 import time
 import argparse
 from sage.all import *
-from massive_SO10 import SO10_SUPERMULTIPLETS_DYNKIN
 
 
 # ==============================================================================
@@ -39,7 +42,6 @@ from massive_SO10 import SO10_SUPERMULTIPLETS_DYNKIN
 # ==============================================================================
 
 B4 = WeylCharacterRing("B4", base_ring=QQ, style="coroots")
-D5 = WeylCharacterRing("D5", style="coroots")
 
 # Universal massive supermultiplet in B4 (dim = 44 + 128 + 84 = 256)
 Z_Q = B4(2, 0, 0, 0) + B4(1, 0, 0, 1) + B4(0, 0, 1, 0)
@@ -210,33 +212,18 @@ def divide_by_zq(target_char):
 
 
 # ==============================================================================
-# 5. Baseline Extraction from SO(10) Benchmark
+# 5. Baseline-Free Derivation Pipeline
 # ==============================================================================
 
-def get_baseline_r(max_level):
-    r"""
-    Extract the exact SO(9) baseline representations r_n from massive_SO10.py
-    via the inverse branching identity:
-        r_1 = S_1 \downarrow B_4
-        r_n = (S_n - S_{n-1}) \downarrow B_4  (for n >= 2).
-    """
-    def get_so10_char(n):
-        res = D5(0)
-        for mult, dim, dynkin in SO10_SUPERMULTIPLETS_DYNKIN[n]["bosons"]:
-            res += mult * D5(*dynkin)
-        for mult, dim, dynkin in SO10_SUPERMULTIPLETS_DYNKIN[n]["fermions"]:
-            res += mult * D5(*dynkin)
-        return res
+def derive_hft_spectrum(max_level):
+    """Return the HFT numerator and independently derived r_n characters."""
+    numerator = compute_hft_numerator(max_level)
+    derived_r = {
+        n: divide_by_zq(numerator[n])
+        for n in range(1, max_level + 1)
+    }
+    return numerator, derived_r
 
-    S_D5 = [get_so10_char(n) for n in range(1, max_level + 1)]
-    S_B4 = [s.branch(B4, rule="default") for s in S_D5]
-    r_baseline = [S_B4[0]] + [S_B4[i] - S_B4[i - 1] for i in range(1, max_level)]
-    return r_baseline
-
-
-# ==============================================================================
-# 6. Main Pipeline & Milestone Verification
-# ==============================================================================
 
 def run_pipeline(max_level=10, verbose=False):
     print("=" * 80)
@@ -247,25 +234,19 @@ def run_pipeline(max_level=10, verbose=False):
     t_start = time.time()
 
     # Step 1: Compute closed-form numerator
-    print(f"\n[1/3] Evaluating HFT chiral partition function in B4 (order q^{max_level})...")
+    print(f"\n[1/2] Evaluating HFT chiral partition function in B4 (order q^{max_level})...")
     t0 = time.time()
     P = compute_hft_numerator(max_level)
     print(f"      Closed-form numerator computed in {time.time() - t0:.3f}s.")
 
-    # Step 2: Load baseline
-    print("\n[2/3] Extracting baseline r_n from massive_SO10.py branching...")
-    t0 = time.time()
-    r_baseline = get_baseline_r(max_level)
-    print(f"      Baseline loaded in {time.time() - t0:.3f}s.")
-
-    # Step 3: Character division and verification
-    print("\n[3/3] Performing character division N_n / Z_Q and verifying...")
+    # Step 2: Character division and internal verification
+    print("\n[2/2] Performing character division N_n / Z_Q and verifying...")
     print("-" * 80)
-    print(f"{'Level':<7}{'Dimension':<12}{'Check Z_Q*r=N':<16}{'Match Baseline':<16}{'Time':<10}")
+    print(f"{'Level':<7}{'Dimension':<12}{'Check Z_Q*r=N':<18}{'Positive Integral':<20}{'Time':<10}")
     print("-" * 80)
 
-    m1_pass = True
-    m2_pass = True
+    low_levels_pass = True
+    high_levels_pass = True
 
     derived_r = {}
 
@@ -276,15 +257,16 @@ def run_pipeline(max_level=10, verbose=False):
         derived_r[n] = r_n
 
         zq_check = (Z_Q * r_n == P[n])
-        baseline_match = (r_n == r_baseline[n - 1])
+        coeffs = r_n.monomial_coefficients().values()
+        positive_integral = all(c in ZZ and c >= 0 for c in coeffs)
 
-        if n <= 5 and not (zq_check and baseline_match):
-            m1_pass = False
-        if n > 5 and not (zq_check and baseline_match):
-            m2_pass = False
+        if n <= 5 and not (zq_check and positive_integral):
+            low_levels_pass = False
+        if n > 5 and not (zq_check and positive_integral):
+            high_levels_pass = False
 
         dim_val = int(r_n.degree())
-        print(f"{n:<7}{dim_val:<12}{str(zq_check):<16}{str(baseline_match):<16}{dt:.3f}s")
+        print(f"{n:<7}{dim_val:<12}{str(zq_check):<18}{str(positive_integral):<20}{dt:.3f}s")
 
         if verbose:
             print(f"      r_{n} = {r_n}")
@@ -293,21 +275,22 @@ def run_pipeline(max_level=10, verbose=False):
     print(f"Total pipeline execution time: {time.time() - t_start:.3f}s")
     print("=" * 80)
 
-    # Report Milestones
-    print("\nMILESTONE VERIFICATION SUMMARY:")
-    print(f"  * Milestone M1 (Levels 1-5):  {'[PASSED]' if m1_pass else '[FAILED]'}")
-    if max_level >= 10:
-        print(f"  * Milestone M2 (Levels 6-10): {'[PASSED]' if m2_pass else '[FAILED]'}")
+    print("\nBASELINE-FREE DERIVATION SUMMARY:")
+    low_end = min(5, max_level)
+    print(f"  * Levels 1-{low_end}: {'[PASSED]' if low_levels_pass else '[FAILED]'}")
+    if max_level > 5:
+        print(f"  * Levels 6-{max_level}: {'[PASSED]' if high_levels_pass else '[FAILED]'}")
+    print("  * Baseline data imported: NO")
     print("=" * 80)
 
-    return m1_pass and m2_pass
+    return low_levels_pass and high_levels_pass
 
 
 if __name__ == "__main__" or (__name__ == "sage.all" and len(sys.argv) > 0 and "hft_so9" in sys.argv[0]):
     parser = argparse.ArgumentParser(description="HFT SO(9) Generating Function & Character Division")
     parser.add_argument("--max-level", type=int, default=10, help="Maximum mass level to compute (default: 10)")
     parser.add_argument("--verbose", action="store_true", help="Print full character expressions at each level")
-    
+
     # Filter argv if called via sage wrapper
     args_list = sys.argv[1:]
     if args_list and args_list[0].endswith(".py"):
@@ -316,4 +299,3 @@ if __name__ == "__main__" or (__name__ == "sage.all" and len(sys.argv) > 0 and "
 
     success = run_pipeline(max_level=args.max_level, verbose=args.verbose)
     sys.exit(0 if success else 1)
-
