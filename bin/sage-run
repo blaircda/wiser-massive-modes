@@ -22,7 +22,7 @@ if [[ -n "$sage_executable" ]]; then
     # These project scripts are valid Python and accept their own CLI options.
     # Running them with the environment's Python prevents Sage's CLI parser from
     # consuming options such as --max-level.
-    if [[ ${1:-} == *.py ]]; then
+    if [[ ${1:-} == *.py || ${1:-} == -m ]]; then
         python_executable="${sage_executable%/sage}/python"
         if [[ -x "$python_executable" ]]; then
             exec "$python_executable" "$@"
@@ -43,7 +43,7 @@ else
     exit 127
 fi
 
-if [[ ${1:-} == *.py ]]; then
+if [[ ${1:-} == *.py || ${1:-} == -m ]]; then
     exec "$conda_executable" run -n sage python "$@"
 fi
 exec "$conda_executable" run -n sage sage "$@"
