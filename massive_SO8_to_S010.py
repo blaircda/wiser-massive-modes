@@ -3,16 +3,19 @@
 # firstly as SO8 states F^l in lightcone gauge
 # then factoring out the common massive supermultiplet ( 44 + 84 + 128 )
 # so the state at level l is:
-# F^l r^l otimes ( 44 + 84 + 128 )
-# we are interested in the r^l
+# F_l = r_l^9 otimes ( 44 + 84 + 128 )
+# we are interested in the r_l
 # we find an uplift
-# r^l -> R^l
+# r_l^8 -> r_l^9
 # where R^l are SO9 states
 # as required by the fact SO9 is the little group for massive states in 10d
 #
-# then we verify that the representations
-# S^l = sum_{l' = 1}^l R^l
+# then we want to verify that the representations
+# R_l^9 = sum_{i = 1}^l r_i^9
 # form SO(10) multiplets
+# i.e. there exists
+# R_n^10 s.t. R_n^10 -> R_n^9 under branching
+# this code verifies this using a previously found set of SO(10) multiplets up to level 10
 
 from sage.all import *
 from massive_SO8_construct import (

@@ -5,9 +5,11 @@
 **Status:** active research plan; TK6A, TK6B.1, finite TK6B.2, the TK6B.3
 all-split boundary-shell theorem, finite TK6B.4 weighted circuits, the TK6B.5
 local HFT pullback, the TK6B.5b/c prefix-shell/Regge-tail reduction and the
-TK6B.5d stable Pieri theorem completed
+TK6B.5d stable Pieri theorem completed; TK6B.5e reduced the remaining
+stable-range premise to an explicit filtered HFT support theorem, and
+TK6B.5f has proved that support theorem at all oscillator degrees
 
-**Last updated:** 25 September 2026
+**Last updated:** 30 September 2026
 
 ## Objective
 
@@ -303,6 +305,8 @@ Only one of the following final proof forms is required:
 | TK6B.4 | All-split circuit criterion | Establish the weighted criterion and identify whether unit circuits persist |
 | TK6B.5 | HFT weighted inequalities | Prove every cumulative target satisfies all weighted circuit inequalities |
 | TK6B.5d | Stable Pieri transport | Prove consecutive symmetric-power translation in both weight cosets and isolate its HFT support hypothesis |
+| TK6B.5e | Finite Pieri hazard | Derive the exact source threshold and reduce HFT stable-range coverage to a closed filtered-divisibility statement |
+| TK6B.5f | Analytic HFT support | Prove the filtered-divisibility statement by exact oscillator telescoping and a level-independent finite certificate |
 | GU6.1 | Generated BBMS levels beyond 7 | Exact graded reconstruction, cumulative positivity and restriction checks |
 | GU6.2 | Telescoping analysis | Uniform cancellation rule or exact first obstruction |
 | Final | All-orders argument | Baseline-free existence proof with all assumptions stated |
@@ -399,11 +403,33 @@ remainder. The equivalent exterior-cost estimate passes for all 363 unstable
 product terms through total degree 12, while a generic Pieri-cost shortcut has
 an exact counterexample. The bound also fails termwise on $PL[Z'_m]$, so the
 proof must use the special HFT coefficient recurrence and its cancellations.
-The next implementation should track the four linear filtrations whose maximum
-is the exterior cost directly through the HFT NS/R product, massless
-subtraction and $qZ_Q$ division.
 See
 `trajectory_kernel/reports/TK6B5D_STABLE_PIERI_TRANSLATION.md`.
+
+**TK6B.5e replaces the proposed four-filtration route.** Each of the four
+linear exterior-cost pieces has an exact tensor-product counterexample, so
+none is a multiplicative representation-ring filtration. The correct
+coupling-aware invariant is the finite harmonic hazard
+$H(\mu)=\max(E(\lambda)-k)$ over unstable constituents. Its source threshold
+$K(\mu)=\max(E(\mu)-1,H(\mu))$ has a closed wall-piecewise affine formula,
+proved in both tensorial and spinorial weight cosets. Every HFT remainder term
+through degree 12 satisfies $K(\mu)\leq d$. Exact all-order oscillator
+identities now express $qZ_QF$ and the all-vector-free core as explicit
+NS/R--Euler numerators. The remaining theorem is their filtered divisibility
+into the wall module $K(\mu)\leq d$, not a further search for tensor-product
+filtrations. See
+`trajectory_kernel/reports/TK6B5E_PIERI_HAZARD.md`.
+
+**TK6B.5f proves the filtered HFT support theorem.** Triality on the common
+$D_4/B_4$ torus gives an exact Green--Schwarz telescope for the virtual
+remainder. The finite Weyl/Dirac map does not raise the chirality-folded wall
+degree, and uniform vector/spinor bounds close the infinite oscillator tail.
+Horizontal-strip upper bounds leave five pivot classes and 323 exact
+low-mode records; all pass with minimum margin zero. Thus
+$[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ at every degree. This closes the
+HFT premise of stable Pieri transport but not the later recursive-circuit or
+integral-packetization step. See
+`trajectory_kernel/reports/TK6B5F_ANALYTIC_HFT_SUPPORT.md`.
 
 **The floating-point MILP audit is complete.** Integer objectives and variables
 now have drift guards and all positive primal witnesses receive exact
@@ -433,9 +459,9 @@ exhaustion remain solver-backed rather than exact certificates. See
    $A/B/C$ family list. Finite TK6B.4 proves the weighted-circuit criterion and
    refutes unit coefficients. TK6B.5 now supplies the local HFT pullback; its
    continuation shows that fixed finite circuits cannot stabilize. TK6B.5d
-   proves the stable Pieri theorem; the remaining task is to prove its
-   contribution-wise HFT stable-range hypothesis, control coherent
-   boundary-tail families and establish the resulting partial-sum
-   inequalities.
+   proves the stable Pieri theorem, TK6B.5e reduces its contribution-wise HFT
+   premise to filtered divisibility, and TK6B.5f proves that support theorem.
+   Control coherent boundary-tail families and establish the resulting
+   partial-sum inequalities.
 4. Extend the BBMS construction beyond level 7 and test telescoping as an
    independent possible shortcut.

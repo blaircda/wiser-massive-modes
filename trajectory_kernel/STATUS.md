@@ -439,7 +439,7 @@ Regge-tail/Pieri route isolated.**
 ## TK6b.5d result
 
 **TK6b.5d — Stable $B_n$ Pieri translation proved; all-degree HFT coverage
-remains open.**
+is subsequently proved in TK6B.5f.**
 
 - Racah--Speiser gives an exact all-rank theorem. For arbitrary tensorial or
   spinorial $B_n$ weights $\mu$ and $\lambda$, if
@@ -457,11 +457,10 @@ remains open.**
   couplings in the 185 eligible adjacent $\ell$ shifts lie in the theorem's
   stable range and match. They include 214 spinorial couplings and 44
   couplings with negative virtual-remainder coefficients.
-- The remaining all-orders obligation is contribution-wise: prove that every
-  remainder irrep which can couple to an exterior-chamber target satisfies
-  the stable-range inequality, and that the new top-degree remainder misses
-  the translated target. The observed half-slope bound alone is not logically
-  sufficient because it also includes inactive remainder irreps.
+- The all-orders obligation left by this milestone was contribution-wise
+  stable-range support for the HFT remainder. TK6B.5f now proves it. The
+  observed half-slope bound alone was not logically sufficient because it
+  also includes inactive remainder irreps.
 - With $E(\ell,m,r,s)=2\ell+3m+\operatorname{cost}(r,s)$, all 176 remainder
   terms through degree 12 satisfy $E(\mu)\leq d+1$. More directly, all 363
   unstable HFT product terms through total degree 12 satisfy
@@ -475,13 +474,69 @@ remains open.**
 - A generator-wise plethystic proof is also obstructed: through degree 8,
   $PL[Z'_m]$ has 10 exterior-cost violations among 85 terms, with minimum
   margin $-3$, although $Z'_m$ itself satisfies the bound in that window.
-- The proposed next route is a four-filtration Newton-cone argument on the
-  exact HFT product. The four linear forms underlying $E$ are multiplicative
-  representation-ring filtrations, and removing
-  $\operatorname{PE}(qV)$ moves the remaining positive bosonic vector modes
-  to degree at least two. The NS/R combination, massless subtraction and
-  division by $qZ_Q$ are the unresolved cancellation steps.
+- **Correction from TK6B.5e:** the four linear forms underlying $E$ are not
+  multiplicative representation-ring filtrations. Every one has an exact
+  small $B_4$ tensor-product counterexample. The proposed four-filtration
+  Newton-cone route is therefore invalid as stated.
 - See `reports/TK6B5D_STABLE_PIERI_TRANSLATION.md`.
+
+**TK6b.5e — Finite Pieri hazard and explicit HFT support target.**
+
+- For each source irrep $V_\mu$, define the unstable harmonic hazard
+  $H(\mu)=\max(E(\lambda)-k)$ over
+  $V_\lambda\subset V_\mu\otimes H_k$ with
+  $\lambda_1<\mu_1$. The weight-polytope bound implies $k<2\mu_1$, so this
+  is a finite invariant independent of any string-level cutoff.
+- The source threshold $K(\mu)=\max(E(\mu)-1,H(\mu))$ is sufficient for both
+  TK6B.5d obligations: every unstable symmetric-power contribution lies
+  outside the GMSZ chamber, and the unpaired top-degree term is excluded.
+- $K$ has a closed wall-piecewise affine formula. On $\ell=0$ it is simply
+  $E-1$. For $\ell\geq1$, three additional pieces enter:
+  $2\ell+5m+6r+3s-4$, $2\ell+5m+7r+4s-5$, and
+  $2\ell+5m+9r+5s-9$.
+- Odd-orthogonal horizontal-strip optimization proves the formula in the
+  tensorial sector. Factoring a spinorial $B_4$ character into the basic
+  spinor times a $C_4$ character reduces the spinorial sector to symplectic
+  Pieri; the extra $k-1$ branch only lowers the hazard. A 678-constituent
+  exact spinorial regression and a 210-label wall-formula holdout have no
+  failures.
+- All 176 nonzero HFT remainder terms through degree 12 satisfy
+  $d\geq K(\mu)$, with minimum margin zero. This remains finite evidence for
+  the HFT-specific support theorem, not its all-orders proof.
+- Exact formal identities now isolate the remaining problem. Both $qZ_QF$
+  and the all-vector-free core are explicit NS/R--Euler oscillator
+  numerators. Through level 13 the core has 103 irreducible terms, including
+  43 negative coefficients, and no $K$-support failure.
+- Uncancelled Racah support is too coarse, generic one-vector induction is
+  false, and the plethystic-generator route was already obstructed. The next
+  theorem is filtered divisibility of the explicit oscillator numerator by
+  $Z_Q$ into the wall module $K(\mu)\leq d$.
+- See `reports/TK6B5E_PIERI_HAZARD.md`.
+
+**TK6b.5f — Analytic HFT support theorem.**
+
+- On the common $D_4/B_4$ torus, triality gives the exact finite identity
+  $E(u)-D(u)=u(V+S)B(u)$. It telescopes the universal-ground-multiplet and
+  level-one-vector divisions before any support estimate.
+- The resulting exact formula is
+  $F(q)=(1-q)\sum_{n\geq1}q^{n-1}B(q^n)
+  \prod_{m<n}E(q^m)/\prod_{2\leq m\leq n}D(q^m)$.
+- The equal-rank Weyl/Dirac numerator sends every $D_4$ source only to $B_4$
+  terms whose seven-wall degree is no larger than that of its chirality-folded
+  highest weight. This support statement does not select an $SO(10)$
+  chirality.
+- A vector factor raises the folded degree by at most 4 and a spinor factor by
+  at most 5. Hence vector modes $m\geq4$, fermion modes $m\geq5$, and
+  $B(q^n)$ for $n\geq3$ are uniformly safe.
+- Horizontal-strip optimization gives closed affine hazard upper bounds for
+  vector modes 2 and 3. Only fermion modes 1--4 and five pivot classes remain. Their
+  323-record exact certificate has no failures; the class minimum margins are
+  $0,0,0,0,1$.
+- Therefore $[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ at every degree. The
+  stable-range premise of TK6B.5d is now proved. The full Bars existence proof
+  still requires recursive weighted-circuit control or an integral
+  packetization theorem.
+- See `reports/TK6B5F_ANALYTIC_HFT_SUPPORT.md`.
 
 ## MILP certification audit
 
@@ -503,14 +558,14 @@ TK6b.3 resolves both the proposed $A/B/C$ continuation and the local
 parent-split problem. TK6b.4 proves the exact finite weighted criterion,
 TK6b.5 pulls it back to HFT multiplicities, and TK6b.5b/c shows that fixed
 finite circuits cannot survive the infinite leading-label limit. TK6b.5d now
-proves stable Pieri transport for tensorial and spinorial $B_n$ weights. The
-next central step is to prove all-degree, contribution-wise stable-range
-coverage for the HFT remainder, preferably in the equivalent exterior-cost
-form $E(\lambda)\leq d+R$, then organize the horizon-dependent circuits as a
-recursive boundary-tail module with a controlled mixed core. Saturation or
-recursive integral packetization is still required separately. In parallel,
-the TK6a partial-sum quotient formulas invite an all-$\ell$ tensor-product
-proof.
+proves stable Pieri transport for tensorial and spinorial $B_n$ weights.
+TK6B.5e reduces its remaining premise to a closed filtered-divisibility
+statement, and TK6B.5f proves that statement from the exact Green--Schwarz
+oscillator product. The next central step is therefore to organize the
+horizon-dependent circuits as a recursive boundary-tail module with a
+controlled mixed core. Saturation or recursive integral packetization is
+still required separately. In parallel, the TK6a partial-sum quotient
+formulas invite an all-$\ell$ tensor-product proof.
 
 TK5c separately rules out naive ungraded source sparsity as a cutoff-stable
 selector. The oscillator-graded uplift suggested by hep-th/0310292 has now
@@ -546,8 +601,8 @@ confirming that this depth is blind to their outer-chirality difference. See
 
 ## Open questions
 
-- Can the empirically exact GMSZ chamber inequalities and shift identities be
-  derived from the HFT oscillator product?
+- Can the now-proved contribution-wise stable Pieri transport be assembled
+  into all weighted boundary-tail inequalities without a horizon cutoff?
 - Is the complement of the transported chamber described by finitely many
   source types after passage to the $D_5\downarrow B_4$ kernel coordinates?
 - Is the core-supported positive path unique after restoring the oscillator
@@ -612,4 +667,5 @@ confirming that this depth is blind to their outer-chirality difference. See
 ./bin/sage-run -m trajectory_kernel.hft_weighted_inequalities --max-level 13
 ./bin/sage-run -m trajectory_kernel.shell_duality --self-test
 ./bin/sage-run -m trajectory_kernel.regge_factorization --max-level 13
+./bin/sage-run -m trajectory_kernel.hft_analytic_support --max-level 13 --maximum-label-sum 2 --telescoping-degree 5 --core-pivot 3 --core-pivot 4 --core-pivot 5
 ```

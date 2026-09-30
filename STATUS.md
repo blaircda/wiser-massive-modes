@@ -675,8 +675,8 @@ global half-slope observation. See
 
 ### Stable Pieri translation (TK6B.5d)
 
-**Status: all-rank translation theorem proved; all-degree HFT stable-range
-coverage remains open.**
+**Status: all-rank translation theorem proved; its formerly open all-degree
+HFT stable-range premise is proved in TK6B.5f.**
 
 For arbitrary tensorial or spinorial $B_n$ highest weights $\mu$ and
 $\lambda$, a Racah--Speiser stabilizer argument proves
@@ -713,7 +713,7 @@ target lies in the stable range, and that the new top-degree remainder misses
 the translated target. The observed half-slope bound alone does not imply
 this, because it also includes remainder irreps which cannot couple.
 
-A sharper finite statement is now visible. Put
+A sharper statement is now available. Put
 $E(\ell,m,r,s)=2\ell+3m+\operatorname{cost}(r,s)$, with the GMSZ support
 cost. All 176 remainder terms through degree 12 satisfy $E(\mu)\leq d+1$,
 and all 363 unstable HFT product terms through total degree 12 satisfy
@@ -722,9 +722,54 @@ the translated label outside the GMSZ chamber exactly. It is HFT-specific:
 the generic shortcut $E(\lambda)\leq E(\mu)+R-1$ has an exact $B_4$
 counterexample. A generator-wise proof also fails: $PL[Z'_m]$ has 10
 exterior-cost violations through degree 8 even though $Z'_m$ itself obeys the
-bound in that window. The next route is a four-filtration Newton-cone analysis
-of the exact HFT product after removing the level-one vector tower. See
-`trajectory_kernel/reports/TK6B5D_STABLE_PIERI_TRANSLATION.md`.
+bound in that window.
+
+TK6B.5e replaces the failed generic shortcut by the finite harmonic hazard
+$H(\mu)=\max(E(\lambda)-k)$ over unstable constituents of
+$V_\mu\otimes H_k$. Only $k<2\mu_1$ can contribute. The sufficient source
+threshold $K(\mu)=\max(E(\mu)-1,H(\mu))$ has a closed wall-piecewise affine
+formula, proved for both tensorial and spinorial weights. Its three new pieces
+away from $\ell=0$ are
+
+$$
+2\ell+5m+6r+3s-4,
+$$
+
+$$
+2\ell+5m+7r+4s-5,
+$$
+
+$$
+2\ell+5m+9r+5s-9.
+$$
+
+All 176 HFT remainder terms through degree 12 satisfy $d\geq K(\mu)$.
+However, all four previously proposed linear ``filtrations'' have exact
+tensor-product counterexamples, so the four-filtration Newton-cone route was
+not valid. This milestone reduced the problem to the explicit HFT support
+theorem $[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$, subsequently proved in
+TK6B.5f. Exact oscillator identities express $qZ_QF$ and the
+all-vector-free core as known NS/R--Euler numerators. See
+`trajectory_kernel/reports/TK6B5E_PIERI_HAZARD.md`.
+
+TK6B.5f proves this remaining support theorem. On the common $D_4/B_4$ torus,
+the finite triality identity
+$E(u)-D(u)=u(V+S)B(u)$ gives an exact Green--Schwarz telescope for $F(q)$.
+The equal-rank Weyl/Dirac numerator cannot raise the chirality-folded
+seven-wall degree. Uniform vector and spinor Lipschitz bounds close all vector
+modes $m\geq4$, fermion modes $m\geq5$, and pivots $n\geq3$ outside a fixed
+low-mode core. Horizontal-strip optimization bounds vector modes 2 and 3 by
+eight affine walls. The remaining five pivot classes give 323 finite
+exact records with no failure and minimum margin zero. Consequently
+
+$$
+[V_\mu]F_d\neq0\quad\Longrightarrow\quad d\geq K(\mu)
+$$
+
+at every degree. This closes the contribution-wise stable-range premise of
+TK6B.5d. It does not yet prove the global recursive weighted-circuit or
+integral-packetization statement required for Bars III.B. See
+`trajectory_kernel/reports/TK6B5F_ANALYTIC_HFT_SUPPORT.md`.
 
 ### MILP numerical certification audit
 
@@ -754,13 +799,11 @@ The present priority order is:
    primitive circuits need not have unit coefficients, and TK6B.5 gives their
    exact local pullback to HFT multiplicities. TK6B.5b/c shows that fixed
    finite circuits cannot stabilize and replaces them by boundary-tail
-   families. Stable Pieri transport is now proved by TK6B.5d. Prove its
-   contribution-wise stable-range hypothesis for the HFT remainder, using the
-   observed exterior-cost inequality rather than the refuted generic
-   Pieri-cost shortcut, then control the mixed tail/core module and its
-   partial sums. Prove saturation or construct integral packetizations
-   directly. This attacks the theorem actually required and does not select a
-   unique lift.
+   families. Stable Pieri transport is proved by TK6B.5d, and TK6B.5f now
+   proves its contribution-wise HFT support premise. Use this transport to
+   control the mixed tail/core module and its cumulative partial sums. Prove
+   saturation or construct integral packetizations directly. This attacks the
+   theorem actually required and does not select a unique lift.
 3. **Test cumulative positivity of the oscillator-graded candidate.** Its
    single-level tagged characters are virtual, but their cumulative ungraded
    sums are positive through level 7. Determine whether the starred
@@ -1228,10 +1271,17 @@ The programme is isolated under `trajectory_kernel/`; its local `README.md` and
    level 13 satisfy that hypothesis, including 214 spinorial and 44
    negative-coefficient couplings. A sharper exterior-cost inequality passes
    for every unstable HFT product term through total degree 12, but a generic
-   Pieri-cost shortcut is false. The remaining all-orders obligation is an
-   HFT-specific contribution-wise remainder support theorem. See
+   Pieri-cost shortcut is false. The HFT-specific contribution-wise remainder
+   support theorem is proved in TK6B.5f. See
    `trajectory_kernel/reports/TK6B5D_STABLE_PIERI_TRANSLATION.md`.
-16. **GU1 complete through level 7:** the oscillator-count-refined Appendix B
+16. **TK6B.5f analytic HFT support proved:** the exact Green--Schwarz
+   telescope, a finite Weyl/Dirac fold, and uniform oscillator-tail bounds
+   reduce the support theorem to 323 low-mode records. All pass, with minimum
+   margin zero. Hence $[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ at every
+   degree, closing the HFT premise of stable Pieri transport. This is not yet
+   the recursive circuit or integral packetization theorem. See
+   `trajectory_kernel/reports/TK6B5F_ANALYTIC_HFT_SUPPORT.md`.
+17. **GU1 complete through level 7:** the oscillator-count-refined Appendix B
    construction of hep-th/0310292 is reproduced exactly and its cumulative
    ungraded lift is positive with the correct HFT $SO(9)$ restriction. It
    agrees with Bars' displayed lift, and with the protected algorithmic
@@ -1240,7 +1290,7 @@ The programme is isolated under `trajectory_kernel/`; its local `README.md` and
    an independent positive continuation of the existence pattern, not a
    disagreement with a higher-level choice made by Bars. See
    `graded_uplift/reports/GU1_LITERATURE_GRADING_AUDIT.md`.
-17. **GU2 complete through level 7 under explicit finite bounds:** after
+18. **GU2 complete through level 7 under explicit finite bounds:** after
    closing the paper-bound tagged domain under outer chirality, the paper
    solution remains feasible but the protected algorithmic single-level
    targets are rationally infeasible at levels 6 and 7. Exact ranks are
@@ -1251,7 +1301,7 @@ The programme is isolated under `trajectory_kernel/`; its local `README.md` and
    is neither a failure of positive liftability nor an unbounded-$\Delta$
    theorem. See
    `graded_uplift/reports/GU2_GRADED_BARS_COMPATIBILITY.md`.
-18. **GU3 complete through level 7 in the resolved IIA domain:** opposite
+19. **GU3 complete through level 7 in the resolved IIA domain:** opposite
     right-moving chirality is exactly equivalent to the axial relation
     $\nu_R=\Delta_R+J_R$, and every Bars $(\ell',\nu)$ block is reproduced.
     The resolved chiral maps and their tensor products are injective, however,
@@ -1260,31 +1310,29 @@ The programme is isolated under `trajectory_kernel/`; its local `README.md` and
     protected algorithmic continuation at level 6 by an outer-even
     restriction-kernel element. See
     `graded_uplift/reports/GU3_IIA_CLOSED_REFINEMENT.md`.
-19. **GU4 complete through level 3:** direct lifting of
+20. **GU4 complete through level 3:** direct lifting of
     $R_n^9\otimes R_n^9$ in the full outer-closed parent domain gives a unique
     positive outer-invariant result. At level 3, outer invariance reduces 27
     positive lifts to one. The factorized representatives recover both Bars
     $\ell'$ labels as $D_5\downarrow B_4$ interlacing depths. See
     `graded_uplift/reports/GU4_DIRECT_CLOSED_LOW_LEVELS.md`.
-20. **GU5 level-6 check complete:** the direct closed conditions admit at
+21. **GU5 level-6 check complete:** the direct closed conditions admit at
     least two distinct positive outer-even lifts at level 6, while the naive
     interlacing-depth rule has no positive lift beginning already at level 5.
     The protected algorithmic continuation and the paper lift share the same
     depth defect, so this refinement cannot distinguish their level-6
     chirality choices. See
     `graded_uplift/reports/GU5_LEVEL6_DIRECT_CLOSED_AND_DEPTH.md`.
-21. **Current objective:** prove contribution-wise stable-range coverage for
-    the HFT virtual remainder, preferably via the observed exterior-cost
-    inequality $E(\lambda)\leq d+R$, then organize horizon-dependent weighted
-    circuits into a recursive boundary-tail module with a controlled mixed
-    core. Use the TK6B.5 local pullback to prove the resulting cumulative HFT
-    partial-sum inequalities. Prove saturation or construct integral
-    packetizations directly. In parallel,
+22. **Current objective:** use the proved contribution-wise stable-range
+    coverage to organize horizon-dependent weighted circuits into a recursive
+    boundary-tail module with a controlled mixed core. Use the TK6B.5 local
+    pullback to prove the resulting cumulative HFT partial-sum inequalities.
+    Prove saturation or construct integral packetizations directly. In parallel,
     seek an all-$\ell$ proof of the TK6A quotient formulas and test whether the
     BBMS cumulative construction telescopes. Any one constructive all-orders
     existence proof would suffice; it need not choose a unique point of the
     positive fibre. Matching the protected algorithmic continuation is a
     stronger secondary question and is not part of Bars' all-orders existence
     claim.
-22. Use the protected levels 1--10 only as a later comparison layer, not as
+23. Use the protected levels 1--10 only as a later comparison layer, not as
     input to the construction.

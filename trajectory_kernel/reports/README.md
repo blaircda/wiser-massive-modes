@@ -47,5 +47,13 @@ Active reports:
 - `TK6B5D_STABLE_PIERI_TRANSLATION.md`: all-rank Racah--Speiser proof of
   stable symmetric-power translation, including spinorial weights, and the
   contribution-wise HFT stable-range audit through level 13.
+- `TK6B5E_PIERI_HAZARD.md`: analytic finite cutoff and closed wall formula for
+  unstable harmonic couplings, exact tensorial/spinorial reduction, correction
+  of the failed four-filtration proposal, and the explicit HFT
+  filtered-divisibility target.
+- `TK6B5F_ANALYTIC_HFT_SUPPORT.md`: exact Green--Schwarz telescoping,
+  $D_4$-to-$B_4$ Weyl/Dirac support control, analytic oscillator-tail closure
+  and the complete finite low-mode certificate proving the HFT support target
+  at all degrees.
 - `MILP_NUMERICAL_CERTIFICATION_AUDIT.md`: floating-point MILP rounding audit,
   exact primal-witness hardening, and the remaining solver-status limitation.

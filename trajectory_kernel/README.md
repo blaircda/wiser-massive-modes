@@ -33,8 +33,10 @@ The package is divided by provenance:
   `restriction_semigroup.py`, and `interlacing_facets.py` are derivation
   modules. `boundary_shell.py`, `all_split_circuits.py`,
   `hft_weighted_inequalities.py`, `shell_duality.py`,
-  `regge_factorization.py`, `stable_pieri.py` and `milp_certification.py` are
-  also derivation modules. They must not import any protected baseline file.
+  `regge_factorization.py`, `stable_pieri.py`, `hft_pieri_hazard.py`,
+  `hft_filtered_core.py`, `hft_analytic_support.py` and
+  `milp_certification.py` are also derivation modules. They must not import
+  any protected baseline file.
 - `verify_against_baseline.py` is the only module in this directory permitted
   to import `massive_SO10.py` or another protected baseline.
 - Comparisons must occur only after a candidate rule has been constructed from
@@ -75,6 +77,9 @@ trajectory_kernel/
 ├── shell_duality.py
 ├── regge_factorization.py
 ├── stable_pieri.py
+├── hft_pieri_hazard.py
+├── hft_filtered_core.py
+├── hft_analytic_support.py
 ├── milp_certification.py
 ├── verify_against_baseline.py
 └── reports/
@@ -163,8 +168,24 @@ trajectory_kernel/
     remainder's first orthogonal coordinate. All 524 active HFT remainder
     couplings in the 185 eligible shifts through level 13 satisfy this exact
     hypothesis. A sharper exterior-cost inequality excludes every unstable
-    product term through total degree 12; proving it at every degree remains
-    open.
+    product term through total degree 12; TK6B.5f subsequently proves the
+    required support statement at every degree.
+14. **TK6b.5e — Finite Pieri hazard and HFT filtered core:** The unstable
+    harmonic search has the analytic cutoff $k<2\mu_1$, and its exact source
+    threshold is a wall-piecewise maximum of seven affine bounds. The formula
+    is proved for tensorial and spinorial weights. It reduces all-orders
+    stable-range coverage to the HFT support theorem
+    $[V_\mu]F_d\neq0\Rightarrow K(\mu)\leq d$. Exact oscillator identities
+    isolate this as filtered divisibility by $Z_Q$; TK6B.5f proves the
+    implication beyond the formerly verified degree-12 window.
+15. **TK6b.5f — Analytic HFT support:** Green--Schwarz triality gives an
+    exact telescoping formula for the virtual remainder. Weyl/Dirac folding
+    does not raise the seven-wall degree, uniform vector/spinor estimates
+    close the infinite mode tail, and the remaining 323-record low-mode
+    certificate has no failures. Hence
+    $[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ at every degree. The remaining
+    Bars problem is the global recursive circuit/packetization theorem, not
+    further HFT level testing.
 
 ## Invocation
 
@@ -194,6 +215,9 @@ unambiguous:
 ./bin/sage-run -m trajectory_kernel.regge_factorization --max-level 13
 ./bin/sage-run -m trajectory_kernel.stable_pieri --max-level 13
 ./bin/sage-run -m trajectory_kernel.stable_pieri --max-level 9 --plethystic-audit
+./bin/sage-run -m trajectory_kernel.hft_pieri_hazard --max-level 13 --maximum-label-sum 2 --formula-label-sum 5
+./bin/sage-run -m trajectory_kernel.hft_filtered_core --max-level 13
+./bin/sage-run -m trajectory_kernel.hft_analytic_support --max-level 13 --maximum-label-sum 2 --telescoping-degree 5 --core-pivot 3 --core-pivot 4 --core-pivot 5
 ```
 
 Further commands will be added to the local `STATUS.md` only after their

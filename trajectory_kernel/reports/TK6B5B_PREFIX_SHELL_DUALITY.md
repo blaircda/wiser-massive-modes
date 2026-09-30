@@ -3,11 +3,11 @@
 **Status:** pivot-elimination theorem proved; fixed finite-circuit route
 obstructed; universal interval-tail family proved; exact HFT Regge
 factorization implemented; stable Pieri lemma subsequently proved in
-TK6B.5d; all-degree remainder support remains open
+TK6B.5d; all-degree remainder support subsequently proved in TK6B.5f
 
 **Provenance:** baseline-free
 
-**Last updated:** 25 September 2026
+**Last updated:** 30 September 2026
 
 ## Result
 

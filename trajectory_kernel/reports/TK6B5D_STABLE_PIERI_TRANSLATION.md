@@ -2,11 +2,11 @@
 
 **Status:** stable translation theorem proved for tensorial and spinorial
 $B_n$ weights; all active HFT remainder couplings certified through level 13;
-all-orders HFT stable-range coverage remains open
+the formerly open all-orders HFT stable-range premise is proved in TK6B.5f
 
 **Provenance:** baseline-free
 
-**Last updated:** 25 September 2026
+**Last updated:** 30 September 2026
 
 ## Result
 
@@ -65,15 +65,15 @@ tensorial and 214 spinorial; 44 carry a negative coefficient in the virtual
 remainder. There are no active pairs outside the stable range, no unpaired
 top-degree remainder term, and no multiplicity failure in that window.
 
-The remaining all-orders problem is therefore narrower than the earlier
-"prove the GMSZ shift" formulation. One must prove that every HFT remainder
-irrep which can contribute in the exterior chamber satisfies the stable-range
-inequality, and that the new top-degree remainder coefficient cannot hit the
-translated target. A sharper exterior-cost inequality passes for every
-unstable product term through total degree 12 and converts this statement
-exactly into exclusion from the GMSZ chamber. A bound on all remainder irreps
-without regard to whether they can couple is not sufficient, and a tempting
-generic Pieri-cost shortcut has an exact counterexample.
+The all-orders problem left by this milestone was narrower than the earlier
+"prove the GMSZ shift" formulation: every HFT remainder irrep contributing in
+the exterior chamber had to satisfy the stable-range inequality, while the
+new top-degree coefficient had to miss the translated target. TK6B.5f now
+proves this statement. The sharper exterior-cost inequality found here passed
+through total degree 12 and converted the problem exactly into exclusion from
+the GMSZ chamber. A bound on all remainder irreps without regard to whether
+they can couple was not sufficient, and a tempting generic Pieri-cost
+shortcut has an exact counterexample.
 
 ## 1. Racah–Speiser proof
 
@@ -286,8 +286,8 @@ assigning the exterior cost independently to each plethystic generator is
 also obstructed: the required support restriction is restored only after
 nontrivial formal cancellations.
 
-There is nevertheless a concrete filtered-series route. The exterior-cost
-bound is equivalent to four linear highest-weight bounds. Define
+The exterior-cost bound is equivalent to four linear highest-weight bounds.
+Define
 
 $$
 L_1=2\ell+3m+6r+5s,
@@ -323,24 +323,28 @@ $$
 L_4(\mu)\leq d.
 $$
 
-Each $L_i$ is nonnegative on the fundamental Dynkin coordinates, so it defines
-a multiplicative filtration of the $B_4$ representation ring. Moreover,
-removing the level-one symmetric-vector tower changes the HFT bosonic factor
-formally by
+**Correction (TK6B.5e):** nonnegative coefficients in Dynkin coordinates do
+not make these forms tensor-product filtrations. Each of the four $L_i$ has an
+exact small $B_4$ tensor-product counterexample. Consequently, the proposed
+four-filtration route is not valid as stated.
+
+Independently, removing the level-one symmetric-vector tower changes the HFT
+bosonic factor formally by
 
 $$
 \operatorname{PE}\!\left(\frac{q}{1-q}(V-1)\right)
 \operatorname{PE}(-qV)
 =
-\operatorname{PE}\!\left(\frac{q^2}{1-q}V-rac{q}{1-q}\right).
+\operatorname{PE}\!\left(\frac{q^2}{1-q}V-\frac{q}{1-q}\right).
 $$
 
 The exceptional vector mode has thereby been removed, and the remaining
-positive vector modes begin at degree two. This suggests proving the four
-filtered bounds directly on the exact HFT product after the NS/R combination,
-massless subtraction and division by $qZ_Q$. Those last three operations are
-where cancellations must still be controlled; the displayed factorization is
-a route to a proof, not the proof itself.
+positive vector modes begin at degree two. TK6B.5e replaces the invalid
+multiplicative-filtration shortcut by a finite harmonic Pieri hazard. It
+derives a closed wall-piecewise affine source bound for tensorial and
+spinorial weights and rewrites the remaining HFT obligation as filtered
+divisibility of an explicit oscillator numerator. See
+`TK6B5E_PIERI_HAZARD.md`.
 
 ## 5. Why the half-slope observation is not yet the proof
 
