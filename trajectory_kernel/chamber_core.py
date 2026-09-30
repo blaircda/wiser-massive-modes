@@ -23,6 +23,7 @@ from sage.numerical.mip import MIPSolverException
 from trajectory_kernel import chamber_audit
 from trajectory_kernel import correction_ansatz
 from trajectory_kernel import kernel_lattice
+from trajectory_kernel import milp_certification
 from trajectory_kernel import regge_columns
 from trajectory_kernel import trajectory_selection
 
@@ -264,6 +265,59 @@ def source_constrained_positive_path(
     program = MixedIntegerLinearProgram(maximization=False)
     coordinates = program.new_variable(integer=True, nonnegative=True)
     feasible_through = 0
+    verified_prefix = ()
+
+    def extract_and_verify_prefix(last_level):
+        values = program.get_values(coordinates)
+        prefix = tuple(
+            tuple(
+                milp_certification.checked_value(
+                    values,
+                    (level, index),
+                    "core-path coordinate",
+                )
+                for index in range(len(generators))
+            )
+            for level in range(1, last_level + 1)
+        )
+        for level, solution in enumerate(prefix, start=1):
+            coefficients = correction_ansatz.coefficients_from_coordinates(
+                references[level], generators, solution
+            )
+            if any(value < 0 for value in coefficients.values()):
+                raise ValueError(
+                    f"Core-path MILP witness is negative at level {level}"
+                )
+            target = kernel_lattice.clean_sparse(
+                correction_ansatz.cross.character_coefficients(
+                    domain["cumulative"][level]
+                )
+            )
+            if kernel_lattice.branch_virtual(coefficients) != target:
+                raise ValueError(
+                    "Core-path MILP witness fails exact restriction at "
+                    f"level {level}"
+                )
+            for index, generator in enumerate(generators):
+                if _source_allowed(policy, level, generator, record_index):
+                    continue
+                ell = generator.top_weight[0]
+                predecessor = (
+                    None
+                    if ell == 0
+                    else key_index.get((generator.top_weight[1:], ell - 1))
+                )
+                transported = (
+                    0
+                    if level == 1 or predecessor is None
+                    else prefix[level - 2][predecessor]
+                )
+                if solution[index] != transported:
+                    raise ValueError(
+                        "Core-path MILP witness violates its exact source "
+                        f"policy at level {level}, generator {index}"
+                    )
+        return prefix
 
     for level in range(1, max_level + 1):
         _add_positivity_constraints(
@@ -304,15 +358,9 @@ def source_constrained_positive_path(
                 "positive": True,
             }
         feasible_through = level
+        verified_prefix = extract_and_verify_prefix(level)
 
-    values = program.get_values(coordinates)
-    solutions = tuple(
-        tuple(
-            int(round(values.get((level, index), 0)))
-            for index in range(len(generators))
-        )
-        for level in range(1, max_level + 1)
-    )
+    solutions = verified_prefix
     sources = []
     previous = tuple(0 for _generator in generators)
     for level, current in enumerate(solutions, start=1):

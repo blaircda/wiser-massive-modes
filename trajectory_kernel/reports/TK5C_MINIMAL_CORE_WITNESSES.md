@@ -4,6 +4,13 @@
 **Last updated:** 24 September 2026  
 **Provenance:** baseline-free
 
+> **Numerical-certification update (25 September 2026).** Every returned
+> integer witness, source equation, bound, positivity condition and
+> restriction identity is now checked exactly after solving. The exclusion
+> cuts are exact integer cuts. Global optimality, infeasibility and enumeration
+> exhaustion nevertheless remain dependent on GLPK's floating-point
+> branch-and-bound status; see `MILP_NUMERICAL_CERTIFICATION_AUDIT.md`.
+
 ## 1. Question
 
 TK5b proved that at least one positive cumulative $SO(10)$ lift through level
@@ -19,7 +26,7 @@ TK5c asks three stronger finite-window questions:
 The implementation is `trajectory_kernel/chamber_witness.py`. It imports no
 protected $SO(10)$ completion.
 
-## 2. Exact optimization criterion
+## 2. Integer optimization criterion
 
 For every allowed source site $(F,\ell,n)$, write the integral source as
 
@@ -50,12 +57,13 @@ generator's top $B_4$ weight, the coordinate is bounded above by the exact
 cumulative multiplicity of that $B_4$ weight. These bounds give rigorous
 finite source bounds.
 
-Distinct minimal source vectors were enumerated with exact exclusion cuts.
-The cap was 20; every tested optimal face was exhausted below the cap.
+Distinct minimal source vectors were enumerated with exact exclusion cuts and
+exactly checked primal witnesses. The cap was 20; GLPK reported every tested
+optimal face exhausted below the cap.
 
 ## 3. Minimality and non-uniqueness
 
-The exact results are:
+The solver results, each with exact primal-witness verification, are:
 
 | Horizon | Minimum source events | Minimum absolute charge | Number of minimal witnesses |
 | ---: | ---: | ---: | ---: |
@@ -67,7 +75,8 @@ The exact results are:
 
 Thus the level-7 minimum is unique, but non-uniqueness begins already at level
 8 and persists. At level 11 the ambiguity is finite and modest under this
-particular criterion: there are exactly six minimal source vectors, rather
+particular criterion: GLPK exhausts the face after six exactly verified source
+vectors, rather
 than a unique vector or an unbounded family.
 
 One population-minimal representative at each horizon adds the following new
@@ -129,8 +138,8 @@ selection rule.
 - Sparsity substantially reduces the TK5b feasibility witness: at level 11
   the minimum has 7 source events and charge 20, compared with 11 events and
   charge 22 in the unoptimized witness.
-- The minimum remains non-unique: exactly six source vectors survive at level
-  11.
+- The minimum remains non-unique: six exactly verified source vectors survive
+  at level 11 before solver-reported exhaustion.
 - More importantly, the secondary minimum is not cutoff-stable beginning at
   $9\to10$. Thus “use as few and as small core sources as possible” is not a
   recursive rule whose earlier decisions can be retained.

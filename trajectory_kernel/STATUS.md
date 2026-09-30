@@ -1,6 +1,6 @@
 # Trajectory–Kernel Programme Status
 
-**Last updated:** 24 September 2026
+**Last updated:** 25 September 2026
 
 This is the local status document for the new analytic programme. The root
 `STATUS.md` remains authoritative for the project as a whole.
@@ -207,8 +207,10 @@ level 11.**
 - Lexicographically minimizing first the number of nonzero sources and then
   their absolute charge gives minima
   $(1,1),(2,2),(3,4),(5,11),(7,20)$ at horizons 7--11.
-- Exact enumeration gives respectively $1,2,2,3,6$ minimal source vectors.
-  Non-uniqueness therefore begins at level 8 and persists.
+- GLPK reports exhaustion after respectively $1,2,2,3,6$ minimal source
+  vectors. Every returned vector and exclusion cut is checked exactly, while
+  exhaustion itself remains solver-backed. Non-uniqueness begins at level 8
+  and persists.
 - Adjacent optimal faces are compatible for $7\to8$ and $8\to9$, but not for
   $9\to10$ or $10\to11$.
 - Every horizon-10 minimum has a level-9 prefix of charge 5 or 6, above the
@@ -219,20 +221,308 @@ level 11.**
   recursive analytic selector.
 - See `reports/TK5C_MINIMAL_CORE_WITNESSES.md`.
 
+## TK6a result
+
+**TK6a — Principal restriction-kernel ideal: global ring presentation and
+finite quotient analysis complete.**
+
+- The fundamental-character restriction map is surjective and has the exact
+  global kernel
+  $\ker(\operatorname{Res})=(J)$, where $J=16_+-16_-$.
+- A new exact triangular converter expresses finite $D_5$ characters as
+  polynomials in the five fundamental characters and verifies every conversion
+  back in the Weyl character ring.
+- All eleven natural kernel generators in the baseline-free level-11 closure
+  divide exactly by $J$.
+- Every quotient is a positive integral $SO(10)$ character with unit
+  coefficients. Two quotients are irreducible and nine are positive reducible
+  characters.
+- The finite-window quotient formulas are
+
+$$
+A_\ell/J=\sum_{i=0}^{\ell}[i,0,0,0,1],
+\qquad 0\leq\ell\leq5,
+$$
+
+$$
+B_\ell/J=\sum_{i=0}^{\ell}
+\left([i+1,0,0,0,1]+[i,1,0,0,1]\right),
+\qquad 0\leq\ell\leq2,
+$$
+
+$$
+C_\ell/J=\sum_{i=0}^{\ell}[i,0,0,0,2],
+\qquad 0\leq\ell\leq1.
+$$
+
+- In particular, the two nontransported TK5b seeds obey
+  $A_0=16_-J$ and $C_0=126_-J$. They are different positive multiples of one
+  global kernel generator, not algebraically independent ring-kernel
+  directions.
+- The partial-sum formulas are exact in the stated ranges but are not yet
+  proved for arbitrary $\ell$.
+- See `reports/TK6A_PRINCIPAL_KERNEL_IDEAL.md`.
+
+## TK6b.1 result
+
+**TK6b.1 — Finite positive restriction semigroup: exact cone and Hilbert-basis
+audit complete through the baseline-free level-11 closure.**
+
+- Collapsing outer-conjugate parents gives a binary multiplicity-free packet
+  matrix with 73 $B_4$ rows, 84 $D_5$ columns, rank 73 and kernel rank 11.
+- The all-chiral square submatrix has determinant one, so the columns generate
+  the full ambient lattice $\mathbb Z^{73}$.
+- Total unimodularity fails: an explicit $3\times3$ packet minor has
+  determinant 2.
+- The exact rational cone is 73-dimensional. All 84 packet columns are
+  extreme rays, and its irredundant dual description has 2,508 facets.
+- Despite the non-TU minor, the Normaliz Hilbert basis has exactly 84 elements
+  and equals the packet columns. The finite semigroup is saturated and has no
+  additional Hilbert generators.
+- Hence, within this finite closure, an integral target has a positive
+  integral lift if and only if it satisfies all rational facet inequalities.
+- Every cumulative HFT target through level 11 satisfies all 2,508 facets and
+  has a separately verified nonnegative integral packet decomposition.
+- This does not prove saturation for arbitrary interlacing domains or that all
+  future HFT targets satisfy a stable all-level family of inequalities.
+- See `reports/TK6B1_POSITIVE_RESTRICTION_SEMIGROUP.md`.
+
+## TK6b.2 result
+
+**TK6b.2 — Facets as positive kernel circuits: finite classification complete
+through the baseline-free level-11 closure.**
+
+- Direct weight-space classification does not stabilize. At level 11, the
+  2,508 facets retain 2,494 distinct leading-shift templates and 2,444
+  full-translation templates. From level 10 to 11, 2,399 new translated
+  templates appear.
+- Only 14 of 63 eligible one-step leading-label shifts preserve a facet.
+  Raw Dynkin translation is therefore not the organizing principle.
+- In the 11-dimensional Gale transform supplied by the natural kernel basis,
+  the 84 packet columns have only 29 distinct row types: one zero type, 22
+  signed-coordinate types and six composite types.
+- Those 29 rows obey one exact $A/B/C$ template consisting of zero, the signed
+  coordinate vectors, the adjacent vectors $-e_{B_i}-e_{A_{i+1}}$, and three
+  boundary sums over the available $A$, $B$ and $C$ chains. The template is
+  exact at every tested nested horizon.
+- All 2,508 facets are positive Gale circuits with unit coefficients. After
+  quotienting repeated Gale rows, only 40 circuit types remain, and their
+  combinatorial multiplicities reconstruct all facets exactly.
+- With $c=U^{-1}m$ the triangular all-chiral section coordinates, every facet
+  is a zero-one Hall-type inequality
+  $\sum_{j\in S\cap\operatorname{Ref}}c_j\geq0$ for a positive circuit $S$.
+- The circuit types still grow, from 23 at level 10 to 40 at level 11. The
+  compact Gale-row rule, rather than a fixed finite circuit list, was the
+  resulting candidate structure; TK6b.3 below refines it after new families
+  enter.
+- See `reports/TK6B2_FACET_CIRCUITS.md`.
+
+## TK6b.3 result
+
+**TK6b.3 — All-split boundary-shell theorem and first new-family obstruction
+complete.**
+
+- The compact TK6b.2 $A/B/C$ Gale-row rule is proved from the support
+  collisions of the six-term kernel relations for arbitrary initial lengths
+  of those three chains.
+- More generally, every consecutive pair of allowed parents over
+  $[\ell,m,r,s]_9$ obeys one universal six-term restriction-kernel identity.
+  Its coefficients are $\pm1$, and interlacing-shell inclusion-exclusion
+  proves it for arbitrary nonnegative labels and every
+  $1\leq k\leq\lfloor s/2\rfloor$.
+- Telescoping gives the natural relation between the $k$th parent and the
+  all-chiral parent in closed form, with exactly $4k+2$ unit-coefficient terms.
+  Exact branching, telescoping and independent chiral-section inversion agree
+  for sampled splits through $k=3$.
+- The actual HFT closure does not remain $A/B/C$-complete. At level 12, the
+  domain has 92 $B_4$ rows, 108 packets and kernel rank 16. In addition to
+  $A_6,B_3,C_2$, generators with top weights $(0,2,0,2)$ and $(0,0,1,2)$
+  enter.
+- All 16 level-12 generators are instances of the universal first-split
+  identity. Their Gale matrix has 43 row types: one zero, 32 signed-coordinate
+  and ten composite collision types.
+- A raw level-13 HFT look-ahead extends the two new families and adds the tail
+  $(m,r,s)=(1,0,3)$. Family growth is continuing.
+- The revised all-orders object is an all-split collision hypergraph of local
+  shell relations, not a fixed finite $A/B/C$ list.
+- See `reports/TK6B3_BOUNDARY_SHELL.md`.
+
+## TK6b.4 result
+
+**TK6b.4 — Weighted-circuit obstruction and finite HFT audit through level 13
+complete.**
+
+- For every finite packet closure, primitive positive Gale circuits give an
+  exact weighted liftability criterion in the triangular all-chiral section
+  coordinates.
+- Repeated Gale rows admit an exact compression: a circuit uses at most one
+  realization of each row type, and expands by the product of the supported
+  type multiplicities.
+- The method reproduces the 2,508 level-11 facets exactly. The complete
+  level-12 and level-13 closures have respectively 18,923 and 162,739 expanded
+  facets.
+- All 40 level-11 and 140 level-12 circuit types have unit coefficients. At
+  level 13, eight of 495 primitive circuit types contain coefficient two. A
+  ten-row, rank-nine relation is an exact minimal certificate.
+- Independent synthetic all-split boxes also contain coefficient-two
+  circuits. Hence the TK6b.2 subset-sum form is not a general branching
+  theorem; the correct criterion is weighted.
+- The cumulative HFT targets through level 13 satisfy every weighted circuit
+  inequality and have exactly reconstructed nonnegative integral packet
+  witnesses. This does not prove saturation of the level-12 or level-13
+  semigroups.
+- See `reports/TK6B4_WEIGHTED_CIRCUITS.md`.
+
+## TK6b.5 result
+
+**TK6b.5 — Local HFT pullback proved; all-orders positivity remains open.**
+
+- The all-chiral triangular coordinate at $[\ell,m,r,s]_9$ is the exact
+  three-fold forward difference of the $B_4$ target multiplicity in its first
+  three orthogonal coordinates. In Dynkin labels this is an eight-term local
+  formula, with zero extension outside the dominant chamber.
+- Every weighted circuit inequality therefore pulls back to an explicit
+  finite signed sum of HFT multiplicities. A circuit involving $t$ reference
+  parents uses at most $8t$ multiplicity entries before cancellations.
+- The formula is proved directly from multiplicity-free interlacing and has
+  no mass-level cutoff. It agrees with independent exact triangular matrix
+  inversion on the complete cumulative HFT closures through level 13.
+- The finite-difference operator commutes exactly with cumulative level sums
+  and Dynkin-label translations. Hence a GMSZ multiplicity shift on the full
+  eight-point stencil transports the corresponding section coordinate and
+  any simultaneously translated circuit slack.
+- This supplies the analytic bridge from circuit facets to HFT coefficients,
+  but not the missing positivity theorem. Circuits in a finite Gale matrix
+  need not persist unchanged when later kernel coordinates are added. A
+  recursive infinite-shell circuit classification, positivity of its HFT
+  partial sums and a saturation or integral-packetization theorem remain
+  open.
+- See `reports/TK6B5_HFT_WEIGHTED_INEQUALITIES.md`.
+
+## TK6b.5b/c result
+
+**TK6b.5b/c — Prefix-shell duality proved; fixed finite circuits obstructed;
+Regge-tail/Pieri route isolated.**
+
+- Every natural shell coordinate has one unique non-chiral $+e_g$ pivot.
+  Eliminating these pivots identifies the positive Gale cone exactly with
+  $y\geq0$, $Ly\geq0$, where $L$ is the closed prefix-shell operator on
+  all-chiral top labels.
+- Positive liftability is equivalently a decomposition
+  $c=u+L^Tz$ with $u,z\geq0$. The exact pairing identity
+  $\langle y,c\rangle=\langle y,u\rangle+\langle Ly,z\rangle$ recovers the
+  weighted criterion without enumerating circuits.
+- The infinite operator is column-finite but not row-finite. Because the
+  $Q_4$ packet forgets the leading label, every nonzero finitely supported
+  $y\geq0$ violates a sufficiently distant shell inequality. Hence the full
+  infinite system has no nonzero finitely supported positive circuit; finite
+  facets are necessarily moving boundary-tail objects.
+- For every fixed top-weight family and parent split, one universal interval
+  tail is a primitive finite-horizon circuit. Its TK6B.5 Möbius pullback
+  telescopes to at most eight HFT endpoint multiplicities, independent of the
+  leading-label horizon.
+- This bounded endpoint property is not universal. In the mixed box
+  $0\leq m\leq1$, $r=0$, $2\leq s\leq4$, the largest pulled support grows
+  from 24 at $\ell=0$ to 45 at $0\leq\ell\leq1$; the latter box has 4,900
+  full circuits and coefficient two.
+- Exact factorization of the HFT primary series by
+  $\operatorname{PE}([1,0,0,0]_9q)$ reconstructs the series through level 13.
+  All 185 eligible adjacent $\ell$ shifts in that window hold separately at
+  every virtual remainder degree. Every observed degree-$d\geq2$ remainder
+  term obeys $2\ell+2m+2r+s\leq d-1$.
+- These finite facts isolated two all-orders lemmas: remainder support and
+  stable $B_4$ Pieri transport. The latter is now proved in TK6b.5d; the
+  contribution-wise remainder statement, mixed-tail recursion and integral
+  packetization remain open.
+- See `reports/TK6B5B_PREFIX_SHELL_DUALITY.md`.
+
+## TK6b.5d result
+
+**TK6b.5d — Stable $B_n$ Pieri translation proved; all-degree HFT coverage
+remains open.**
+
+- Racah--Speiser gives an exact all-rank theorem. For arbitrary tensorial or
+  spinorial $B_n$ weights $\mu$ and $\lambda$, if
+  $\lambda_1\geq\mu_1$ in orthogonal coordinates, then the multiplicity of
+  $V_\lambda$ in $V_\mu\otimes H_k$ equals that of
+  $V_{\lambda+\omega_1}$ in $V_\mu\otimes H_{k+1}$.
+- Summing the harmonic decomposition of $\operatorname{Sym}^R(V)$ proves the
+  corresponding consecutive symmetric-power identity. The possible extra
+  scalar at alternating parity cannot contribute under the same inequality.
+- The proof works uniformly on the integral and half-integral weight cosets.
+  Chirality is therefore not an obstruction to this leading-coordinate
+  transport theorem.
+- A small exact character-ring regression tests 393 cases without failure.
+  In the exact HFT factorization through level 13, all 524 active irrep-level
+  couplings in the 185 eligible adjacent $\ell$ shifts lie in the theorem's
+  stable range and match. They include 214 spinorial couplings and 44
+  couplings with negative virtual-remainder coefficients.
+- The remaining all-orders obligation is contribution-wise: prove that every
+  remainder irrep which can couple to an exterior-chamber target satisfies
+  the stable-range inequality, and that the new top-degree remainder misses
+  the translated target. The observed half-slope bound alone is not logically
+  sufficient because it also includes inactive remainder irreps.
+- With $E(\ell,m,r,s)=2\ell+3m+\operatorname{cost}(r,s)$, all 176 remainder
+  terms through degree 12 satisfy $E(\mu)\leq d+1$. More directly, all 363
+  unstable HFT product terms through total degree 12 satisfy
+  $E(\lambda)\leq d+R$, with minimum margin two; this inequality excludes the
+  translated label from the GMSZ chamber exactly.
+- That energy statement is HFT-specific. The generic shortcut
+  $E(\lambda)\leq E(\mu)+R-1$ is false, with the exact counterexample
+  $\mu=(1,0,2,1)$, $R=3$, $\lambda=(0,0,0,5)$. The next proof must therefore
+  use the special remainder support or establish the combined HFT coupling
+  inequality directly.
+- A generator-wise plethystic proof is also obstructed: through degree 8,
+  $PL[Z'_m]$ has 10 exterior-cost violations among 85 terms, with minimum
+  margin $-3$, although $Z'_m$ itself satisfies the bound in that window.
+- The proposed next route is a four-filtration Newton-cone argument on the
+  exact HFT product. The four linear forms underlying $E$ are multiplicative
+  representation-ring filtrations, and removing
+  $\operatorname{PE}(qV)$ moves the remaining positive bosonic vector modes
+  to degree at least two. The NS/R combination, massless subtraction and
+  division by $qZ_Q$ are the unresolved cancellation steps.
+- See `reports/TK6B5D_STABLE_PIERI_TRANSLATION.md`.
+
+## MILP certification audit
+
+- The unchecked objective rounding reported in `trajectory_selection.py` was
+  confirmed, and raw integer-variable rounding occurred in the other audited
+  MILP modules.
+- A shared drift guard now checks every integer objective and extracted
+  variable. Lexicographic stages, range endpoints, source witnesses, numerator
+  identities and packet decompositions receive domain-specific exact primal
+  verification.
+- Global optimality, infeasibility and enumeration exhaustion remain backed by
+  GLPK's floating-point branch-and-bound status unless an independent exact
+  obstruction is supplied.
+- See `reports/MILP_NUMERICAL_CERTIFICATION_AUDIT.md`.
+
 ## Next refinement
 
-TK5c rules out naive ungraded source sparsity as a cutoff-stable selector. The
-remaining algebraic chamber question is whether core-supported feasibility
-follows from a closed recurrence or finite source module without a minimality
-prescription. The separate oscillator-graded uplift suggested by
-hep-th/0310292 has now been tested through level 7. Its outer-chirality-closed
-finite domain has a unique paper solution but no rational Bars solution at
-levels 6 and 7; the level-6 obstruction persists through
+TK6b.3 resolves both the proposed $A/B/C$ continuation and the local
+parent-split problem. TK6b.4 proves the exact finite weighted criterion,
+TK6b.5 pulls it back to HFT multiplicities, and TK6b.5b/c shows that fixed
+finite circuits cannot survive the infinite leading-label limit. TK6b.5d now
+proves stable Pieri transport for tensorial and spinorial $B_n$ weights. The
+next central step is to prove all-degree, contribution-wise stable-range
+coverage for the HFT remainder, preferably in the equivalent exterior-cost
+form $E(\lambda)\leq d+R$, then organize the horizon-dependent circuits as a
+recursive boundary-tail module with a controlled mixed core. Saturation or
+recursive integral packetization is still required separately. In parallel,
+the TK6a partial-sum quotient formulas invite an all-$\ell$ tensor-product
+proof.
+
+TK5c separately rules out naive ungraded source sparsity as a cutoff-stable
+selector. The oscillator-graded uplift suggested by hep-th/0310292 has now
+been tested through level 7. Its outer-chirality-closed finite domain has a
+unique paper solution but no rational refinement of the protected algorithmic
+continuation at levels 6 and 7; the level-6 obstruction persists through
 $\Delta_{\max}=10$. This is a finite-domain result, not an all-$\Delta$
 theorem. GU3 then restores the Type-IIA opposite chirality and Bars'
 $\ell'=n-\ell$ label. The fully resolved closed map remains injective and
-forces the paper-times-conjugate candidate, which still differs from Bars at
-levels 6 and 7. Thus a genuinely new direct closed construction must use the
+forces the paper-times-conjugate candidate, which differs at levels 6 and 7
+from the protected algorithmic continuation. Bars supplied no lift at those
+levels. Thus a genuinely new direct closed construction must use the
 IIA/M-theory labels without imposing the IIB $\Delta$ grading separately on
 each chiral factor. See `../graded_uplift/STATUS.md`. The direct closed-uplift
 question and the class-valued anomaly series remain open; neither should be
@@ -250,8 +540,8 @@ GU5 has now tested that ambiguity. Two distinct baseline-free positive
 outer-even closed lifts exist at level 6, so closed outer invariance is not a
 selector there. Moreover the naive identification of $\ell'$ with ordinary
 $D_5\downarrow B_4$ interlacing depth has no positive lift starting at level
-5. The Bars and paper candidates have the same depth defect, confirming that
-this depth is blind to their outer-chirality difference. See
+5. The protected algorithmic and paper candidates have the same depth defect,
+confirming that this depth is blind to their outer-chirality difference. See
 `../graded_uplift/reports/GU5_LEVEL6_DIRECT_CLOSED_AND_DEPTH.md`.
 
 ## Open questions
@@ -264,7 +554,17 @@ this depth is blind to their outer-chirality difference. See
   excitation-number grading discarded by the ungraded HFT quotient?
 - What baseline-free analytic condition selects among the 6,057 positive
   level-10 lifts?
-- Does the absence of a new seed family at level 11 persist at higher levels?
+- Are coefficients of primitive all-split circuits uniformly bounded, or can
+  they grow with the collision hypergraph?
+- Is every finite downward-closed $D_5\downarrow B_4$ packet semigroup
+  saturated, as the complete level-11 closure is?
+- Can the horizon-dependent positive circuits be generated as a recursive
+  boundary-tail module with a controlled mixed core?
+- Can the weighted positive-circuit inequalities be derived directly from the
+  HFT/GMSZ multiplicity recurrences without enumerating the cone facets?
+- Can the observed HFT remainder bound
+  $2\ell+2m+2r+s\leq d-1$ be proved at every degree, and combined with a
+  stable $B_4$ Pieri theorem to derive the outer $\ell$ shift?
 - Is there an independent finite-source construction of the class-valued
   kernel anomaly series $\mathcal K(q)$, despite failure of the one-seed ansatz?
 - Can the level-matched closed HFT series be uplifted directly so that its
@@ -299,4 +599,17 @@ this depth is blind to their outer-chirality difference. See
 ./bin/sage-run -m trajectory_kernel.chamber_core --max-level 11
 ./bin/sage-run -m trajectory_kernel.chamber_witness --self-test
 ./bin/sage-run -m trajectory_kernel.chamber_witness --max-level 11 --enumeration-cap 20
+./bin/sage-run -m trajectory_kernel.principal_ideal --self-test
+./bin/sage-run -m trajectory_kernel.principal_ideal --max-level 11
+./bin/sage-run -m trajectory_kernel.restriction_semigroup --self-test
+./bin/sage-run -m trajectory_kernel.restriction_semigroup --max-level 11
+./bin/sage-run -m trajectory_kernel.interlacing_facets --self-test
+./bin/sage-run -m trajectory_kernel.interlacing_facets --max-level 11 --min-level 5
+./bin/sage-run -m trajectory_kernel.boundary_shell --self-test
+./bin/sage-run -m trajectory_kernel.boundary_shell --max-level 12 --previous-level 11 --branch-check-ell 2 --split-check-max-s 6 --lookahead-level 13
+./bin/sage-run -m trajectory_kernel.all_split_circuits --self-test
+./bin/sage-run -m trajectory_kernel.all_split_circuits --hft-level 13 --verbose
+./bin/sage-run -m trajectory_kernel.hft_weighted_inequalities --max-level 13
+./bin/sage-run -m trajectory_kernel.shell_duality --self-test
+./bin/sage-run -m trajectory_kernel.regge_factorization --max-level 13
 ```

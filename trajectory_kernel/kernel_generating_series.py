@@ -28,6 +28,7 @@ from sage.numerical.mip import MIPSolverException
 
 import hft_so10_uplift
 from trajectory_kernel import correction_ansatz as fibers_module
+from trajectory_kernel import milp_certification
 from trajectory_kernel import trajectory_selection as selection
 
 
@@ -264,10 +265,37 @@ def numerator_compatibility(max_level, domain, generators):
 
         feasible_through = level
         values = program.get_values(coordinates)
-        solutions[level] = tuple(
-            int(round(values.get((level, index), 0)))
-            for index in range(len(generators))
-        )
+        prefix_coordinates = {
+            horizon: tuple(
+                milp_certification.checked_value(
+                    values,
+                    (horizon, index),
+                    "numerator-compatibility coordinate",
+                )
+                for index in range(len(generators))
+            )
+            for horizon in range(1, level + 1)
+        }
+        previous_lift = fibers_module.cross.D5(0)
+        for horizon in range(1, level + 1):
+            coefficients = fibers_module.coefficients_from_coordinates(
+                references[horizon],
+                generators,
+                prefix_coordinates[horizon],
+            )
+            if any(value < 0 for value in coefficients.values()):
+                raise ValueError(
+                    "MILP numerator-compatibility witness has a negative "
+                    f"lift coefficient at level {horizon}"
+                )
+            lift = d5_character(coefficients)
+            if zq10 * (lift - previous_lift) != p10[horizon]:
+                raise ValueError(
+                    "MILP numerator-compatibility witness fails exact "
+                    f"character verification at level {horizon}"
+                )
+            previous_lift = lift
+        solutions[level] = prefix_coordinates[level]
 
     return {
         "feasible_through": feasible_through,

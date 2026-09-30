@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from sage.all import MixedIntegerLinearProgram
 
 from trajectory_kernel import correction_ansatz as fibers_module
+from trajectory_kernel import milp_certification
 
 
 @dataclass(frozen=True)
@@ -240,6 +241,26 @@ def milp_optimal_path(domain, generators, max_level, rule):
         for level in range(1, max_level + 1)
     }
 
+    def verify_exact_path(path, context):
+        for level, solution in enumerate(path, start=1):
+            coefficients = fibers_module.coefficients_from_coordinates(
+                references[level], generators, solution
+            )
+            if any(value < 0 for value in coefficients.values()):
+                raise ValueError(
+                    f"{context} has a negative lift at level {level}"
+                )
+            target = fibers_module.lattice.clean_sparse(
+                fibers_module.cross.character_coefficients(
+                    domain["cumulative"][level]
+                )
+            )
+            if fibers_module.lattice.branch_virtual(coefficients) != target:
+                raise ValueError(
+                    f"{context} does not restrict to the HFT target at "
+                    f"level {level}"
+                )
+
     interior_terms = []
     boundary_terms = []
     population_terms = []
@@ -286,16 +307,43 @@ def milp_optimal_path(domain, generators, max_level, rule):
         raise ValueError(f"Unknown selection rule: {rule}")
 
     optimum = []
-    for objective in objectives:
+    for stage, objective in enumerate(objectives):
         program.set_objective(objective)
-        value = int(round(program.solve()))
+        value = milp_certification.checked_integer(
+            program.solve(), f"{rule} objective stage {stage + 1}"
+        )
+        stage_values = program.get_values(coordinates)
+        stage_solutions = tuple(
+            tuple(
+                milp_certification.checked_value(
+                    stage_values,
+                    (level, index),
+                    "path coordinate",
+                )
+                for index in range(len(generators))
+            )
+            for level in range(1, max_level + 1)
+        )
+        stage_cost = primary_cost(
+            path_cost(stage_solutions, generators, rule), rule
+        )
+        expected_prefix = tuple(optimum) + (value,)
+        if stage_cost[: stage + 1] != expected_prefix:
+            raise ValueError(
+                f"MILP objective stage {stage + 1} lacks an exact integer "
+                f"primal witness: objectives={expected_prefix}, "
+                f"path cost={stage_cost}"
+            )
+        verify_exact_path(stage_solutions, f"MILP objective stage {stage + 1}")
         optimum.append(value)
         program.add_constraint(objective == value)
 
     values = program.get_values(coordinates)
     solutions = tuple(
         tuple(
-            int(round(values.get((level, index), 0)))
+            milp_certification.checked_value(
+                values, (level, index), "path coordinate"
+            )
             for index in range(len(generators))
         )
         for level in range(1, max_level + 1)
@@ -308,29 +356,65 @@ def milp_optimal_path(domain, generators, max_level, rule):
             f"solutions={solutions}"
         )
 
-    for level, solution in enumerate(solutions, start=1):
-        coefficients = fibers_module.coefficients_from_coordinates(
-            references[level], generators, solution
-        )
-        if any(value < 0 for value in coefficients.values()):
-            raise ValueError(f"MILP returned a negative lift at level {level}")
-        target = fibers_module.lattice.clean_sparse(
-            fibers_module.cross.character_coefficients(
-                domain["cumulative"][level]
-            )
-        )
-        if fibers_module.lattice.branch_virtual(coefficients) != target:
-            raise ValueError(
-                f"MILP lift does not restrict to the HFT target at level {level}"
-            )
+    verify_exact_path(solutions, "MILP optimized path")
 
     final_ranges = []
     for index in range(len(generators)):
         variable = coordinates[max_level, index]
         program.set_objective(variable)
-        lower = int(round(program.solve()))
+        lower = milp_certification.checked_integer(
+            program.solve(), f"final coordinate {index} lower bound"
+        )
+        lower_values = program.get_values(coordinates)
+        lower_path = tuple(
+            tuple(
+                milp_certification.checked_value(
+                    lower_values,
+                    (level, coordinate),
+                    "lower-bound witness coordinate",
+                )
+                for coordinate in range(len(generators))
+            )
+            for level in range(1, max_level + 1)
+        )
         program.set_objective(-variable)
-        upper = -int(round(program.solve()))
+        upper = -milp_certification.checked_integer(
+            program.solve(), f"negative final coordinate {index} upper bound"
+        )
+        upper_values = program.get_values(coordinates)
+        upper_path = tuple(
+            tuple(
+                milp_certification.checked_value(
+                    upper_values,
+                    (level, coordinate),
+                    "upper-bound witness coordinate",
+                )
+                for coordinate in range(len(generators))
+            )
+            for level in range(1, max_level + 1)
+        )
+        if lower_path[-1][index] != lower or upper_path[-1][index] != upper:
+            raise ValueError(
+                f"Final-coordinate range {index} lacks exact endpoint "
+                f"witnesses: reported {(lower, upper)}, obtained "
+                f"{(lower_path[-1][index], upper_path[-1][index])}"
+            )
+        for endpoint, endpoint_path in (
+            ("lower", lower_path),
+            ("upper", upper_path),
+        ):
+            endpoint_cost = primary_cost(
+                path_cost(endpoint_path, generators, rule), rule
+            )
+            if endpoint_cost != tuple(optimum):
+                raise ValueError(
+                    f"Final-coordinate {endpoint} endpoint leaves the "
+                    f"lexicographically optimal face: {endpoint_cost}"
+                )
+            verify_exact_path(
+                endpoint_path,
+                f"Final-coordinate {index} {endpoint} endpoint",
+            )
         final_ranges.append((lower, upper))
 
     return {

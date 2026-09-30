@@ -26,3 +26,26 @@ Active reports:
   decomposition, exact kernel lineage and core-supported source feasibility.
 - `TK5C_MINIMAL_CORE_WITNESSES.md`: exact sparse-source minima,
   non-uniqueness counts and failure of cutoff stability.
+- `TK6A_PRINCIPAL_KERNEL_IDEAL.md`: global principal restriction-kernel
+  presentation and positive quotients of the level-11 natural kernel basis.
+- `TK6B1_POSITIVE_RESTRICTION_SEMIGROUP.md`: exact packet cone, non-TU
+  certificate, Hilbert basis and saturation through the level-11 closure.
+- `TK6B2_FACET_CIRCUITS.md`: failure of direct facet translations, exact Gale
+  positive-circuit classification and the conditional subset-sum criterion.
+- `TK6B3_BOUNDARY_SHELL.md`: arbitrary-length $A/B/C$ collision theorem,
+  universal six-term consecutive-shell and telescoped all-split identities,
+  and the level-12 obstruction to $A/B/C$ completeness.
+- `TK6B4_WEIGHTED_CIRCUITS.md`: exact finite weighted-circuit criterion,
+  coefficient-two obstruction, compressed facet counts and positive HFT
+  witnesses through level 13.
+- `TK6B5_HFT_WEIGHTED_INEQUALITIES.md`: closed local Möbius formula for the
+  all-chiral inverse, exact circuit pullback to HFT multiplicities and
+  translation-covariant route toward an all-orders inequality proof.
+- `TK6B5B_PREFIX_SHELL_DUALITY.md`: exact pivot-eliminated prefix-shell cone,
+  obstruction to fixed finite circuits, universal Regge-tail telescoping and
+  the HFT symmetric-vector/Pieri route to endpoint stability.
+- `TK6B5D_STABLE_PIERI_TRANSLATION.md`: all-rank Racah--Speiser proof of
+  stable symmetric-power translation, including spinorial weights, and the
+  contribution-wise HFT stable-range audit through level 13.
+- `MILP_NUMERICAL_CERTIFICATION_AUDIT.md`: floating-point MILP rounding audit,
+  exact primal-witness hardening, and the remaining solver-status limitation.

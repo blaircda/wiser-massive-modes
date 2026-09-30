@@ -1,0 +1,2 @@
+# Exact Hilbert-basis and normality backend for trajectory_kernel.restriction_semigroup
+PyNormaliz==2.24

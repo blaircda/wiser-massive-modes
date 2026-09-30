@@ -26,6 +26,7 @@ from trajectory_kernel import chamber_audit
 from trajectory_kernel import chamber_core
 from trajectory_kernel import correction_ansatz
 from trajectory_kernel import kernel_lattice
+from trajectory_kernel import milp_certification
 from trajectory_kernel import regge_columns
 from trajectory_kernel import trajectory_selection
 
@@ -47,10 +48,7 @@ class SourceModel:
 
 def _integer_objective(value):
     """Round an integral MILP objective and reject numerical drift."""
-    rounded = int(round(float(value)))
-    if abs(float(value) - rounded) > 1e-6:
-        raise ValueError(f"Expected integral objective, obtained {value}")
-    return rounded
+    return milp_certification.checked_integer(value, "MILP objective")
 
 
 def _record_index(records):
@@ -202,18 +200,41 @@ def extract_witness(model, generators, max_level):
     coordinate_values = model.program.get_values(model.coordinates)
     positive_values = model.program.get_values(model.source_positive)
     negative_values = model.program.get_values(model.source_negative)
+    active_values = model.program.get_values(model.source_active)
     coordinates = tuple(
         tuple(
-            int(round(coordinate_values.get((level, index), 0)))
+            milp_certification.checked_value(
+                coordinate_values,
+                (level, index),
+                "witness coordinate",
+            )
             for index in range(len(generators))
         )
         for level in range(1, max_level + 1)
     )
     source_vector = tuple(
-        int(round(positive_values.get(item["site"], 0)))
-        - int(round(negative_values.get(item["site"], 0)))
+        milp_certification.checked_value(
+            positive_values, item["site"], "positive source"
+        )
+        - milp_certification.checked_value(
+            negative_values, item["site"], "negative source"
+        )
         for item in model.sites
     )
+    active_vector = tuple(
+        milp_certification.checked_value(
+            active_values, item["site"], "source activity"
+        )
+        for item in model.sites
+    )
+    if any(value not in (0, 1) for value in active_vector):
+        raise ValueError("MILP returned a nonbinary source-activity value")
+    if any(bool(value) != bool(active) for value, active in zip(
+        source_vector, active_vector
+    )):
+        raise ValueError(
+            "MILP source-activity variables do not exactly mark nonzero sources"
+        )
     sources = tuple(
         {**item, "value": value}
         for item, value in zip(model.sites, source_vector)
@@ -222,7 +243,9 @@ def extract_witness(model, generators, max_level):
     return coordinates, source_vector, sources
 
 
-def verify_witness(model, generators, domain, coordinates, sources):
+def verify_witness(
+    model, generators, domain, coordinates, source_vector, sources
+):
     positive = True
     exact_restriction = True
     for level, solution in enumerate(coordinates, start=1):
@@ -238,11 +261,38 @@ def verify_witness(model, generators, domain, coordinates, sources):
         exact_restriction = exact_restriction and (
             kernel_lattice.branch_virtual(coefficients) == target
         )
+    keys = trajectory_selection.generator_coordinates(generators)
+    key_index = {key: index for index, key in enumerate(keys)}
+    source_equations = True
+    source_bounds = True
+    for item, value in zip(model.sites, source_vector):
+        level = item["level"]
+        index = item["index"]
+        family, ell = keys[index]
+        predecessor = (
+            None if ell == 0 else key_index.get((family, ell - 1))
+        )
+        transported = (
+            0
+            if level == 1 or predecessor is None
+            else coordinates[level - 2][predecessor]
+        )
+        source_equations = source_equations and (
+            coordinates[level - 1][index] - transported == value
+        )
+        source_bounds = source_bounds and item["lower"] <= value <= item["upper"]
+    coordinate_bounds = all(
+        0 <= coordinates[level - 1][index] <= bound
+        for (level, index), bound in model.coordinate_bounds.items()
+    )
     event_count = len(sources)
     charge = sum(abs(item["value"]) for item in sources)
     return {
         "positive": positive,
         "exact_restriction": exact_restriction,
+        "source_equations": source_equations,
+        "source_bounds": source_bounds,
+        "coordinate_bounds": coordinate_bounds,
         "event_count": event_count,
         "charge": charge,
     }
@@ -281,7 +331,14 @@ def optimize_horizon(max_level, domain, generators, records, enumeration_cap):
     coordinates, source_vector, sources = extract_witness(
         model, generators, max_level
     )
-    checks = verify_witness(model, generators, domain, coordinates, sources)
+    checks = verify_witness(
+        model,
+        generators,
+        domain,
+        coordinates,
+        source_vector,
+        sources,
+    )
     enumeration = enumerate_minimal_source_vectors(
         max_level,
         domain,
@@ -314,7 +371,9 @@ def optimize_horizon(max_level, domain, generators, records, enumeration_cap):
     }
 
 
-def adjacent_cutoff_compatibility(first_level, max_level, horizons):
+def adjacent_cutoff_compatibility(
+    first_level, max_level, horizons, domain, generators
+):
     """Test whether adjacent cutoff-optimal faces have a common witness."""
     result = {}
     for cutoff in range(first_level + 1, max_level + 1):
@@ -339,6 +398,42 @@ def adjacent_cutoff_compatibility(first_level, max_level, horizons):
         model.program.set_objective(0)
         try:
             model.program.solve()
+            coordinates, source_vector, sources = extract_witness(
+                model, generators, cutoff
+            )
+            checks = verify_witness(
+                model,
+                generators,
+                domain,
+                coordinates,
+                source_vector,
+                sources,
+            )
+            prefix_values = tuple(
+                value
+                for item, value in zip(model.sites, source_vector)
+                if item["level"] <= cutoff - 1 and value
+            )
+            exact_prefix = (
+                len(prefix_values)
+                == horizons[cutoff - 1]["minimum_events"]
+                and sum(abs(value) for value in prefix_values)
+                == horizons[cutoff - 1]["minimum_charge"]
+            )
+            exact_primal = all(
+                checks[name]
+                for name in (
+                    "positive",
+                    "exact_restriction",
+                    "source_equations",
+                    "source_bounds",
+                    "coordinate_bounds",
+                )
+            )
+            if not exact_prefix or not exact_primal:
+                raise ValueError(
+                    "Adjacent-cutoff compatibility lacks an exact primal witness"
+                )
             compatible = True
         except MIPSolverException:
             compatible = False
@@ -363,15 +458,60 @@ def enumerate_minimal_source_vectors(
         except MIPSolverException:
             exhausted = True
             break
-        _coordinates, source_vector, sources = extract_witness(
+        coordinates, source_vector, sources = extract_witness(
             model, generators, max_level
         )
+        checks = verify_witness(
+            model,
+            generators,
+            domain,
+            coordinates,
+            source_vector,
+            sources,
+        )
+        if not all(
+            checks[name]
+            for name in (
+                "positive",
+                "exact_restriction",
+                "source_equations",
+                "source_bounds",
+                "coordinate_bounds",
+            )
+        ):
+            raise ValueError(
+                "Enumerated MILP source vector failed exact primal verification"
+            )
         vectors.append(source_vector)
         witnesses.append(sources)
         add_exclusion_cut(model, source_vector)
     if len(vectors) == cap:
         try:
             model.program.solve()
+            coordinates, source_vector, sources = extract_witness(
+                model, generators, max_level
+            )
+            checks = verify_witness(
+                model,
+                generators,
+                domain,
+                coordinates,
+                source_vector,
+                sources,
+            )
+            if source_vector in vectors or not all(
+                checks[name]
+                for name in (
+                    "positive",
+                    "exact_restriction",
+                    "source_equations",
+                    "source_bounds",
+                    "coordinate_bounds",
+                )
+            ):
+                raise ValueError(
+                    "Post-cap MILP solve lacks a new exact primal witness"
+                )
         except MIPSolverException:
             exhausted = True
     return {
@@ -441,10 +581,17 @@ def cutoff_stable_minimal_witness(
         population = _integer_objective(model.program.solve())
     except MIPSolverException:
         return {"feasible": False, "population": None, "sources": ()}
-    coordinates, _vector, sources = extract_witness(
+    coordinates, source_vector, sources = extract_witness(
         model, generators, max_level
     )
-    checks = verify_witness(model, generators, domain, coordinates, sources)
+    checks = verify_witness(
+        model,
+        generators,
+        domain,
+        coordinates,
+        source_vector,
+        sources,
+    )
     return {
         "feasible": True,
         "population": population,
@@ -485,7 +632,7 @@ def summarize_tk5c(
         first_level, max_level, horizons, domain, generators, records
     )
     adjacent = adjacent_cutoff_compatibility(
-        first_level, max_level, horizons
+        first_level, max_level, horizons, domain, generators
     )
 
     print("=" * 104)
@@ -546,6 +693,9 @@ def summarize_tk5c(
     checks = all(
         result["checks"]["positive"]
         and result["checks"]["exact_restriction"]
+        and result["checks"]["source_equations"]
+        and result["checks"]["source_bounds"]
+        and result["checks"]["coordinate_bounds"]
         and result["checks"]["event_count"] == result["minimum_events"]
         and result["checks"]["charge"] == result["minimum_charge"]
         for result in horizons.values()
@@ -554,6 +704,9 @@ def summarize_tk5c(
         or (
             stable["checks"]["positive"]
             and stable["checks"]["exact_restriction"]
+            and stable["checks"]["source_equations"]
+            and stable["checks"]["source_bounds"]
+            and stable["checks"]["coordinate_bounds"]
         )
     )
     print("-" * 104)
