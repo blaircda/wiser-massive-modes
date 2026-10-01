@@ -1,0 +1,1789 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=27mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array,tabularx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{deepblue}{RGB}{35,72,112}
+\definecolor{softblue}{RGB}{238,245,251}
+\definecolor{softgray}{RGB}{245,246,248}
+\definecolor{darkgray}{RGB}{70,74,80}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=deepblue,
+  citecolor=deepblue,
+  urlcolor=deepblue,
+  pdftitle={From Bars to Analytic HFT Support},
+  pdfauthor={Wiser Massive Modes research project}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small From Bars to analytic HFT support}
+\fancyhead[R]{\small TK6B.5f}
+\fancyfoot[C]{\thepage}
+
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.25em,topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.3em,topsep=0.4em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.15}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Spin}{\operatorname{Spin}}
+\newcommand{\SO}{\operatorname{SO}}
+\newcommand{\PE}{\operatorname{PE}}
+\newcommand{\PEF}{\operatorname{PE}_{F}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Rep}{R}
+\newcommand{\Kseven}{K_{7}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\one}{\mathbf{1}}
+
+\newenvironment{summarybox}
+  {\begin{center}\begin{minipage}{0.92\textwidth}\color{darkgray}
+   \hrule\vspace{0.7em}}
+  {\vspace{0.5em}\hrule\end{minipage}\end{center}}
+
+\title{\textbf{From Bars to Analytic HFT Support}\\
+\large The trajectory--kernel route to the TK6B.5f all-orders theorem}
+\author{Wiser Massive Modes research project}
+\date{1 October 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Bars proposed that at strong coupling the perturbative massive primaries of
+the type-IIA superstring should be supplemented by nonperturbative states so
+that their cumulative $\Spin(9)$ content assembles into $\Spin(10)$
+representations.  In its minimal form the claim is an existence problem: for
+every level $n$, the cumulative character
+$R_n^9=\sum_{i=1}^{n}r_i^9$ should admit at least one positive integral
+$\Spin(10)$ lift.  The lift need not be unique.
+
+This report first develops the full route from Bars's proposal to the local
+all-orders theorem proved in TK6B.5f.  It reviews the covariant HFT generating
+function, multiplicity-free $D_5\downarrow B_4$ branching, Regge shifts,
+restriction-kernel coordinates, positive packet cones, Gale circuits,
+interlacing shells, the local M\"obius inverse and stable Pieri translation.
+The mathematical notions beyond a standard graduate representation-theory
+course are introduced when they enter.
+
+The second part proves the HFT support theorem.  A finite triality identity
+telescopes the Green--Schwarz oscillator product and performs the
+universal-supermultiplet division before support estimates are applied.  A
+Weyl-numerator argument transfers $\Spin(8)$ support to $\Spin(9)$, uniform
+vector and spinor estimates close the infinite oscillator tail, and a fixed
+323-record low-mode certificate finishes the proof.  This closes the HFT
+premise needed for stable Pieri transport at every degree.  The remaining
+Bars problem is global: control all moving weighted circuits and prove
+integral packetization at arbitrary level.
+\end{abstract}
+
+\begin{summarybox}
+\textbf{Three levels of the argument.}
+
+\emph{Bars's target:} for every $n$, find a positive integral $\Spin(10)$
+character $X_n$ with
+\[
+   X_n\mathord\downarrow_{\Spin(9)}=R_n^9
+   =\sum_{i=1}^{n}r_i^9.
+\]
+\emph{The theorem proved here:} if the irreducible $\Spin(9)$ character
+$V_\mu$ occurs with nonzero signed coefficient in degree $d$ of the virtual
+HFT remainder $F(q)$, then
+\[
+   [V_\mu]F_d\neq0 \quad\Longrightarrow\quad d\geq K(\mu),
+\]
+where $K$ is the exact Pieri-hazard threshold derived in TK6B.5e.  The theorem
+holds at every oscillator degree.
+
+\emph{The remaining gap:} show that stable transport controls every
+horizon-dependent weighted circuit and supply an all-level integral packet
+decomposition (or a saturation theorem).  Finite levels are evidence and
+regression data, not the all-orders argument.
+\end{summarybox}
+
+\tableofcontents
+\newpage
+
+\section{Bars's strong-coupling proposal}
+
+\subsection{Why $\Spin(9)$ and $\Spin(10)$ appear}
+
+For a massive particle in ten-dimensional Minkowski space the little group
+is $\Spin(9)$.  Perturbative massive string states therefore decompose into
+$\Spin(9)$ irreducible representations.  If strongly coupled type-IIA string
+theory develops an eleventh spacetime dimension, the corresponding massive
+rotation group is $\Spin(10)$.  A necessary representation-theoretic shadow
+of that claim is that the ten-dimensional states, after adding appropriate
+nonperturbative states, should be restrictions of $\Spin(10)$
+representations.
+
+The supersymmetry descendants are conveniently factored off.  Let $r_n^9$
+denote the $\Spin(9)$ character of the chiral massive \emph{primaries} at
+perturbative level $n$.  Acting with the broken supercharges produces the
+universal chiral massive multiplet
+\[
+ Z_Q=[2,0,0,0]_9+[1,0,0,1]_9+[0,0,1,0]_9,
+\]
+of dimension $44+128+84=256$.  For the closed type-II theory there is one
+such factor from each chiral half.  Bars's question concerns the remaining
+primary factor: can it also be organized covariantly with respect to the
+extra spatial direction?  This is the content relevant to the present
+project, rather than a claim that the perturbative spectrum alone already
+has $\Spin(10)$ symmetry.
+
+We use $\Spin$ rather than $SO$ when spinor representations matter.  The
+older literature often writes $SO(9)$ and $SO(10)$ for the same character
+problem.
+
+\subsection{Bars's additional level and the cumulative sum}
+
+Bars introduces an elementary string level $l$ and an additional
+nonperturbative level $l'$.  At fixed ten-dimensional mass level $n$, his
+on-shell proposal is
+\[
+   n=l'+l,
+\]
+with the pairs
+\[
+   (l',l)=(0,n),(1,n-1),\ldots,(n-1,1).
+\]
+The $\Spin(9)$ quantum numbers depend on $l$, while $l'$ distinguishes the
+new states.  In the single-multiplicity, or ``minimal'', scheme each pair is
+used once.  Consequently one chiral half at mass level $n$ has the cumulative
+primary character
+\begin{equation}
+\label{eq:bars-cumulative}
+   R_n^9=\sum_{l=1}^{n}r_l^9.
+\end{equation}
+Bars checked directly through $n=5$ that these cumulative characters
+reassemble into $\Spin(10)$ characters \cite{Bars}.  For orientation, his
+dimension notation gives the following first examples.  Bosonic and
+fermionic sectors are displayed separately where needed.
+
+\begin{table}[H]
+\centering
+\caption{Bars's minimal cumulative pattern for one chiral half.  These are
+the examples displayed in the 1995 paper, not an all-orders proof.}
+\label{tab:bars-low-levels}
+\begin{tabularx}{\textwidth}{cXl}
+\toprule
+$n$ & cumulative $\Spin(9)$ primary content & one $\Spin(10)$ parent \\
+\midrule
+1 & $1$ & $1$ \\
+2 & $1+9$ & $10$ \\
+3 & $(1+9+44)_B+16_F$ & $54_B+16_F$ \\
+4 & $(1+2\cdot9+36+156+44)_B+(16+128)_F$
+  & $(45+210)_B+144_F$ \\
+5 & $\bigl(2(1+9+36+44)+84+156+231+450\bigr)_B$
+    $+\bigl(2(16+128)+576\bigr)_F$
+  & $(1+120+320+660)_B+(144+720)_F$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The representation dimensions in the last column suppress Dynkin labels and,
+for spinors, an outer-chirality choice.  Later finite computations show that
+positive parents need not be unique.  Bars's Section III.B claim therefore
+has the following precise minimal interpretation.
+
+\begin{definition}[Minimal Bars lifting problem]
+For every $n\geq1$, find at least one positive integral $\Spin(10)$
+character $X_n$ such that
+\[
+   \Res^{\Spin(10)}_{\Spin(9)}X_n=R_n^9.
+\]
+\end{definition}
+
+``Positive integral'' means a finite direct sum of irreducible characters
+with coefficients in $\mathbb Z_{\geq0}$.  It does not mean that the lift is
+unique, nor that its consecutive difference $X_n-X_{n-1}$ is positive.  It
+also does not include Bars's separate higher-multiplicity scheme or arbitrary
+additional complete nonperturbative multiplets.  The protected project data
+through level 10 provide examples of such lifts; only levels 1--5 were
+displayed by Bars himself.
+
+\section{The HFT covariant spectrum}
+
+\subsection{Characters and plethystic exponentials}
+
+Hanany, Forcella and Troost (HFT) supplied the all-order perturbative input
+which Bars did not have: a generating function covariant under the massive
+little group $\Spin(9)$ \cite{HFT}.  We write
+\[
+   [a_1,a_2,a_3,a_4]_9
+\]
+for the irreducible $B_4=\Spin(9)$ character with those Dynkin labels and set
+\[
+   V_9=[1,0,0,0]_9,
+   \qquad S_9=[0,0,0,1]_9.
+\]
+On the common $\Spin(8)$ torus the physical transverse vector is represented
+by the virtual $B_4$ character
+\[
+   T=V_9-\one,
+\]
+because $V_9$ restricts as $8_v\oplus\one$.
+
+For a character-valued series $f$, the bosonic and fermionic plethystic
+exponentials are
+\[
+   \PE[f]=\exp\!\left(\sum_{k\geq1}\frac{f(q^k,y^k)}{k}\right),
+\]
+\[
+   \PEF[f]=\exp\!\left(\sum_{k\geq1}
+        \frac{(-1)^{k+1}f(q^k,y^k)}{k}\right).
+\]
+They are compact devices for taking all symmetric, respectively exterior,
+powers of oscillator representations.  The variables collectively denoted
+by $y$ are weight fugacities.
+
+\subsection{The HFT formula}
+
+Define the transverse bosonic product
+\[
+   Z_B(q)=\PE\!\left[\frac{q}{1-q}T\right]
+\]
+and the fermionic product with a fermion-mode fugacity $f$,
+\[
+   \mathcal Z_F(q;f)
+   =\PEF\!\left[\frac{f}{1-q}T\right].
+\]
+The GSO-projected Neveu--Schwarz series is
+\[
+   Z_{NS}(q)=\frac{1}{2\sqrt q}
+   \left(\mathcal Z_F(q;\sqrt q)
+        -\mathcal Z_F(q;-\sqrt q)\right),
+\]
+while the Ramond oscillator factor entering the covariant expression is
+\[
+   Z_R(q)=\mathcal Z_F(q;q).
+\]
+With a purely massless chirality term denoted by $\Delta_0$, HFT's covariant
+left-moving partition function can be written
+\begin{equation}
+\label{eq:hft-left}
+   Z_{\mathrm{Left}}(q)
+   =\Delta_0+Z_B(q)
+      \left(Z_{NS}(q)+\frac12 S_9 Z_R(q)\right).
+\end{equation}
+The apparently fractional factor does not produce fractional multiplicities:
+the plethystic expansion supplies the compensating parity factor.
+
+Let $Z_0$ be the complete massless contribution.  The massive-primary series
+is HFT's quotient
+\begin{equation}
+\label{eq:hft-massive}
+   Z_m(q)=\frac{Z_{\mathrm{Left}}(q)-Z_0}{qZ_Q}.
+\end{equation}
+In project notation,
+\begin{equation}
+\label{eq:R-series}
+   R(q)=Z_m(q)=\sum_{d\geq0}r_{d+1}^9q^d.
+\end{equation}
+Thus coefficient degree $d=0$ corresponds to physical massive level one.
+Equation \eqref{eq:hft-massive} is an exact all-orders character formula, but
+positivity of its irreducible $\Spin(9)$ coefficients is not manifest from
+the quotient.  HFT themselves identified proving positivity as a challenge.
+For the Bars problem, $R(q)$ supplies the single-level characters which are
+then cumulatively summed as in \eqref{eq:bars-cumulative}.
+
+\subsection{Removing the leading symmetric-vector tower}
+
+HFT also observed the exact factorization
+\begin{equation}
+\label{eq:hft-regge-factor}
+   R(q)=\PE(qV_9)F(q),
+   \qquad
+   F(q)=\sum_{d\geq0}F_dq^d.
+\end{equation}
+The coefficient of the first factor is
+\[
+   [q^a]\PE(qV_9)
+   =\operatorname{Sym}^{a}(V_9)
+   =\bigoplus_{j=0}^{\lfloor a/2\rfloor}[a-2j,0,0,0]_9.
+\]
+This factor carries the leading Regge tower.  The coefficients $F_d$ are
+\emph{virtual} characters: irreducible coefficients may be negative because
+we have algebraically removed nine level-one modes even though only eight are
+physical transverse oscillators.  Therefore an argument about $F$ must
+respect cancellations; $F_d$ is not the character of a Hilbert space.
+
+Equation \eqref{eq:hft-regge-factor} is the entry point of the final proof,
+but several layers of the lifting problem had to be understood before the
+right support statement for $F$ became visible.
+
+\section{Branching packets and positive lifts}
+
+\subsection{The multiplicity-free branching rule}
+
+Write a dominant $D_5=\Spin(10)$ highest weight in orthogonal coordinates as
+\[
+   \lambda_1\geq\lambda_2\geq\lambda_3\geq\lambda_4
+   \geq|\lambda_5|
+\]
+and a dominant $B_4=\Spin(9)$ weight as
+\[
+   \mu_1\geq\mu_2\geq\mu_3\geq\mu_4\geq0.
+\]
+The restriction $D_5\downarrow B_4$ is multiplicity-free.  The child
+$V_\mu$ occurs in $V_\lambda$ precisely when the coordinates interlace:
+\begin{equation}
+\label{eq:interlacing}
+ \lambda_1\geq\mu_1\geq\lambda_2\geq\mu_2
+ \geq\lambda_3\geq\mu_3\geq\lambda_4
+ \geq\mu_4\geq|\lambda_5|.
+\end{equation}
+
+\begin{definition}[Branching packet]
+The packet of a $D_5$ irrep $V_\lambda$ is the $B_4$ character
+\[
+   P_\lambda=\Res^{D_5}_{B_4}V_\lambda,
+\]
+namely the sum of all interlacing children in
+\eqref{eq:interlacing}.  Its multiplicity vector has only zeroes and ones.
+\end{definition}
+
+A positive integral lift of a target multiplicity vector $m$ is exactly a
+nonnegative integral packet decomposition
+\[
+   m=Ax,
+   \qquad x\in\mathbb Z_{\geq0}^{p},
+\]
+where the columns of $A$ are the permitted packets.  This converts Bars's
+question into a structured integer decomposition problem.
+
+For a top $B_4$ Dynkin label $\mu=[\ell,m,r,s]_9$, the unoriented family of
+parents with that same top child is
+\begin{equation}
+\label{eq:parent-family}
+   [\ell,m,r,k,s-k]_{10},
+   \qquad 0\leq k\leq\left\lfloor\frac{s}{2}\right\rfloor.
+\end{equation}
+Outer-conjugate $D_5$ parents restrict identically, so they may be collapsed
+when the question is existence rather than chirality selection.
+
+\subsection{A triangular virtual section}
+
+Choose the $k=0$ parent
+\[
+   p_0(\ell,m,r,s)=[\ell,m,r,0,s]_{10}
+\]
+for every $B_4$ top weight.  Ordered by dominance, the resulting packet
+matrix $U$ is triangular with diagonal entries one.  Hence
+\[
+   \det U=1
+\]
+in every finite downward-closed domain, and any integral target has a unique
+integral \emph{virtual} lift on this section:
+\[
+   c=U^{-1}m.
+\]
+Some coefficients $c_\mu$ can be negative.  The role of alternative parents
+is precisely to repair those negative coefficients while preserving the
+restriction.
+
+\begin{definition}[Restriction kernel and positive fibre]
+The restriction kernel consists of virtual $D_5$ characters $K$ satisfying
+$\Res K=0$.  If $s(m)$ is any virtual section lift, every other lift is
+\[
+   s(m)+K.
+\]
+The \emph{positive fibre} over $m$ is the set of those kernel corrections for
+which every final $D_5$ coefficient is a nonnegative integer.
+\end{definition}
+
+This language separates existence from selection.  Bars III.B asks whether
+the positive fibre is nonempty.  It does not ask for a preferred point in
+that fibre.
+
+\section{The trajectory--kernel programme}
+
+\subsection{Step 1a: Regge coordinates and shifts}
+
+At each physical HFT level $n\geq1$, write
+\[
+ a_n(\ell,m,r,s)
+ =\operatorname{mult}_{r_n^9}[\ell,m,r,s]_9.
+\]
+Thus a five-tuple $(n,\ell,m,r,s)$ means ``level $n$, with $B_4$ highest
+weight $[\ell,m,r,s]_9$''.  The first Dynkin coordinate $\ell$ measures the
+leading symmetric-tensor direction.  The basic Regge shift is
+\begin{equation}
+\label{eq:regge-shift}
+   (n,\ell,m,r,s)\longmapsto(n+1,\ell+1,m,r,s).
+\end{equation}
+A \emph{Regge column} fixes $(m,r,s)$.  The elementary orbit invariant is
+therefore
+\[
+   \rho=n-\ell.
+\]
+At fixed $(m,r,s)$, a Regge orbit is therefore specified by $\rho$.  Nothing
+about the shift itself singles out the further subtraction of $3m$; that
+choice becomes natural only after the support geometry is introduced.
+
+\subsection{Step 1b: HFT support and the GMSZ chambers}
+
+Through the tested finite window, the HFT data are accurately organized by
+the empirical support rule of Georgoudis, Minahan, Str\"om and Zoumis (GMSZ)
+\cite{GMSZ}.  Their rule is stated for $n>6$.  Define the support cost
+\[
+ c(r,s)=\max\{6r+5s-6,\ 6r+4s-2,\ 6r+3s-1,\ 2s+1\}.
+\]
+At fixed $(n,m,r,s)$, the largest allowed leading label is
+\[
+ \ell_{\max}=n-3m-c(r,s),
+\]
+apart from the stated isolated gap $[n-2,0,0,0]_9$.  Thus the outer support
+condition is
+\[
+ 0\leq\ell\leq\ell_{\max}.
+\]
+
+This is what motivates the support-adapted reduced depth
+\[
+   \delta=n-\ell-3m=\rho-3m.
+\]
+The subtraction of $3m$ is not required by Regge invariance.  It absorbs the
+three units of level carried by one unit of the second Dynkin label in the
+GMSZ support rule.  The support condition becomes simply
+\[
+ \delta\geq c(r,s),
+\]
+and the literal distance below the leading edge is
+\[
+ \ell_{\max}-\ell=\delta-c(r,s).
+\]
+Thus $\rho=n-\ell$ is the basic Regge invariant, whereas $\delta$ is the
+same invariant recentered so that the $m$-dependent support cost has already
+been removed.
+
+Some chamber terminology will be used repeatedly.  A supported target with
+$\ell\geq1$ has the unit Regge predecessor
+\[
+ (n-1,\ell-1,m,r,s).
+\]
+In the GMSZ range, its \emph{upper $\ell$-chamber} is the high-$\ell$ part of
+the support for which that predecessor is present and
+\[
+ \ell>\left\lfloor\frac{\ell_{\max}}2\right\rfloor.
+\]
+Here ``upper'' means closer to the largest allowed first Dynkin label; it
+does not mean higher string level.  The multiplicity in this chamber is
+transported unchanged from the predecessor.  The lattice wall at the edge
+of this region is the \emph{transport boundary}.  The \emph{outer support
+boundary} is instead the edge of the allowed spectrum itself, such as
+$\ell=\ell_{\max}$ at fixed $(n,m,r,s)$.  A third object, the branching
+boundary of an interlacing packet, will appear in Step~2.  These boundaries
+are related manifestations of failed naive translation, but they are not the
+same mathematical locus.
+
+We can now state the three transport rules precisely in our conventions.
+Fix a supported target $[\ell,m,r,s]_9$ at level $n>6$, and let
+$\ell_{\max}$ always mean the target value defined above.  A proposed
+equality is admissible only when its lower-level source exists in the HFT
+support and the indicated positive integer $k$ is within range.
+
+The \emph{$\ell$-transport} is
+\[
+ a_n(\ell,m,r,s)=a_{n-k}(\ell-k,m,r,s),
+ \qquad 1\leq k\leq\ell,
+\]
+with chamber inequality
+\[
+ \ell>\left\lfloor\frac{\ell_{\max}}2\right\rfloor
+       +\left\lfloor\frac{k}{2}\right\rfloor.
+\]
+For $k=1$ this reduces to the upper-$\ell$-chamber condition already given.
+
+The \emph{$m$-transport} is
+\[
+ a_n(\ell,m,r,s)=a_{n-3k}(\ell,m-k,r,s),
+ \qquad 1\leq k\leq m,
+\]
+with chamber inequality
+\[
+ \ell>\ell_{\max}-m+k-1.
+\]
+The factor three in the level shift is the same factor that motivated the
+coordinate $\delta=n-\ell-3m$.
+
+The \emph{$r$-transport} is
+\[
+ a_n(\ell,m,r,s)=a_{n-6k}(\ell,m,r-k,s),
+ \qquad 1\leq k\leq r,
+\]
+with chamber inequality
+\[
+ \ell>\ell_{\max}-r+k-1+\epsilon(s),
+\]
+where the spinor-label correction is
+\[
+ \epsilon(s)=
+ \begin{cases}
+  2, & s=0,\\
+  1, & 1\leq s\leq3,\\
+  0, & s\geq4.
+ \end{cases}
+\]
+All three inequalities are strict inequalities between integers.  In the
+deterministic TK5 chamber decomposition, the families are tried in the order
+$\ell$, $m$, $r$, using the largest admissible $k$ in the first applicable
+family.  The finite audit also tested every admissible $k$, rather than only
+that selected representative.
+
+The \emph{residual core} is the set of supported labels for which none of
+these admissible transports applies.  It is therefore the part of the
+spectrum whose multiplicity is not supplied by the transport identities.  In
+particular, it is not merely a synonym for the complement of the upper
+$\ell$-chamber: some labels below that chamber can still be transported in
+the $m$ or $r$ direction.
+
+\subsection{Step 1c: what TK1 and TK5 established}
+
+TK1 asked, before imposing any chamber condition, whether HFT multiplicities
+were simply constant along all Regge orbits.
+
+They are not globally constant.  Through level 10, 80 of 134 adjacent tests
+matched and 54 failed.  TK5 later showed that the tested upper $\ell$-chamber
+contains no such failures.  In the later level-$7$--$11$ audit, all 95
+admissible adjacent comparisons inside that chamber matched.  The failures
+lie outside it, where crossing the transport boundary and encountering
+genuinely nontransported core data cannot be ignored.
+
+This chamber decomposition explained the TK1 mismatches, but its status was
+still empirical and finite-level.  It prevented a false all-orders
+conjecture based only on leading trajectories.  The later Pieri argument
+derives directly from the exact HFT factorization the portion of stable
+transport actually needed for the all-orders support theorem.
+
+\subsection{Step 2: boundary-corrected kernel shifts}
+
+Let $\sigma_D$ and $\sigma_B$ increase the first $D_5$ and $B_4$ Dynkin
+labels respectively.  Interlacing gives the exact identity
+\begin{equation}
+\label{eq:branch-shift-defect}
+   \Res(\sigma_DV_\lambda)
+   =\sigma_B\Res(V_\lambda)+\partial V_\lambda,
+\end{equation}
+where $\partial V_\lambda$ is the nonnegative, multiplicity-free slice
+\[
+   \mu_1=\lambda_2.
+\]
+This slice is the \emph{branching boundary}: it is the face of the
+$D_5\downarrow B_4$ interlacing packet left behind by the shift.  It is not
+the transport boundary just defined, although both phenomena express a
+failure of a naive shift to act everywhere without correction.  The slice is
+independent of the shifted first label.  Thus raw shifting does not commute
+with restriction, but its failure is an explicitly known lower face of the
+packet.
+
+If $s_{\mathrm{ch}}$ denotes the triangular all-chiral section, define the
+corrected shift on a kernel element by
+\begin{equation}
+\label{eq:corrected-kernel-shift}
+   T(K)=\sigma_DK-s_{\mathrm{ch}}(\Res(\sigma_DK)).
+\end{equation}
+Then $\Res T(K)=0$.  TK2 proved more: for every natural finite generator,
+$T(K)$ is exactly the next generator along its Regge trajectory.  This is
+why the programme is called \emph{trajectory--kernel}: the leading shift acts
+naturally only after the restriction-kernel boundary correction is included.
+
+The first important seed is the six-term relation
+\[
+ [0,0,0,1,1]_{10}-[0,0,0,0,2]_{10}
+ -[0,0,1,0,0]_{10}+[0,1,0,0,0]_{10}
+ -[1,0,0,0,0]_{10}+[0,0,0,0,0]_{10},
+\]
+whose restriction vanishes.  In dimension notation it is
+\[
+   210-126-120+45-10+1.
+\]
+This is the local algebra behind the first $126/210$ parent ambiguity.
+
+\subsection{Step 3: positive fibres and the failure of uniqueness}
+
+TK3 used the natural kernel basis to parameterize the complete positive
+fibres in the level-10 HFT closure.  The number of positive lifts at levels
+1 through 10 was
+\[
+   1,1,1,1,1,1,2,8,72,6057.
+\]
+The first compulsory correction occurs at level 7 and uses the six-term seed
+above.  The result establishes two logically different facts:
+\begin{itemize}
+  \item the tested cumulative HFT targets do have positive integral lifts;
+  \item positivity alone very quickly ceases to choose a unique lift.
+\end{itemize}
+
+TK4 and TK5 tested possible selection principles: minimum kernel population,
+minimum support, minimum corrected-shift defect and sources confined to an
+empirical residual chamber.  These organize the finite solutions but do not
+produce a unique cutoff-stable rule.  In particular, a lift optimized at one
+horizon may have to be abandoned to reach the optimum at the next horizon.
+This redirected the project from selecting a favourite lift to proving that
+the positive fibre is nonempty by intrinsic inequalities.
+
+\section{From a positive fibre to facet inequalities}
+
+\subsection{The global ring kernel}
+
+Let $16_+$ and $16_-$ be the two half-spinor characters of $D_5$ and put
+\[
+   J=16_+-16_-.
+\]
+The representation-ring restriction is surjective and has the exact
+principal kernel
+\begin{equation}
+\label{eq:principal-kernel}
+   \ker\!\left(R(\Spin(10))\longrightarrow R(\Spin(9))\right)=(J).
+\end{equation}
+Thus every virtual ambiguity is a multiple of one global chirality
+difference.  This elegant ring statement does not solve positivity:
+multiplication by $J$ introduces both signs.  The positive problem lives in
+the representation \emph{semiring}, where subtraction is unavailable.
+
+\subsection{Cone, semigroup, facets and Hilbert basis}
+
+For a finite packet matrix $A$, define
+\[
+   C=A\mathbb R_{\geq0}^{p},
+   \qquad
+   S=A\mathbb Z_{\geq0}^{p}.
+\]
+The cone $C$ records rational positive packet combinations; the semigroup
+$S$ records genuine integral combinations.  An integral target can lie in
+$C$ but outside $S$, producing an \emph{integrality hole}.
+
+A \emph{facet} is a codimension-one face of $C$.  Equivalently it is given by
+a primitive linear inequality
+\[
+   y^Tm\geq0
+\]
+valid on every packet column.  Membership in a full-dimensional rational
+cone is equivalent to satisfying all its facet inequalities.  A
+\emph{Hilbert basis} is the minimal finite set of lattice points which
+generates all lattice points in the cone by nonnegative integer sums.  If the
+packet columns themselves form that Hilbert basis, then
+\[
+   S=C\cap\mathbb Z^d,
+\]
+and the semigroup is called \emph{saturated} or \emph{normal}.
+
+TK6B.1 found, in the complete level-11 closure,
+\[
+   A\in\mathbb Z^{73\times84},
+   \qquad \operatorname{rank}A=73,
+\]
+with 2508 facets.  The matrix is not totally unimodular, but its 84 packet
+columns are nevertheless exactly its Hilbert basis.  Hence, in that finite
+domain, the facet inequalities are both necessary and sufficient for an
+integral positive lift.  This was decisive conceptually, although it was not
+yet an all-orders saturation theorem.
+
+\subsection{Gale transforms and positive circuits}
+
+Directly listing thousands of facet inequalities obscures their origin.  Let
+\[
+   K\in\mathbb Z^{p\times k}
+\]
+have as columns an integral basis of $\ker A$, so $AK=0$.  The row
+vectors $g_j\in\mathbb Z^k$ of $K$ are a \emph{Gale transform} of the packet
+configuration.  Informally, the packet columns describe what is generated;
+the Gale vectors describe all linear dependencies among those generators.
+
+If $y$ is a facet functional, its slack on the packet columns is
+\[
+   x=A^Ty.
+\]
+It satisfies
+\[
+   x\geq0,
+   \qquad K^Tx=0.
+\]
+Conversely, because $A$ has full row rank, every extreme ray of this
+nonnegative relation cone comes from a facet.  A \emph{positive Gale circuit}
+is a minimally supported relation
+\[
+   \sum_j x_jg_j=0,
+   \qquad x_j\geq0,
+\]
+with primitive integer coefficients.  The word ``circuit'' is borrowed from
+matroid theory: it means that deleting any supported row destroys the
+dependence.
+
+In triangular coordinates $c=U^{-1}m$, the corresponding liftability
+condition becomes the weighted Hall-type inequality
+\begin{equation}
+\label{eq:weighted-circuit}
+   \sum_{j\in\operatorname{Ref}}x_jc_j\geq0.
+\end{equation}
+At level 11, 2508 facets compressed to only 40 circuit types.  At level 13,
+new shell collisions produced genuine coefficient-two circuits.  Therefore
+the correct all-orders object is a growing family of \emph{weighted}
+circuits, not a fixed list of zero-one inequalities.
+
+\section{Shell identities and the bridge back to HFT}
+
+\subsection{Universal local kernel relations}
+
+The finite kernel families eventually proliferate, but their local origin is
+uniform.  For the parent family \eqref{eq:parent-family}, let
+\[
+   P_k=[\ell,m,r,k,s-k]_{10}.
+\]
+The difference of two consecutive parent packets is a single interlacing
+boundary slice.  Inclusion--exclusion on that slice gives four all-chiral
+packets $Q_{1,k},\ldots,Q_{4,k}$ and the universal six-term identity
+\begin{equation}
+\label{eq:shell-identity}
+   \Res\bigl(P_k-P_{k-1}-Q_{1,k}+Q_{2,k}-Q_{3,k}+Q_{4,k}\bigr)=0.
+\end{equation}
+For example, the first split is
+\begin{multline}
+ K_{\ell,m,r,s}^{(1)}=
+ [\ell,m,r,1,s-1]-[\ell,m,r,0,s]
+ -[\ell,m,r+1,0,s-2]\\
+ +[\ell,m+r+1,0,0,s-2]
+ +[m,r,0,0,s-2]-[\ell+m+1,r,0,0,s-2].
+\end{multline}
+All labels in this display are $D_5$ labels.  The identity follows directly
+from the interlacing rule and is valid for arbitrary nonnegative labels.
+Summing consecutive shells telescopes the $k$th parent back to the all-chiral
+parent with exactly $4k+2$ unit-coefficient terms.
+
+The important point is where level dependence has gone.  The shell formula
+is universal; a string-level cutoff merely chooses a finite induced
+collision hypergraph of these local relations.  Its primitive positive
+circuits are the facet inequalities that the HFT target must satisfy.
+
+\subsection{The local M\"obius inverse}
+
+The triangular section itself also has a cutoff-independent formula.  Let
+\[
+   M(\ell,m,r,s)
+\]
+be the multiplicity of $[\ell,m,r,s]_9$ in any finite $B_4$ character,
+extended by zero outside the dominant chamber.  The coefficient of the
+all-chiral parent $[\ell,m,r,0,s]_{10}$ is
+\begin{equation}
+\label{eq:mobius}
+\begin{split}
+ c_{\ell,m,r,s}
+ ={}&\sum_{\epsilon_1,\epsilon_2,\epsilon_3\in\{0,1\}}
+ (-1)^{\epsilon_1+\epsilon_2+\epsilon_3}\\
+ &M(\ell+\epsilon_1-\epsilon_2,
+    m+\epsilon_2-\epsilon_3,
+    r+\epsilon_3,s).
+\end{split}
+\end{equation}
+This is a three-fold finite difference, or M\"obius inversion, of the
+interlacing sums.  ``M\"obius'' here means inclusion--exclusion on a finite
+partially ordered set; no number-theoretic M\"obius function is involved.
+
+Substituting \eqref{eq:mobius} into
+\eqref{eq:weighted-circuit} turns every branching-cone facet into a finite
+signed inequality among HFT multiplicities.  This is the essential bridge:
+an abstract $\Spin(10)$ lifting obstruction becomes an explicit local
+functional of the known $\Spin(9)$ generating series.
+
+\subsection{Why higher-level enumeration cannot finish the proof}
+
+The full infinite shell system has no nonzero finitely supported positive
+circuit.  The reason is that one boundary term in
+\eqref{eq:shell-identity} forgets the leading label $\ell$, so a putative
+finite circuit can always be tested against a sufficiently distant shell and
+forced negative.  Finite-horizon facets are therefore moving
+\emph{boundary-tail} objects; their support changes as the horizon grows.
+
+Some tails telescope under \eqref{eq:mobius} to a bounded number of endpoint
+multiplicities, but mixed circuits can have growing pullback support.  This is
+the precise answer to the question ``what prevents an all-orders proof from
+being just a check of higher and higher levels?''  One needs a structural
+transport theorem for the moving tails.  That requirement led back to the
+HFT symmetric-vector factorization.
+
+\section{Stable Pieri translation and the remaining support theorem}
+
+\subsection{What ``stable Pieri translation'' means}
+
+Let $V_\mu$ and $V_\lambda$ be irreducible $B_n$ representations, expressed
+in orthogonal coordinates, and let
+\[
+   H_k=V_{k\omega_1}
+\]
+be the traceless symmetric, or harmonic one-row, representation.  A Pieri
+rule describes the irreducible summands obtained by tensoring an arbitrary
+representation with such a one-row representation.
+
+\begin{theorem}[Stable Pieri translation]
+If the prospective target is at least as far out in its first orthogonal
+coordinate as the source,
+\[
+   \lambda_1\geq\mu_1,
+\]
+then
+\begin{equation}
+\label{eq:stable-pieri-harmonic}
+ [V_\lambda:V_\mu\otimes H_k]
+ =
+ [V_{\lambda+\omega_1}:V_\mu\otimes H_{k+1}]
+\end{equation}
+for every $k\geq0$.  Consequently
+\begin{equation}
+\label{eq:stable-pieri-symmetric}
+ [V_\lambda:V_\mu\otimes\operatorname{Sym}^{a}(V)]
+ =
+ [V_{\lambda+\omega_1}:
+  V_\mu\otimes\operatorname{Sym}^{a+1}(V)].
+\end{equation}
+\end{theorem}
+
+The brackets denote tensor-product multiplicity.  In $B_4$,
+$\lambda\mapsto\lambda+\omega_1$ is exactly
+$[\ell,m,r,s]\mapsto[\ell+1,m,r,s]$.  Thus the theorem says that, once the
+first row is longer than anything carried by the fixed source $V_\mu$, adding
+one symmetric-vector degree simply adds one box to that first row.  The
+decomposition has entered a stable regime.
+
+The proof uses Racah--Speiser.  Every Weyl-group term which moves the first
+coordinate would require a weight of $V_\mu$ whose absolute coordinate is
+larger than $\mu_1$, so it vanishes.  The stabilizer of the first coordinate
+is unchanged when one adds $\omega_1$ to the target and one unit to the
+harmonic degree.  This works equally for integral tensor weights and
+half-integral spinor weights; stable Pieri translation itself is not a
+chirality obstruction.
+
+\subsection{Applying it to the HFT factorization}
+
+From \eqref{eq:hft-regge-factor}, the coefficient of $q^N$ is
+\[
+   [q^N]R(q)
+   =\sum_{d=0}^{N}\operatorname{Sym}^{N-d}(V_9)\otimes F_d.
+\]
+For a fixed $V_\mu$ in $F_d$, equation
+\eqref{eq:stable-pieri-symmetric} transports its contribution from one
+physical level to the next provided the target satisfies
+$\lambda_1\geq\mu_1$.  The sign of the coefficient of $V_\mu$ in the virtual
+character $F_d$ is irrelevant: the equality holds contribution by
+contribution before the signed terms are added.
+
+Two possible failures remain:
+\begin{enumerate}
+  \item a source $V_\mu$ might couple to an \emph{unstable} target with
+        $\lambda_1<\mu_1$;
+  \item the new top-degree term $F_N$, which has no predecessor, might itself
+        hit the translated target.
+\end{enumerate}
+Both are excluded if every remainder label appears late enough.
+
+\subsection{The Pieri hazard}
+
+Define the exterior-chamber cost
+\[
+   E(\ell,m,r,s)=2\ell+3m+c(r,s),
+\]
+where $c(r,s)$ is the support cost introduced above.  For a source $\mu$,
+define its harmonic hazard
+\[
+ H(\mu)=
+ \max_{\substack{k\geq0,\ V_\lambda\subset V_\mu\otimes H_k\\
+                  \lambda_1<\mu_1}}
+ \bigl(E(\lambda)-k\bigr).
+\]
+This maximum is finite.  An unstable target can occur only for
+\[
+   k<2\mu_1,
+\]
+so no unbounded tensor-product search is hidden in the definition.  Put
+\begin{equation}
+\label{eq:pieri-threshold}
+   K(\mu)=\max\bigl(E(\mu)-1,H(\mu)\bigr).
+\end{equation}
+Then the single support implication
+\begin{equation}
+\label{eq:needed-support}
+   [V_\mu]F_d\neq0
+   \quad\Longrightarrow\quad
+   d\geq K(\mu)
+\end{equation}
+simultaneously excludes all unstable couplings and the unpaired top-degree
+term.
+
+The hazard is not an opaque maximization.  Orthogonal Pieri interlacing
+\cite{Okada} gives a closed piecewise-affine formula: on $\ell=0$ it is
+simply $E-1$, while for $\ell\geq1$ three additional affine walls appear.
+The next section packages those pieces into a convenient seven-wall function
+$K_7$.
+
+\subsection{What the present proof accomplishes}
+
+Before TK6B.5f, implication \eqref{eq:needed-support} had been checked only
+through a finite HFT window.  Checking more degrees could never establish it.
+The remaining task was to derive it from the infinite oscillator product in
+\eqref{eq:hft-left}.  The rest of this report gives that derivation:
+\begin{enumerate}
+  \item encode $K$ by seven affine walls;
+  \item rewrite the HFT quotient on the common $D_4$ torus;
+  \item telescope the Green--Schwarz product using a finite triality identity;
+  \item prove that the infinite high-mode tail is automatically safe;
+  \item check the fixed low-mode residue exactly.
+\end{enumerate}
+This closes one major analytic premise of the trajectory--kernel programme.
+It does not yet classify all moving circuits or prove all-level integral
+packetization.
+
+\subsection{Programme at a glance}
+
+The route can be summarized without the finite computational detail as
+follows.  A ``complete'' entry in the final column means complete for the
+mathematical statement indicated there, not completion of the Bars problem.
+
+\begin{longtable}{p{0.12\textwidth}p{0.35\textwidth}p{0.43\textwidth}}
+\caption{Conceptual progression of the trajectory--kernel programme.}
+\label{tab:programme-roadmap}\\
+\toprule
+stage & new object or theorem & consequence \\
+\midrule
+\endfirsthead
+\toprule
+stage & new object or theorem & consequence \\
+\midrule
+\endhead
+Bars & cumulative target $R_n^9$ & formulate the minimal positive
+$D_5$-lift existence problem \\
+HFT & covariant series $R(q)$ & replace order-by-order oscillator
+construction by an exact all-orders $B_4$ generating function \\
+TK1 & Regge columns and reduced depth $\delta$ & raw multiplicity shifts are
+useful but not globally valid \\
+TK2 & boundary-corrected kernel shift & exact transport acts on restriction
+relations rather than on raw packets \\
+TK3--5 & positive fibres and chamber/core sources & establish finite
+existence and strong nonuniqueness; simple minimization is not canonical \\
+TK6a & principal kernel ideal $(16_+-16_-)$ & settle the global virtual
+kernel while isolating positivity as a semiring problem \\
+TK6B.1 & packet cone, semigroup and Hilbert basis & reduce finite integral
+liftability to facet inequalities in the level-11 closure \\
+TK6B.2--4 & Gale circuits and universal shells & replace thousands of facets
+by primitive weighted relations in a local collision hypergraph \\
+TK6B.5b/c & M\"obius pullback and boundary tails & turn facets into local HFT
+multiplicity inequalities and explain why circuit lists move with the cutoff
+\\
+TK6B.5d/e & stable Pieri translation and hazard $K$ & reduce the relevant
+transport inequalities to the single support implication
+$[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ \\
+TK6B.5f & Green--Schwarz telescope and finite low-mode core & prove that
+support implication at every degree \\
+\bottomrule
+\end{longtable}
+
+\section{The seven-wall degree}
+
+\subsection{$B_4$ labels and orthogonal coordinates}
+
+We write a dominant $B_4$ Dynkin label as
+\[
+   \mu=(\ell,m,r,s).
+\]
+Its orthogonal coordinates are
+\begin{align*}
+ x_1&=\ell+m+r+\frac{s}{2}, &
+ x_2&=m+r+\frac{s}{2},\\
+ x_3&=r+\frac{s}{2}, &
+ x_4&=\frac{s}{2},
+\end{align*}
+with $x_1\geq x_2\geq x_3\geq x_4\geq0$.  Tensorial representations have
+integral $x_i$, while spinorial representations have half-integral $x_i$.
+
+The original Pieri threshold $K(\mu)$ is piecewise affine.  It is convenient
+to use a slightly stronger uniform function $\Kseven$, which agrees with $K$
+away from the wall $\ell=0$ and may be stronger on that wall.
+
+\begin{definition}[Uniform seven-wall degree]
+For $\mu=(\ell,m,r,s)$, define $\Kseven(\mu)$ as the maximum of
+\begin{align*}
+ W_1&=2\ell+3m+6r+5s-7,\\
+ W_2&=2\ell+3m+6r+4s-3,\\
+ W_3&=2\ell+3m+6r+3s-2,\\
+ W_4&=2\ell+3m+2s,\\
+ W_5&=2\ell+5m+6r+3s-4,\\
+ W_6&=2\ell+5m+7r+4s-5,\\
+ W_7&=2\ell+5m+9r+5s-9.
+\end{align*}
+\end{definition}
+
+The first four walls are the exterior-chamber degree $E(\mu)-1$; the last
+three are the extra unstable-Pieri hazards.  Since
+\[
+   \Kseven(\mu)\geq K(\mu),
+\]
+it is enough to prove the stronger implication
+\[
+   [V_\mu]F_d\neq0\quad\Longrightarrow\quad d\geq\Kseven(\mu).
+\]
+
+For later use, Table~\ref{tab:orthogonal-walls} gives the same seven walls in
+orthogonal coordinates.
+
+\begin{table}[ht]
+\centering
+\caption{The seven walls in orthogonal coordinates.}
+\label{tab:orthogonal-walls}
+\begin{tabular}{ccl}
+\toprule
+wall & coefficient vector & affine expression \\
+\midrule
+$W_1$ & $(2,1,3,4)$ & $2x_1+x_2+3x_3+4x_4-7$ \\
+$W_2$ & $(2,1,3,2)$ & $2x_1+x_2+3x_3+2x_4-3$ \\
+$W_3$ & $(2,1,3,0)$ & $2x_1+x_2+3x_3-2$ \\
+$W_4$ & $(2,1,-3,4)$ & $2x_1+x_2-3x_3+4x_4$ \\
+$W_5$ & $(2,3,1,0)$ & $2x_1+3x_2+x_3-4$ \\
+$W_6$ & $(2,3,2,1)$ & $2x_1+3x_2+2x_3+x_4-5$ \\
+$W_7$ & $(2,3,4,1)$ & $2x_1+3x_2+4x_3+x_4-9$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Changing to the Green--Schwarz oscillator product}
+
+\subsection{Why $D_4$ is the useful intermediate language}
+
+The covariant HFT series is naturally organized as a $B_4=\Spin(9)$
+character.  The oscillator product is simpler after restriction to the common
+maximal torus of $D_4=\Spin(8)$.  Let
+\[
+   V=8_v,
+   \qquad S=8_s,
+   \qquad C=8_c,
+\]
+where $S$ is the chirality chosen for the Green--Schwarz fermionic
+oscillators and $C$ is the other half-spinor.  Exchanging $S$ and $C$ is an
+outer automorphism of $D_4$; no physical chirality choice for a
+$\Spin(10)$ lift is being made at this stage.
+
+Define the finite exterior polynomials
+\[
+   D(u)=\sum_{j=0}^{8}(-u)^j\Lambda^jV,
+   \qquad
+   E(u)=\sum_{j=0}^{8}u^j\Lambda^jS,
+\]
+and set
+\[
+   H=V+S.
+\]
+The inverse $D(u)^{-1}$ is the symmetric-power series of $V$.
+
+\subsection{The finite triality identity}
+
+\begin{lemma}[One-mode divisibility]
+In the exact representation ring of $D_4$,
+\[
+   E(u)-D(u)=uH B(u),
+\]
+where
+\[
+   B(u)=1+(C-\one)u^2+(V-S)u^3+(C-\one)u^4+u^6.
+\]
+\end{lemma}
+
+\begin{proof}
+Both sides are polynomials of degree at most eight.  Expand the exterior
+powers of $8_v$ and $8_s$.  Triality identifies the relevant vector and
+spinor exterior powers, while Hodge duality pairs degrees $j$ and $8-j$.
+After subtracting, the constant terms cancel and every remaining coefficient
+is divisible by $H=V+S$.  The quotients, in increasing degree, are
+\[
+   \one,\quad 0,\quad C-\one,\quad V-S,
+   \quad C-\one,\quad 0,\quad\one.
+\]
+This is exactly $B(u)$.  The implementation verifies all nine coefficients
+as identities of Weyl characters.
+\end{proof}
+
+The identity is a finite representation-ring form of the generalized Jacobi
+identity relating RNS and Green--Schwarz oscillator descriptions.  Its main
+advantage is that it performs the ground-multiplet division without expanding
+an infinite virtual Koszul sum.
+
+\subsection{Telescoping the infinite product}
+
+Put
+\[
+   A(u)=\frac{E(u)}{D(u)}.
+\]
+The lemma gives
+\[
+   A(u)-1=\frac{uH B(u)}{D(u)}.
+\]
+Let
+\[
+   P(q)=\prod_{m\geq1}A(q^m)
+\]
+be the Green--Schwarz oscillator product.  For a finite product one has the
+elementary telescoping identity
+\[
+   \prod_{m=1}^{N}A_m-1
+   =\sum_{n=1}^{N}(A_n-1)\prod_{m=1}^{n-1}A_m.
+\]
+Substituting $A_n=A(q^n)$ and using the one-mode identity gives, coefficient
+by coefficient in $q$,
+\[
+ \frac{P(q)-1}{qH}
+ =\sum_{n\geq1}q^{n-1}\frac{B(q^n)}{D(q^n)}
+   \prod_{m=1}^{n-1}A(q^m).
+\]
+There is no convergence issue: the coefficient of $q^d$ sees only finitely
+many modes.
+
+The $B_4$ vector restricts to $\one+V$ on $D_4$.  Removing its level-one
+symmetric tower therefore multiplies by
+\[
+   \PE(-q(\one+V))=(1-q)D(q).
+\]
+We obtain the central exact identity.
+
+\begin{proposition}[Green--Schwarz telescope for the remainder]
+On the common $D_4/B_4$ torus,
+\begin{equation}
+\label{eq:telescope}
+ F(q)=(1-q)\sum_{n\geq1}q^{n-1}B(q^n)
+ \frac{\displaystyle\prod_{m=1}^{n-1}E(q^m)}
+      {\displaystyle\prod_{m=2}^{n}D(q^m)}.
+\end{equation}
+\end{proposition}
+
+This is the decisive change of viewpoint.  The universal multiplet has been
+divided out exactly, with the required cancellations already incorporated.
+Every summand has a distinguished first nontrivial mode $n$, which we call
+its \emph{pivot}.
+
+\section{Returning from $D_4$ to $B_4$}
+
+\subsection{The finite Weyl-numerator map}
+
+Let $A_\rho$ denote a Weyl alternant.  Since the roots of $B_4$ not present
+in $D_4$ are the short roots $\pm e_i$, the Weyl denominators obey
+\[
+   \frac{A_{\rho_{B_4}}}{A_{\rho_{D_4}}}
+   =\prod_{i=1}^{4}\left(e^{e_i/2}-e^{-e_i/2}\right).
+\]
+For a $D_4$ irrep with highest weight $\lambda$,
+\[
+ A_{\rho_{B_4}}\chi^{D_4}_{\lambda}
+ =\frac{A_{\rho_{B_4}}}{A_{\rho_{D_4}}}
+  A_{\lambda+\rho_{D_4}}.
+\]
+The right side has at most $192\cdot16$ signed monomials before equal terms
+are collected: 192 elements of the $D_4$ Weyl group and 16 sign choices from
+the short-root product.  Thus the conversion is finite and independent of
+the size of $\lambda$.
+
+\subsection{Chirality folding does not increase the wall degree}
+
+Write a dominant $D_4$ highest weight in orthogonal coordinates as
+\[
+   \lambda=(a,b,c,d),
+   \qquad a\geq b\geq c\geq|d|.
+\]
+Its chirality fold is the dominant $B_4$ weight
+\[
+   \widehat\lambda=(a,b,c,|d|).
+\]
+
+\begin{lemma}[Componentwise containment]
+If a dominant $B_4$ term
+$\nu=(y_1,y_2,y_3,y_4)$ occurs in
+$A_{\rho_{B_4}}\chi^{D_4}_\lambda$, then
+\[
+   y_i\leq\widehat\lambda_i
+   \qquad (1\leq i\leq4).
+\]
+\end{lemma}
+
+\begin{proof}
+The doubled Weyl-numerator terms have the form
+\[
+   w(2\lambda+2\rho_{D_4})+\varepsilon,
+   \qquad \varepsilon_i\in\{\pm1\}.
+\]
+Take absolute values and order the four coordinates decreasingly.  There is
+only one coordinate originating from each entry of
+$\widehat\lambda+\rho_{D_4}$.  Consequently the $i$th order statistic is no
+larger than
+\[
+   \widehat\lambda_i+(\rho_{D_4})_i+\frac12
+   =\widehat\lambda_i+(\rho_{B_4})_i.
+\]
+Subtracting $\rho_{B_4}$ gives the claim.
+\end{proof}
+
+Six of the seven walls in Table~\ref{tab:orthogonal-walls} have nonnegative
+orthogonal-coordinate coefficients, so componentwise containment immediately
+controls them.  Only $W_4$ needs attention.
+
+\begin{lemma}[The exceptional wall]
+Every dominant term $\nu$ in the Weyl numerator satisfies
+\[
+   \Kseven(\nu)\leq\Kseven(\widehat\lambda).
+\]
+\end{lemma}
+
+\begin{proof}
+For the exceptional wall, dominance of $\nu$ gives
+\[
+\begin{split}
+ W_4(\nu)
+ &=2y_1+y_2-3y_3+4y_4\\
+ &\leq2a+b+|d|,
+\end{split}
+\]
+because $-3y_3+4y_4\leq y_4\leq|d|$.
+If $c=|d|$, the last expression is exactly $W_4(\widehat\lambda)$.
+If $c>|d|$, the two coordinates lie in the same weight lattice, so
+$c\geq|d|+1$.  Hence
+\[
+   2a+b+|d|\leq2a+b+3c-2=W_3(\widehat\lambda).
+\]
+The maximum of all seven source walls therefore bounds every target wall.
+\end{proof}
+
+This lemma explains precisely what chirality does and does not do here.
+Different $D_4$ chiral representatives may contribute differently, but after
+folding, none can create a $B_4$ term of larger filtered degree.  No choice of
+a $D_5=\Spin(10)$ parent has entered the argument.
+
+\section{Why only finitely many oscillator modes remain}
+
+\subsection{Vector and spinor Lipschitz constants}
+
+The seven walls provide uniform tensor-product estimates.
+
+\begin{lemma}[One-factor degree increase]
+Let $\alpha$ be a dominant $D_4$ weight and fold all $D_4$ chiralities before
+evaluating $\Kseven$.
+\begin{enumerate}
+  \item Every constituent of $V_\alpha\otimes V$ has degree at most
+        $\Kseven(\widehat\alpha)+4$.
+  \item Every constituent of $V_\alpha\otimes S$ has degree at most
+        $\Kseven(\widehat\alpha)+5$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+A vector weight changes one orthogonal coordinate by $\pm1$ before Weyl
+dominantization.  The largest absolute coefficient in
+Table~\ref{tab:orthogonal-walls} is 4.  A spinor weight changes all four
+coordinates by $\pm\tfrac12$.  Half the largest sum of absolute wall
+coefficients is
+\[
+   \frac12(2+1+3+4)=5.
+\]
+Taking the maximum over walls and Weyl images preserves these bounds.
+\end{proof}
+
+Repeated tensoring gives an increase of at most $4r$ for a constituent of
+$V^{\otimes r}$ and at most $5j$ for a constituent of $S^{\otimes j}$.
+Since $\operatorname{Sym}^rV\subset V^{\otimes r}$ and
+$\Lambda^jS\subset S^{\otimes j}$, the same upper bounds apply to the
+oscillator factors.
+
+\subsection{The safe tail}
+
+In a bosonic mode $m$, the degree charge of $\operatorname{Sym}^rV$ is $mr$.
+Thus every vector mode $m\geq4$ pays at least the maximum possible increase
+$4r$.  Similarly, every fermion mode $m\geq5$ pays at least $5j$ for
+$\Lambda^jS$.
+
+The polynomial $B(q^n)$ is also harmless for $n\geq3$:
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+power in $B$ & possible non-scalar factor & degree charge for $n\geq3$ \\
+\midrule
+2 & $C$ & at least 6 \\
+3 & $V$ or $S$ & at least 9 \\
+4 & $C$ & at least 12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+The possible filtered increases are at most 5, 5 and 5 respectively.
+Negative coefficients such as $-\one$ or $-S$ do not change a support bound;
+they change only signed multiplicities.
+
+We have therefore reduced the entire infinite product to
+\begin{itemize}
+  \item fermionic modes 1, 2, 3 and 4;
+  \item bosonic vector modes 2 and 3;
+  \item the exceptional pivot polynomials $B(q)$ and $B(q^2)$.
+\end{itemize}
+This reduction is uniform in the final string level.
+
+\section{The two low vector modes}
+
+\subsection{Harmonic decomposition and the hazard transform}
+
+Let $H_k$ be the $D_4$ harmonic one-row representation.  Recall
+\[
+   \operatorname{Sym}^{r}V
+   =H_r\oplus H_{r-2}\oplus H_{r-4}\oplus\cdots.
+\]
+For an upper support estimate, a trace term is easier than its harmonic
+label suggests: it pays the oscillator degree of $r$ but has harmonic degree
+$k\leq r$.  It is therefore enough to charge $mk$ to $H_k$ in mode $m$.
+
+For a folded source $\alpha$, define the exact mode-two hazard
+\[
+ H_2(\alpha)=
+ \max_{\substack{k\geq0\\V_\beta\subset V_\alpha\otimes H_k}}
+ \left(\Kseven(\widehat\beta)-2k\right).
+\]
+This is finite: after the first-row stable range begins, increasing $k$ only
+translates the leading coordinate and does not enlarge the charged degree.
+
+\subsection{Pieri-polytope optimization}
+
+The orthogonal horizontal-strip Pieri rule can be expressed using an
+intermediate partition $\xi$.  Both the source-to-$\xi$ skew diagram and the
+target-to-$\xi$ skew diagram are horizontal strips.  The number of boxes
+removed and added bounds the harmonic degree $k$.  In the spinorial coset,
+subtracting the common half-spin shift gives the same interlacing
+inequalities.
+
+Each wall is affine in the target rows, while the degree penalty is affine in
+the source, intermediate and target rows.  Maximizing over the Pieri polytope
+is therefore an elementary endpoint calculation: every variable is put at
+one of its two interlacing endpoints according to the sign of its coefficient.
+This gives the certified upper closures in
+Table~\ref{tab:mode-two}.
+
+\begin{table}[ht]
+\centering
+\caption{Affine upper closure under vector mode 2.  A row
+$(p_1,p_2,p_3,p_4)-c$ denotes
+$p_1\ell+p_2m+p_3r+p_4s-c$.}
+\label{tab:mode-two}
+\begin{tabular}{cc}
+\toprule
+input wall & mode-two upper closure \\
+\midrule
+$(2,3,6,5)-7$ & $(2,3,8,5)-7$ \\
+$(2,3,6,4)-3$ & $(2,4,6,4)-3$ \\
+$(2,3,6,3)-2$ & $(2,4,6,3)-2$ \\
+$(2,3,0,2)$   & $(2,3,0,2)$ \\
+$(2,5,6,3)-4$ & $(3,5,6,3)-4$ \\
+$(2,5,7,4)-5$ & $(3,5,7,4)-5$ \\
+$(2,5,9,5)-9$ & $(3,7,9,5)-9$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Let $\overline H_2$ be the maximum of the seven right-hand entries.  Then
+\[
+   H_2(\alpha)\leq\overline H_2(\alpha).
+\]
+Applying the same endpoint optimization to mode 3 leaves those seven upper
+pieces and adds one new piece,
+\[
+   4\ell+7m+9r+5s-9.
+\]
+Thus the joint exact hazard $H_{23}$ obeys
+\begin{equation}
+\label{eq:joint-hazard}
+ H_{23}(\alpha)\leq
+ \overline H_{23}(\alpha)
+ :=\max\left\{
+ \overline H_2(\alpha),
+ 4\ell+7m+9r+5s-9
+ \right\}.
+\end{equation}
+
+Only the upper bound is needed for the proof.  Direct $D_4$ character
+products attain it throughout the regression simplex, including examples in
+which mode 3 genuinely raises the mode-two hazard.  These comparisons protect
+against convention or chirality errors, but they are not being extrapolated
+to establish the theorem.
+
+\section{The finite low-mode certificate}
+
+\subsection{Five pivot classes}
+
+Denote the $n$th summand of \eqref{eq:telescope} by
+\[
+ T_n(q)=(1-q)q^{n-1}B(q^n)
+ \frac{\prod_{m=1}^{n-1}E(q^m)}
+      {\prod_{m=2}^{n}D(q^m)}.
+\]
+After applying the safe-tail estimates, only five cases remain.
+
+\begin{longtable}{p{0.12\textwidth}p{0.18\textwidth}p{0.27\textwidth}p{0.27\textwidth}}
+\caption{Finite data retained in each pivot class.}
+\label{tab:pivots}\\
+\toprule
+pivot & base degree & fermionic core & remaining vector/core factor \\
+\midrule
+\endfirsthead
+\toprule
+pivot & base degree & fermionic core & remaining vector/core factor \\
+\midrule
+\endhead
+1 & 0 & none & $(1-q)B(q)$ \\
+2 & 1 & $E(q)$ & $B(q^2)/D(q^2)$ \\
+3 & 2 & modes 1--2 & vector modes 2--3 \\
+4 & 3 & modes 1--3 & vector modes 2--3 \\
+$n\geq5$ & at least 4 & modes 1--4 & vector modes 2--3 \\
+\bottomrule
+\end{longtable}
+
+For $n\geq5$, replacing the actual base degree $n-1$ by 4 is the worst-case
+choice.  All omitted fermion modes are at least 5, all omitted vector modes
+are at least 4, and $B(q^n)$ is safe.
+
+\subsection{Why first occurrence is sufficient}
+
+Expand each finite fermion core exactly in irreducible $D_4$ characters.  If
+the same irrep occurs at several degrees, retain only its first occurrence.
+The representation has the same low-vector hazard at every occurrence, while
+later copies have more degree available.  This turns the three nontrivial
+fermion cores into only
+\[
+   20,\qquad 50,\qquad 105
+\]
+distinct first-occurrence records for pivots 3, 4 and $n\geq5$.
+
+For each source $\alpha$ of first degree $f$, the required calculation is
+simply
+\[
+   \text{margin}=(\text{base degree})+f-\overline H_{23}(\alpha).
+\]
+Pivots 1 and 2 retain the signed coefficients of $B$ explicitly.  For pivot
+2 the mode-two upper hazard $\overline H_2$ is used.  The factor $(1-q)$
+creates a second copy one degree later, so it can never worsen support.
+
+\subsection{Certificate result}
+
+\begin{table}[ht]
+\centering
+\caption{Complete low-mode certificate.}
+\label{tab:certificate}
+\begin{tabular}{crrr}
+\toprule
+pivot class & records & minimum margin & failures \\
+\midrule
+1 & 8 & 0 & 0 \\
+2 & 140 & 0 & 0 \\
+3 & 20 & 0 & 0 \\
+4 & 50 & 0 & 0 \\
+$n\geq5$ & 105 & 1 & 0 \\
+\midrule
+total & 323 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All decompositions are exact Weyl-character calculations over the integers.
+The virtual signs in $B$ are retained.  No protected $\Spin(10)$ lift, no
+level-1--10 answer and no numerical optimization solver enters the
+certificate.
+
+\section{Proof of the all-orders support theorem}
+
+We can now assemble the argument.
+
+\begin{theorem}[All-orders HFT remainder support]
+For every $d\geq0$ and every dominant $B_4$ label $\mu$,
+\[
+   [V_\mu]F_d\neq0
+   \quad\Longrightarrow\quad
+   d\geq\Kseven(\mu)\geq K(\mu).
+\]
+\end{theorem}
+
+\begin{proof}
+Use the exact telescoping expansion \eqref{eq:telescope} and fix one pivot
+$n$.
+
+First decompose the finite fermion core retained in
+Table~\ref{tab:pivots}.  For each resulting $D_4$ source, the certificate in
+Table~\ref{tab:certificate}, together with
+\eqref{eq:joint-hazard}, proves degree at least $\Kseven$ after applying
+vector modes 2 and 3.  Pivots 1 and 2 are included directly in the same
+certificate.
+
+Every remaining vector mode has index at least 4, so its oscillator degree
+pays for the maximum filtered increase.  Every remaining fermion mode has
+index at least 5 and is safe for the same reason.  The factor $B(q^n)$ is
+safe for $n\geq3$, while its exceptional cases $n=1,2$ were included in the
+finite certificate.  Multiplication by $(1-q)$ either preserves the degree or
+raises it by one.
+
+Thus every $D_4$ irrep occurring in every coefficient of every pivot summand
+has degree at least the folded value of $\Kseven$.  The Weyl-numerator lemma
+shows that passage back to dominant $B_4$ characters cannot increase
+$\Kseven$.  Hence each individual telescoping summand has the desired
+support, and so does their signed sum $F(q)$.
+
+Finally, $\Kseven\geq K$, proving the original Pieri-hazard support theorem.
+\end{proof}
+
+\begin{corollary}[Stable-range premise]
+Every contribution of the virtual HFT remainder lies in the stable range
+required by the consecutive harmonic and symmetric-power Pieri translation
+theorem.  The new top-degree contribution also lies outside the translated
+exterior-chamber target.
+\end{corollary}
+
+The corollary is valid contribution by contribution, including spinorial
+sources and negative coefficients in the virtual remainder.
+
+\section{Why the earlier Koszul route failed}
+
+There is a formally correct $B_4$ identity
+\[
+   F_d=\sum_{j=0}^{9}(-1)^j\Lambda^j(V_9)\otimes R_{d-j}.
+\]
+It is tempting to bound every tensor product on the right separately using
+minimum physical levels.  That strategy is too strong because the sum is
+virtual.  An unsafe irrep can occur in one Koszul term and be cancelled by an
+equal irrep in another term.
+
+The simplest symptom is already visible near the vacuum: a term
+$-V_9q$ violates the desired bound term by term, but is cancelled by the
+corresponding positive contribution.  In the standard finite regression,
+the generic Koszul-transition test produces 165 such obstructions.  These
+are not counterexamples to the theorem; they are counterexamples to a proof
+method which discarded essential cancellations.
+
+The Green--Schwarz telescope succeeds because the cancellation required for
+division by the universal multiplet is performed algebraically first.  Only
+then is a support estimate applied.  This distinction is the conceptual
+reason the new proof closes while the principal-embedding shortcut does not.
+
+\section{Independent checks}
+
+The proof is level-independent, but several exact finite comparisons guard
+against implementation errors.
+
+\begin{table}[ht]
+\centering
+\caption{Standard regression checks.  These checks support the implementation;
+they are not substitutes for the all-orders argument.}
+\label{tab:checks}
+\begin{tabularx}{\textwidth}{Xrr}
+\toprule
+check & cases or terms & failures \\
+\midrule
+one-mode triality coefficients & 9 & 0 \\
+telescoping reconstruction, degrees 0--5 & 6 & 0 \\
+separate telescoping support terms & 33 & 0 \\
+finite Weyl/Dirac fold regression & 30 & 0 \\
+direct low-vector hazard comparisons & 15 & 0 \\
+finite low-mode certificate & 323 & 0 \\
+observed HFT remainder irreps through physical level 13 & 176 & 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The telescope reconstructs the independently derived $B_4$ remainder
+weight-for-weight through degree 5.  A larger direct test of the total
+$D_4$ irrep support has also passed through degree 24.  These observations
+were useful in finding the proof, but the finite-mode reduction is what
+removes dependence on a level cutoff.
+
+\section{What has and has not been proved}
+
+\subsection{What is now closed}
+
+The theorem supplies an analytic, all-degree answer to the question which
+motivated this report:
+\begin{itemize}
+  \item higher oscillator levels cannot introduce a new support violation;
+  \item chirality folding at the $D_4$ stage cannot increase the required
+        $B_4$ degree;
+  \item every virtual remainder contribution lies in the stable Pieri range;
+  \item the result is baseline-free and does not depend on a selected
+        $\Spin(10)$ representative.
+\end{itemize}
+
+\subsection{What remains for Bars III.B}
+
+The Bars claim concerns positive integral $\Spin(10)$ lifts of the cumulative
+targets $R_n^9$.  The support theorem controls one systematic family of local
+inequalities, but the complete finite-horizon lift cone has moving weighted
+circuits.  The remaining work is to do at least one of the following:
+\begin{enumerate}
+  \item prove that the stable Pieri transport assembles all moving
+        boundary-tail circuits into a recursively controlled family;
+  \item construct an all-level nonnegative integral packetization directly;
+  \item prove that another graded construction, such as the BBMS candidate,
+        telescopes to a positive cumulative lift at every level.
+\end{enumerate}
+Even if all rational circuit inequalities are controlled, integrality or
+saturation remains a logically separate issue.
+
+\subsection{What the proof says about chirality}
+
+The argument deliberately folds the two $D_4$ chiralities only for the
+purpose of a support estimate.  It shows that the support theorem is
+insensitive to that choice.  It does \emph{not} prove that different
+$\Spin(10)$ chiral lifts are physically equivalent, nor does it select among
+the distinct positive completions seen from level 6 onward.  That question
+belongs to the later global lift problem.
+
+\section{Reproduction and implementation boundary}
+
+The proof implementation is
+\begin{center}
+\texttt{trajectory\_kernel/hft\_analytic\_support.py}.
+\end{center}
+From the project root, the complete standard run is
+\begin{verbatim}
+./bin/sage-run -m trajectory_kernel.hft_analytic_support \
+  --max-level 13 \
+  --maximum-label-sum 2 \
+  --telescoping-degree 5 \
+  --core-pivot 3 --core-pivot 4 --core-pivot 5 --progress
+\end{verbatim}
+It reports, among other checks,
+\begin{verbatim}
+Finite low-mode pivots/sources/failures: (3, 4, 5)/175/0
+Finite core minimum margin: 0
+Complete finite certificate: True
+Protected SO(10) baseline imported: NO
+\end{verbatim}
+
+The parameter \texttt{--max-level} affects only comparison with explicitly
+expanded HFT coefficients.  It does not change the finite proof domain.  The
+proof modules do not import any of the protected level-1--10 $\Spin(10)$
+baseline files.
+
+\appendix
+
+\section{A compact logical dependency map}
+
+For reference, the proof can be read as the following chain.
+\begin{enumerate}
+  \item The seven-wall degree $\Kseven$ implies the exact Pieri threshold
+        $K$.
+  \item Triality gives $E-D=uHB$.
+  \item That identity telescopes the Green--Schwarz oscillator product and
+        gives equation \eqref{eq:telescope}.
+  \item The $D_4$ Weyl numerator maps to $B_4$ without increasing
+        $\Kseven$.
+  \item Vector and spinor Lipschitz constants close all modes except
+        fermions 1--4 and vectors 2--3.
+  \item Pieri-polytope optimization bounds vector modes 2--3 by eight affine
+        walls.
+  \item The remaining fermionic first occurrences form a 323-record exact
+        certificate.
+  \item Therefore every coefficient of every pivot summand, and hence every
+        coefficient of $F(q)$, satisfies degree at least $\Kseven$.
+\end{enumerate}
+
+\section{Notation glossary}
+
+\begin{longtable}{p{0.22\textwidth}p{0.70\textwidth}}
+\toprule
+symbol & meaning \\
+\midrule
+$B_4$ & $\Spin(9)$, the massive little group in ten dimensions \\
+$D_4$ & $\Spin(8)$, used for the transverse Green--Schwarz oscillator product \\
+$D_5$ & $\Spin(10)$, the desired parent group for Bars lifts \\
+$r_n^9$ & chiral massive-primary $B_4$ character at physical level $n$ \\
+$R_n^9$ & cumulative Bars target $\sum_{i=1}^{n}r_i^9$ \\
+$R(q)$ & HFT massive-primary series after universal massive-multiplet division \\
+$F(q)$ & virtual remainder after removing the level-one $B_4$ vector tower \\
+$P_\lambda$ & branching packet $\Res^{D_5}_{B_4}V_\lambda$ \\
+$U$ & unitriangular matrix of all-chiral reference packets \\
+$c=U^{-1}m$ & integral, generally signed, triangular section coordinates \\
+$J$ & global restriction-kernel generator $16_+-16_-$ \\
+facet & codimension-one face, or primitive defining inequality, of the packet cone \\
+Hilbert basis & minimal integral generators of all lattice points in a rational cone \\
+Gale vector & row of an integral kernel-basis matrix for the packet configuration \\
+positive circuit & minimally supported nonnegative relation among Gale vectors \\
+shell & six-term local kernel identity from consecutive interlacing slices \\
+Regge shift & simultaneous $n\mapsto n+1$ and $\ell\mapsto\ell+1$ \\
+$\rho=n-\ell$ & elementary invariant of the Regge shift \\
+$\delta=n-\ell-3m$ & support-adapted reduced depth; subtracting $3m$ absorbs the level cost of the second Dynkin label \\
+upper $\ell$-chamber & high-$\ell$ supported region where multiplicity is inherited from a lower-level Regge predecessor \\
+transport boundary & lattice wall separating the upper $\ell$-chamber from the sector where that transport rule is unavailable \\
+branching boundary & interlacing face $\mu_1=\lambda_2$ left behind when a branching packet is shifted \\
+residual core & supported labels reached by none of the admissible $\ell$-, $m$- or $r$-transport identities \\
+stable Pieri range & region $\lambda_1\geq\mu_1$ where one-row tensor multiplicities translate exactly \\
+$V,S,C$ & $D_4$ vector, chosen oscillator spinor and opposite spinor \\
+$D(u)$ & alternating exterior polynomial of $V$ \\
+$E(u)$ & ordinary exterior polynomial of $S$ \\
+$B(u)$ & finite triality quotient in $E-D=u(V+S)B$ \\
+$K(\mu)$ & exact unstable-Pieri source threshold from TK6B.5e \\
+$\Kseven(\mu)$ & uniform seven-wall strengthening of $K$ used in this proof \\
+$H_k$ & harmonic one-row representation of degree $k$ \\
+pivot $n$ & first oscillator mode selected by the telescoping identity \\
+\bottomrule
+\end{longtable}
+
+\begin{thebibliography}{9}
+
+\bibitem{Bars}
+I.~Bars,
+\emph{Stringy evidence for D=11 structure in strongly coupled type-IIA
+superstring},
+Phys. Rev. D \textbf{52} (1995) 3567--3575,
+\href{https://arxiv.org/abs/hep-th/9503228}{arXiv:hep-th/9503228}.
+
+\bibitem{HFT}
+A.~Hanany, D.~Forcella and J.~Troost,
+\emph{The covariant perturbative string spectrum},
+Nucl. Phys. B \textbf{846} (2011) 212--225,
+\href{https://arxiv.org/abs/1007.2622}{arXiv:1007.2622}.
+
+\bibitem{GMSZ}
+A.~Georgoudis, J.~A.~Minahan, G.~Str\"om and A.~Zoumis,
+\emph{The growth of $SO(9)$ super-representations in Type II string theory},
+\href{https://arxiv.org/abs/2609.04107}{arXiv:2609.04107}.
+
+\bibitem{Okada}
+S.~Okada,
+\emph{Pieri rules for classical groups and equinumeration between generalized
+oscillating tableaux and semistandard tableaux},
+\href{https://arxiv.org/abs/1606.02375}{arXiv:1606.02375}.
+
+\bibitem{BT}
+A.~Bourget and J.~Troost,
+\emph{The Covariant Chiral Ring},
+JHEP \textbf{03} (2016) 163,
+\href{https://arxiv.org/abs/1512.03649}{arXiv:1512.03649}.
+
+\bibitem{BM}
+T.~Basile and M.~Markou,
+\emph{On the deep superstring spectrum},
+\href{https://arxiv.org/abs/2405.18467}{arXiv:2405.18467}.
+
+\bibitem{BBMS}
+N.~Beisert, M.~Bianchi, J.~F.~Morales and H.~Samtleben,
+\emph{On the spectrum of AdS/CFT beyond supergravity},
+JHEP \textbf{02} (2004) 001,
+\href{https://arxiv.org/abs/hep-th/0310292}{arXiv:hep-th/0310292}.
+
+\end{thebibliography}
+
+\end{document}
