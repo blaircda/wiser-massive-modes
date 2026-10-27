@@ -55,5 +55,26 @@ Active reports:
   $D_4$-to-$B_4$ Weyl/Dirac support control, analytic oscillator-tail closure
   and the complete finite low-mode certificate proving the HFT support target
   at all degrees.
+- `TK6B6_CUMULATIVE_REGGE_UPLIFT.md`: exact completion of the cumulative
+  $B_4$ Regge tower to a restricted $D_5$ symmetric-vector tower, the
+  two-seed positive construction through level 13, its scalar-diagonal
+  correction formula and the resulting one-shell all-orders target.
+- `TK6B6_SCALAR_BOUNDARY_REDUCTION.md`: exact prefix-sum form of the scalar
+  correction, removal of the outer Green--Schwarz finite difference, the
+  all-label nine-ray `D4` boundary functional, its wall--curvature and fixed
+  modified-Frobenius/Plücker reductions, the final six-term `B4` low-form
+  kernel, its primitive-form dominance reduction, the canonical cumulative
+  $B_4$ Koszul core, its all-orders three-hook boundary kernel, the DDF/Koszul
+  primitive quotient, the exact gamma-traceless relative-Dirac symbols, the
+  all-$k$ free polynomial hook injection, the explicit five-term
+  gamma-traceless free resolution with positive cokernel
+  $\bigoplus_n[n,0,3,0]$, its nonzero null-fibre homology, the exact
+  positive-core pairing and $B_\Gamma$--$H_4$ first-difference identity, the
+  exact return of its correctly oriented prefix to the virtual three-hook
+  shell, the full recursive gamma-trace triangle, the universal
+  Clifford-valued Cartan identity, the explicit trace-Laplacian transfer and
+  obstruction to a naive projected-$Q^1$ map, the failure of coefficientwise
+  Regge translation, and the obstruction to the tempting multiplicative-core
+  shortcut.
 - `MILP_NUMERICAL_CERTIFICATION_AUDIT.md`: floating-point MILP rounding audit,
   exact primal-witness hardening, and the remaining solver-status limitation.

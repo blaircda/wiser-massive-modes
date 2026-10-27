@@ -1,6 +1,6 @@
 # Trajectory–Kernel Programme Status
 
-**Last updated:** 25 September 2026
+**Last updated:** 13 October 2026
 
 This is the local status document for the new analytic programme. The root
 `STATUS.md` remains authoritative for the project as a whole.
@@ -538,6 +538,288 @@ is subsequently proved in TK6B.5f.**
   packetization theorem.
 - See `reports/TK6B5F_ANALYTIC_HFT_SUPPORT.md`.
 
+## TK6b.6 result
+
+**TK6b.6 — Cumulative Regge-tower uplift: exact construction isolated and
+positive through level 13.**
+
+- The HFT factorization and the Bars cumulative factor give the all-orders
+  formal identity
+  $Z_m(q)/(1-q)=\operatorname{Res}(\operatorname{PE}(qV_{10}))F(q)$.
+  Hence any virtual integral $D_5$ lift $\widetilde F$ produces an exact
+  cumulative virtual lift
+  $X(q)=\operatorname{PE}(qV_{10})\widetilde F(q)$.
+- The fixed all-chiral triangular lift $S(F)$ first fails positivity at
+  physical level 4 by exactly $16_+ -16_-=J$. Adding $-q^3J$ repairs this
+  defect and leaves a positive cumulative series
+  through level 9.
+- Thereafter a greedy recursion using only the first six-term shell
+  $A_0=16_-J=210-126_- -120+45-10+1$ remains feasible and positive through
+  level 13. Its nonzero correction is
+  $-q^3J+(q^9+2q^{10}+2q^{11}+3q^{12})A_0$.
+- The $A_0$ coefficients are independently fixed by a scalar diagonal of the
+  HFT remainder. If $C(q)$ is the diagonal series of one-row coefficients in
+  $S(F)$, then the uncorrected scalar series is
+  $B(q)=C(q)/(1-q^2)$ and
+  $[\mathbf1]\operatorname{PE}(qV_{10})A_0=1/(1+q)$. Thus the closed
+  candidate is $A(q)=-(1+q)B_{\geq9}(q)$; it reproduces the greedy
+  coefficients exactly through degree 12.
+- The exact identity $b_8=0$ sharpens this to
+  $a_N=-\sum_{k\leq N}c_k$ for every $N\geq9$. Since the Green--Schwarz
+  telescope is $F=(1-q)G$, the prefix sum is the direct pre-telescope index
+  $\Phi_q(G)$. The all-label formula for $\Phi$ is supported on nine fixed
+  transverse `D4` rays. Except for five wall endpoints, its values are
+  monomials times $(1-q)^2$. An independent Weyl-alternant regression checks
+  all 715 labels of total Dynkin sum at most nine. The sign itself remains to
+  be proved; direct exact coefficients have the required sign through degree
+  20.
+- The nine rays group into four adjacent-ray Euler sectors with coefficient
+  patterns $(1,-2,1)$, $3(-1,1)$, $2(1,-1)$ and $(-1,1)$. Two raw sectors
+  have negative coefficients, so these are Euler combinations rather than
+  Hilbert series; a literal state injection between the earlier ``supply''
+  and ``demand'' groupings is therefore not a valid proof strategy.
+- Uniform Laurent continuation, followed by absorbing its formal $L=-1,0$
+  terms into the endpoints, gives
+  $\Phi_q(G)=(1-q)^2R_{\mathrm{st}}+\Omega$. Here $R_{\mathrm{st}}$ contains
+  only stable first arms and $\Omega$ is the explicit contribution of the
+  five actual endpoint multiplicity series. Hence $a_N=W_N-I_N$, with
+  $I_N=R_{\mathrm{st},N}-2R_{\mathrm{st},N-1}+R_{\mathrm{st},N-2}$ and
+  $W_N=-[q^N]\Omega$. The exact remaining scalar theorem is
+  $W_N\geq I_N$ for $N\geq9$; it holds through the computed range.
+- At fixed first modified-Frobenius arm $L\geq1$, all nine stable rays carry
+  the same monomial $q^{L-1}$. Their Young diagrams have common first row
+  $L+1$ and tails equal to nine of the ten partitions in a $3\times2$
+  rectangle. This reduces the moving-ray geometry to one finite transverse
+  Euler functional. Its ten-component coefficient vector (including the
+  missing zero) is exactly the Hodge dual of the decomposable bivector
+  $(1,1,1,1,1)\wedge(0,0,1,2,3)$. This rank-two Plücker factorization
+  packages the nine Weyl numerators into one $6\times6$ bordered determinant;
+  the corresponding virtual character has all-arm dimension 15. Summing all
+  arms is a geometric replacement of its first column, so the infinite arm
+  direction is also closed analytically. Clearing the vector exterior
+  denominator leaves a representation-ring numerator of degree seven, so
+  the entire stable family is eight fixed virtual characters followed by a
+  symmetric-vector tower.
+- Self-adjointness moves that tower through the character inner product and
+  cancels the exact vector-exterior factor in $G$. Combining the endpoints
+  and applying the relative $D_4/B_4$ Weyl denominator gives
+  $\Phi_q(G)=\langle\mathscr C(q),Z_m(q)\rangle_{B_4}$. If
+  $s_k=\sum_{j=0}^k(-1)^j\Lambda^j9$, the six coefficients of
+  $\mathscr C$ are
+  $(s_3,s_4+s_2,s_3+s_1,s_2+s_0,s_1,s_0)$. Therefore only the
+  multiplicities of $1,9,36,84,126$ in six adjacent HFT levels remain. This
+  motivates, but does not yet construct, a finite Koszul/physical-state
+  complex proving the required sign.
+- Alternating inversion of those five form multiplicities gives a still
+  smaller exact target. With
+  $h_k(d)=(-1)^k\langle s_k,Q_d\rangle$, $H_k(q)=\sum_dh_k(d)q^d$ and
+  $D=H_3-qH_2+q^2H_1-q^3H_0$, one has
+  $\Phi=-(1+q^2)D+qH_4$. Hence the scalar theorem is precisely
+  $D_N+D_{N-2}\geq h_4(N-1)$ for $N\geq9$. In the computed range all five
+  $h_k$ and $D$ are nonnegative from degree 6, but the required dominance is
+  still an analytic gap rather than a consequence of that evidence.
+- A second inversion
+  $\Pi_k=\sum_{r=0}^k(-q)^rH_{k-r}$ gives
+  $\Phi=q\Pi_4-\Pi_3$, or equivalently
+  $\mathscr C=[x^4]\Lambda_x9(q-x)/((1+x)(1+qx))$. The smallest scalar
+  target is therefore the adjacent bidegree inequality
+  $\pi_3(N)\geq\pi_4(N-1)$.
+- The resulting `D4` identities are exact:
+  $Z_Q\downarrow_{D_4}=(8_v+8_s)(8_v+8_c)$ and
+  $(8_s-8_c)^2=\sum_{j=0}^8(-1)^j\Lambda^j8_v
+  =\mathscr C(1)\downarrow_{D_4}$. Moreover the pre-telescope series is
+  $G=D_{8_v}(q)(Z_m\downarrow_{D_4})$. Its coefficients are positive
+  integral `D4` characters through degree 20, and the independently
+  restricted baseline-free HFT construction agrees with the Green--Schwarz
+  telescope in the tested comparison range. This positivity is evidence,
+  not an all-orders result.
+- The same $G$ has a canonical $B_4$ inverse under restriction. With
+  $E_9(q)=\sum_{j=0}^9(-q)^j\Lambda^j9$ and
+  $K_9(q)=E_9(q)/(1-q)$, odd-dimensional Hodge duality gives
+  $K_9\downarrow_{D_4}=D_{8_v}(q)$. Hence
+  $\widehat G=K_9Z_m$ satisfies
+  $\widehat G\downarrow_{D_4}=G$ and
+  $Z_m/(1-q)=\operatorname{PE}(q9)\widehat G$. Equivalently, the former
+  virtual remainder is $F=(1-q)\widehat G$. The relative-Dirac positive half
+  reconstructs this same $\widehat G$ exactly. Its coefficients are positive
+  integral $B_4$ characters through degree 20, with 145 irreducible summands
+  at degree 20 and least coefficient one. This is finite evidence for a
+  cumulative Koszul/DDF module, not an all-orders positivity or freeness
+  theorem.
+- Moving $(1-q)\operatorname{PE}(q9)$ through the scalar inner product gives
+  an all-orders three-hook kernel. If
+  $R_k=[k,0,0,0]-[k-1,1,0,0]+[k-1,0,1,0]$ with invalid labels omitted, then
+  $L=\mathscr C(1-q)\operatorname{PE}(q9)$ satisfies
+  $[q^k]L=R_k-R_{k+1}$. The proof checks the first nine exact character
+  coefficients and then uses the order-eight $B_4$ Weyl-alternant recurrence
+  with characteristic polynomial $K_9$. Hence
+  $a_N=\sum_{d=0}^N\langle R_{N-d+1}-R_{N-d},\widehat G_d\rangle$ for every
+  $N\geq9$. The scalar target is now supported on the three principal hooks
+  $(k)$, $(k,1)$ and $(k,1,1)$. Their alternating signs still require a
+  hook-multiplicity map or dominance theorem.
+- The local three-hook symbol is now exact for every $k$. Under the
+  stabilizer $D_4$, contraction and exterior multiplication give an injection
+  $(k,1)\hookrightarrow(k)\oplus(k,1,1)$. Multiplicity-free interlacing shows
+  that its cokernel is
+  $1\oplus\bigoplus_{j=0}^{k-1}[j,0,1,1]_{D_4}$, so
+  $(R_{k+1}-R_k)\downarrow_{D_4}=[k,0,1,1]$. This proves the desired symbol
+  for every first-row length. Relative Dirac orientation now also handles the
+  inner-product mismatch exactly. The three hook families become
+  $[k,0,1,0]$, $[k-1,1,1,0]$ and $[k-1,0,2,1]$ in $D_4$; under the
+  $B_3$ stabilizer their cokernel is
+  $[0,0,1]\oplus\bigoplus_{j=0}^{k-1}[j,0,3]$. Thus their vector symbol gives
+  an injective map of free $\operatorname{Sym}(8_v)$-modules for every $k$.
+  After tensoring with a physical multiplicity module, the exact obstruction
+  is
+  $\operatorname{Tor}^{\operatorname{Sym}(8_v)}_1
+  (\mathcal C_k^{\mathrm{sym}},\mathcal P)$.
+  In the finite range through degree 20,
+  the scalar correction splits as nonnegative one-row and three-row supplies
+  minus a nonnegative middle-hook demand, with positive total margin from
+  degree nine. Termwise hook-shell positivity is false: 38 individual
+  pairings are negative in $d+k\leq20$, beginning in the Bars range with
+  $\langle R_2-R_1,\widehat G_8\rangle=-2$. Thus the required lift must
+  connect adjacent mass degrees rather than act separately on each shell.
+- The diagonal reindexing does not by itself construct the previously
+  proposed cokernel maps. With
+  $\mathcal D_N^{(p)}=\bigoplus_{d+k=N}
+  \operatorname{Hom}_{B_4}(H_k^{(p)},\widehat{\mathcal G}_d)$, the hook birth
+  counts are consecutive dimension differences, apart from the explicit
+  $p=0$ scalar endpoint, but literally they are first-row differences at
+  fixed core degree. A termwise Regge injection is refuted: the triangle
+  $d+k\leq20$ contains 122 negative first-row differences, 108 with
+  $d+k\geq9$. Fixed-hook level shifts and the oriented-vector rank inequality
+  have no dimension obstruction in that finite tail, but this is not a map.
+  The corrected target is to construct a diagonal filtration mixing both
+  gradings, identify its cokernels with the three birth counts, and evaluate
+  the complete five-term derived tensor product described below. Only then
+  should one seek
+  $\operatorname{coker}T_N^{(1)}\hookrightarrow
+  \operatorname{coker}T_N^{(0)}\oplus\operatorname{coker}T_N^{(2)}$.
+  Its dimension inequality would be exactly the remaining scalar theorem.
+  The $Q^1$ curvature and the derived homology are data to compute in this
+  descent, not generic groups required in advance to vanish.
+- The level-one bosonic DDF creators give the candidate
+  degree-$(+1,-1)$ Koszul map, but the raw map is not injective:
+  $\ker d_4=\operatorname{im}d_5$ from the second relevant strand onward.
+  The exact automatic injection is
+  $K_4/\operatorname{im}d_5\hookrightarrow K_3$. Hence the corrected proof
+  target is to identify $\Pi_4$ with this primitive quotient after physical
+  and supermultiplet reduction, and $\Pi_3$ with a target containing its
+  image. A finite scan rules out their simplest identification with raw
+  exterior-form multiplicities in either $G$ or $\widehat G$. In particular,
+  the apparent relation
+  $\pi_4(N)=[\Lambda^3 9:\widehat G_{N-1}]$ through $N=10$ fails at $N=11$
+  ($12\neq8$), so it is not used as a structural identity.
+- The superstring BRST no-ghost spectral sequence is a plausible template for
+  such a concentration proof, but not a proof of this inequality: its two
+  adjacent terms are graded by ghost number and are isomorphic copies of the
+  light-cone spectrum, whereas $x$ here grades `SO(9)` exterior degree and
+  $\pi_3(N)-\pi_4(N-1)$ is nonzero. A usable BRST route must first reproduce
+  the compact two-variable kernel after massive-supermultiplet division.
+- The DDF bosonic differential is BRST compatible but does not commute with
+  spacetime supersymmetry: the supercharges exchange the bosonic vector and
+  fermionic spinor oscillators. A literal super-Koszul completion therefore
+  has a spinor in auxiliary degree one, while the compact kernel has a
+  shifted scalar before insertion of the relative Dirac factor.
+- The relative Dirac descent is now exact at character and symbol level. The
+  positive-half map
+  $\mathfrak D^+[a,b,c,d]=[a,b,c+d+1,c]$ satisfies
+  $(8_s-8_c)\operatorname{Res}X=\mathfrak D^+X-\tau\mathfrak D^+X$.
+  This is the index-two Gross--Kostant--Ramond--Sternberg formula, and
+  Kostant's relative Dirac operator realizes both terms in an actual kernel;
+  thus $\mathfrak D^+(Z_m)$ has a canonical chiral Dirac-cohomology model.
+  It sends the five low forms to gamma-traceless modules of dimensions
+  $(8,56,160,224,112)$. In an explicit rational Clifford model, projected
+  wedge maps between these modules compose to zero. Their ranks are
+  $(8,48,112,112)$ at a non-null vector and $(8,48,112,92)$ at a nonzero
+  null vector. The Buchsbaum--Eisenbud grade criterion therefore proves the
+  exact polynomial free resolution
+
+$$
+0\longrightarrow S_V(-4)U_0\longrightarrow S_V(-3)U_1
+\longrightarrow S_V(-2)U_2\longrightarrow S_V(-1)U_3
+\longrightarrow S_VU_4\longrightarrow\mathcal T\longrightarrow0,
+$$
+
+  with $S_V=\operatorname{Sym}(8_v)$ and
+  $\mathcal T_n=[n,0,3,0]_{D_4}$. Its null fibre has twenty-dimensional
+  homology in each of the final two positions. Thus the earlier truncated
+  $\operatorname{Tor}_1$ generally does not vanish on the trace quotient;
+  the full resolution computes it.
+- Pairing this resolution with the positive relative-Dirac half of the
+  cumulative core gives an exact new scalar identity. With
+  $B_\Gamma(q)=\langle\sum_{n\geq0}q^n[n,0,3,0],
+  \mathfrak D^+(\widehat G)\rangle$, one has
+
+$$
+(1-q)\Phi=(1+q)H_4-(1+q^2)B_\Gamma.
+$$
+
+  Equivalently,
+  $a_N-a_{N-1}=B_{\Gamma,N}+B_{\Gamma,N-2}-h_4(N)-h_4(N-1)$. The identity is exact; positivity
+  of $B_\Gamma$ is conditional on all-orders positivity of $\widehat G$, presently
+  known only through degree 20. This prefix dominance between $B_\Gamma$ and $H_4$
+  is the sharp remaining scalar target.
+- Moving $H_4$ to the cumulative core requires outer antisymmetrization before
+  positive orientation. With that order enforced, the prefix kernel closes
+  exactly back onto the previous three-hook shell:
+
+$$
+\mathcal L_n=E_n-E_{n-1}
+=\mathfrak D^+(R_{n+1}-R_n),
+$$
+
+  where
+  $E_n=[n+1,0,1,0]-[n,1,1,0]+[n,0,2,1]$ and $E_{-1}=U_0$.
+  Its $B_3$ restriction is the positive irrep $[n,0,3]$, but its $D_4$
+  character has negative terms. Pairing these kernels with
+  $\mathfrak D^+(\widehat G_d)$ reproduces the full Bars margin exactly. Thus
+  the free resolution explains the shell structurally but does not create a
+  coefficientwise-positive shortcut; the module-level dominance problem is
+  genuinely the same one in a derived form.
+- What is not yet proved is the action of the complete resolution on the
+  mass-graded $\mathfrak D^+(Z_m)$ Dirac-cohomology module and the resulting
+  homology concentration or prefix dominance. Basile--Markou's
+  Ramond-sector operator $Q^1=\gamma\cdot\alpha_{-1}/\sqrt2$ acts within the
+  Howe multiplicity module of a fixed Lorentz representation; it is not the
+  adjacent projected-wedge map $U_j\to U_{j+1}$. It obeys
+  $\{Q^1,Q^1\}=T^{11}$ and remains relevant for organizing the trace quotient.
+  The two actions must be combined by derived descent. Because the mode-one
+  tower has already been removed in $\widehat G$, $Q^1$ must act before
+  Koszul descent and be transferred to primitive homology.
+- The local transfer required for that combination is now exact. On the full
+  spinor-form triangle, gamma contraction $\Gamma$, gamma wedge $G$, exterior
+  multiplication $E_v$ and Clifford multiplication $C_v$ satisfy
+  $\Gamma E_v+E_v\Gamma=C_v$ and
+  $\Gamma G-G\Gamma=(8-2p)\operatorname{id}$. The four required trace
+  Laplacians have spectra $(8)$, $(6,14)$, $(4,10,18)$ and
+  $(2,6,12,20)$, so the trace coordinate removed by projection is exactly
+  $(\Gamma G)^{-1}C_v$. The literal projected Clifford map fails to commute
+  with the projected-wedge row, with defect ranks $(8,48,112,112)$ off the
+  null cone and $(4,24,56,56)$ on it. Its defect nevertheless factors
+  entirely through the gamma-trace complement and equals
+  $-2P'E_v(\Gamma G)^{-1}C_vI$. The full triangle restores the ambient
+  relations. Thus the next unknown is global filtration compatibility and
+  homology concentration on the HFT quotient, not a missing local map.
+- Extending the four folded fundamental images multiplicatively does not give
+  a core lift. It differs only by the kernel class $J$ at degree four, but its
+  restriction is already wrong at degree five. This records an exact
+  obstruction rather than a candidate construction.
+- A Racah--Speiser stabilizer argument proves the analogous stable-Pieri
+  translation theorem for tensorial and spinorial $D_n$ weights. It
+  propagates the upper leading-coordinate part of this explicit candidate.
+- This route is target-specific and integral, so coefficientwise positivity
+  would bypass both a classification of every moving circuit and a general
+  semigroup-saturation theorem. The remaining statements are nonnegativity
+  of the scalar-tail coefficients and one-shell dominance of the explicit
+  corrected series.
+- The two-seed simplification is section-dependent. The alternate balanced
+  triangular section has an exact $A_0$-interval obstruction at physical
+  level 6. This is not evidence for a physical chirality preference.
+- See `reports/TK6B6_CUMULATIVE_REGGE_UPLIFT.md` and
+  `reports/TK6B6_SCALAR_BOUNDARY_REDUCTION.md`.
+
 ## MILP certification audit
 
 - The unchecked objective rounding reported in `trajectory_selection.py` was
@@ -561,11 +843,54 @@ finite circuits cannot survive the infinite leading-label limit. TK6b.5d now
 proves stable Pieri transport for tensorial and spinorial $B_n$ weights.
 TK6B.5e reduces its remaining premise to a closed filtered-divisibility
 statement, and TK6B.5f proves that statement from the exact Green--Schwarz
-oscillator product. The next central step is therefore to organize the
-horizon-dependent circuits as a recursive boundary-tail module with a
-controlled mixed core. Saturation or recursive integral packetization is
-still required separately. In parallel, the TK6a partial-sum quotient
-formulas invite an all-$\ell$ tensor-product proof.
+oscillator product. TK6B.6 now supplies a more economical target-specific
+route: prove positivity of the single explicit series
+$\operatorname{PE}(qV_{10})(S(F)-q^3J+A(q)A_0)$, where $A(q)$ is fixed by
+the scalar diagonal. The scalar tail is now reduced to the sign of a fixed
+nine-ray pre-telescope boundary index. The DDF audit rules out raw middle
+Koszul injectivity and replaces it by the primitive source
+$K_4/\operatorname{im}d_5$. Relative Dirac descent then gives an exact
+gamma-traceless five-term polynomial resolution with positive cokernel
+$\bigoplus_n[n,0,3,0]_{D_4}$. Its nonzero null-fibre homology shows why the
+old truncated-Tor-vanishing target was too strong. Pairing the full
+resolution with the cumulative core gives the exact identity
+$(1-q)\Phi=(1+q)H_4-(1+q^2)B_\Gamma$. The next central step is to realize the complete
+spinor-form triangle on the mass-graded $\mathfrak D^+(Z_m)$ DDF
+multiplicity module and prove the equivalent prefix dominance between
+$B_\Gamma$ and $H_4$. The gamma-trace transfer is already explicit through
+the invertible operator $(\Gamma G)^{-1}$, so this step should be organized
+as a filtration by trace depth and a homology-concentration argument rather
+than as a search for further adjacent maps.
+Correct outer orientation makes this prefix exactly
+$\mathfrak D^+(R_{n+1}-R_n)$, so it recovers rather than bypasses the known
+three-hook shell. The
+orthosymplectic operator $Q^1$ acts separately on the Howe multiplicity
+module; its curvature $T^{11}$ must be handled during the derived descent,
+not confused with the adjacent projected-wedge differential. The action must
+be constructed before removal of the mode-one tower and transferred through
+Koszul homology. Universal-supermultiplet division must be shown to preserve
+the trace-depth filtration; this is the specific unresolved descent lemma. A
+direct HFT proof of the same prefix dominance remains the alternative.
+The new cumulative factorization
+$Z_m/(1-q)=\operatorname{PE}(q9)\widehat G$ suggests a parallel module-level
+construction: realize the nine degree-one operations on the cumulative
+physical-state space and prove that they form a regular sequence with
+quotient $\widehat G$. That would prove core positivity and explain why the
+cumulative sum is natural, but it would not replace the refined
+$\Pi_4\to\Pi_3$ map.
+The exact three-hook kernel provides the most concrete interface to the
+orthosymplectic construction. Its contraction/wedge symbol already injects
+$(k,1)$ into $(k)\oplus(k,1,1)$ for every $k$; lift that injection to the
+lowest-weight multiplicity spaces and prove the displayed diagonal dominance.
+The relative Weyl factor is already absorbed by the positive Dirac half.
+Coefficientwise Regge translation is refuted, so the lift must be a filtered
+diagonal construction mixing core and first-row degrees.
+One should then derive the five non-scalar shell functionals and prove
+one-shell dominance, using stable $D_5$ Pieri transport to remove the upper
+chamber. The general recursive boundary-tail module and saturation questions
+remain valuable structural alternatives, but are no longer logically
+required if this direct integral construction closes. In parallel, the TK6a
+partial-sum quotient formulas invite an all-$\ell$ tensor-product proof.
 
 TK5c separately rules out naive ungraded source sparsity as a cutoff-stable
 selector. The oscillator-graded uplift suggested by hep-th/0310292 has now
@@ -603,6 +928,29 @@ confirming that this depth is blind to their outer-chirality difference. See
 
 - Can the now-proved contribution-wise stable Pieri transport be assembled
   into all weighted boundary-tail inequalities without a horizon cutoff?
+- Are the coefficients of
+  $A(q)=-(1+q)[\mathbf1]\bigl(\operatorname{PE}(qV_{10})S(F)\bigr)_{\geq9}$
+  nonnegative at all degrees, and does the resulting $A_0$ correction dominate
+  every non-scalar coefficient as it does through level 13?
+- Can the explicit five-term gamma-traceless free resolution be evaluated on
+  the mass-graded $\mathfrak D^+(Z_m)$ multiplicity module after
+  universal-supermultiplet division? More precisely, does that quotient
+  preserve the now-explicit gamma-trace filtration and does its spectral
+  sequence concentrate in edge homologies $\Pi_4$ and $\Pi_3$? This would
+  prove the equivalent $B_\Gamma$--$H_4$ prefix dominance. How does the
+  distinct multiplicity-side relation $\{Q^1,Q^1\}=T^{11}$ organize the trace
+  ideal in that descent?
+- Can the exact cumulative factorization
+  $Z_m/(1-q)=\operatorname{PE}(q9)\widehat G$ be realized on actual DDF
+  states, with nine covariant degree-one operations forming a regular
+  sequence? Are the positive $B_4$ coefficients of $\widehat G$ positive at
+  all orders rather than only through degree 20?
+- Can the now-exact contraction/wedge symbol
+  $(k,1)\hookrightarrow(k)\oplus(k,1,1)$ be lifted to the orthosymplectic
+  lowest-weight multiplicity modules so that its diagonal Euler
+  characteristic is
+  $\sum_d\langle R_{N-d+1}-R_{N-d},\widehat G_d\rangle$? This is the new
+  three-trajectory form of the scalar sign theorem.
 - Is the complement of the transported chamber described by finitely many
   source types after passage to the $D_5\downarrow B_4$ kernel coordinates?
 - Is the core-supported positive path unique after restoring the oscillator
@@ -668,4 +1016,9 @@ confirming that this depth is blind to their outer-chirality difference. See
 ./bin/sage-run -m trajectory_kernel.shell_duality --self-test
 ./bin/sage-run -m trajectory_kernel.regge_factorization --max-level 13
 ./bin/sage-run -m trajectory_kernel.hft_analytic_support --max-level 13 --maximum-label-sum 2 --telescoping-degree 5 --core-pivot 3 --core-pivot 4 --core-pivot 5
+./bin/sage-run -m trajectory_kernel.cumulative_regge_uplift --self-test
+./bin/sage-run -m trajectory_kernel.cumulative_regge_uplift --max-level 13 --policy chiral
+./bin/sage-run -m trajectory_kernel.scalar_boundary_functional --self-test
+./bin/sage-run -m trajectory_kernel.ddf_koszul_audit --self-test
+./bin/sage-run -m trajectory_kernel.gamma_symbol_complex --self-test
 ```

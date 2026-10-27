@@ -34,9 +34,11 @@ The package is divided by provenance:
   modules. `boundary_shell.py`, `all_split_circuits.py`,
   `hft_weighted_inequalities.py`, `shell_duality.py`,
   `regge_factorization.py`, `stable_pieri.py`, `hft_pieri_hazard.py`,
-  `hft_filtered_core.py`, `hft_analytic_support.py` and
-  `milp_certification.py` are also derivation modules. They must not import
-  any protected baseline file.
+  `hft_filtered_core.py`, `hft_analytic_support.py`,
+  `cumulative_regge_uplift.py`, `scalar_boundary_functional.py`,
+  `ddf_koszul_audit.py`, `gamma_symbol_complex.py` and
+  `milp_certification.py` are also derivation
+  modules. They must not import any protected baseline file.
 - `verify_against_baseline.py` is the only module in this directory permitted
   to import `massive_SO10.py` or another protected baseline.
 - Comparisons must occur only after a candidate rule has been constructed from
@@ -80,6 +82,10 @@ trajectory_kernel/
 ├── hft_pieri_hazard.py
 ├── hft_filtered_core.py
 ├── hft_analytic_support.py
+├── cumulative_regge_uplift.py
+├── scalar_boundary_functional.py
+├── ddf_koszul_audit.py
+├── gamma_symbol_complex.py
 ├── milp_certification.py
 ├── verify_against_baseline.py
 └── reports/
@@ -186,6 +192,51 @@ trajectory_kernel/
     $[V_\mu]F_d\neq0\Rightarrow d\geq K(\mu)$ at every degree. The remaining
     Bars problem is the global recursive circuit/packetization theorem, not
     further HFT level testing.
+16. **TK6b.6 — Cumulative Regge uplift and primitive scalar target:** The
+    Bars cumulative factor completes the HFT vector tower to a restricted
+    $D_5$ tower. A two-seed correction is positive through level 13, and its
+    scalar tail reduces at all orders to
+    $\pi_3(N)\geq\pi_4(N-1)$. The transverse DDF creators yield the natural
+    Koszul map, but its raw middle term has
+    $\ker d_4=\operatorname{im}d_5$. The corrected source is the primitive
+    quotient $K_4/\operatorname{im}d_5$. The cumulative character has the
+    exact factorization
+    $Z_m/(1-q)=\operatorname{PE}(q9)\widehat G$, with canonical $B_4$ core
+    $\widehat G$ positive through degree 20. Relative Dirac descent both
+    reconstructs this core from the transverse quotient and produces five
+    gamma-traceless modules. Their explicit projected-wedge maps form an
+    exact polynomial free resolution with positive cokernel
+    $\bigoplus_{n\geq0}[n,0,3,0]_{D_4}$. The null fibre has nonzero homology,
+    so vanishing of the truncated $\operatorname{Tor}_1$ is neither true nor
+    the correct target; the full five-term derived tensor product must be
+    retained. The orthosymplectic operator
+    $Q^1=\gamma\cdot\alpha_{-1}/\sqrt2$ instead organizes the trace
+    multiplicity module and obeys $\{Q^1,Q^1\}=T^{11}$; it is not the
+    adjacent projected-wedge map. Their local combination is now explicit on
+    the full spinor-form triangle: $\Gamma E+E\Gamma=C$, the trace Laplacians
+    have spectra $(8)$, $(6,14)$, $(4,10,18)$ and $(2,6,12,20)$, and the
+    projected defect is exactly $-2P'E(\Gamma G)^{-1}CI$. Constructing this
+    filtered triangle on the mass-graded DDF module, proving compatibility
+    with universal-supermultiplet division, and establishing homology
+    concentration remain open. The all-orders positivity and actual
+    regular-sequence realization of $\widehat G$ are parallel open tasks. An
+    exact order-eight Weyl recurrence further reduces the scalar functional
+    on $\widehat G$ to the three principal hook trajectories $(k)$, $(k,1)$
+    and $(k,1,1)$. Contraction plus exterior multiplication injects the middle
+    hook into the two outer hooks at every first-row length, leaving the
+    module-level lift as the direct orthosymplectic alternative. Positive
+    relative-Dirac orientation upgrades this to an injective free
+    $\operatorname{Sym}(8_v)$ symbol. The complete resolution moves through
+    the cumulative-core pairing and yields
+    $(1-q)\Phi=(1+q)H_4-(1+q^2)B_\Gamma$, where $B_\Gamma$ is a positive pairing whenever
+    the core is positive. Correct outer orientation makes its prefix kernel
+    exactly $\mathfrak D^+(R_{n+1}-R_n)$: it restricts positively to the
+    single `Spin(7)` shell $[n,0,3]$ but remains virtual in `Spin(8)`. Thus
+    the resolution explains, rather than bypasses, the earlier three-hook
+    obstruction. A coefficientwise Regge
+    injection is refuted by many negative first-row differences, so the
+    concrete target is a diagonal filtered complex mixing core degree and
+    first-row degree, not a level-raising map inferred from dimensions alone.
 
 ## Invocation
 
@@ -218,6 +269,10 @@ unambiguous:
 ./bin/sage-run -m trajectory_kernel.hft_pieri_hazard --max-level 13 --maximum-label-sum 2 --formula-label-sum 5
 ./bin/sage-run -m trajectory_kernel.hft_filtered_core --max-level 13
 ./bin/sage-run -m trajectory_kernel.hft_analytic_support --max-level 13 --maximum-label-sum 2 --telescoping-degree 5 --core-pivot 3 --core-pivot 4 --core-pivot 5
+./bin/sage-run -m trajectory_kernel.cumulative_regge_uplift --self-test
+./bin/sage-run -m trajectory_kernel.scalar_boundary_functional --self-test
+./bin/sage-run -m trajectory_kernel.ddf_koszul_audit --self-test
+./bin/sage-run -m trajectory_kernel.gamma_symbol_complex --self-test
 ```
 
 Further commands will be added to the local `STATUS.md` only after their
